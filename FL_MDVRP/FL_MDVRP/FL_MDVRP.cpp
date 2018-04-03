@@ -7,9 +7,6 @@
 
 using namespace std;
 
-// iPair ==>  Integer Pair
-typedef pair<int, int> iPair;
-
 // This class represents a directed graph using
 // adjacency list representation
 class Graph
@@ -45,6 +42,44 @@ void Graph::addEdge(int u, int v, int w)
 	a[u][v] = w;
 }
 
+class Vertex
+{
+	int distance;
+	int marked;
+	int prevIndex; // index of previous vertex in the shortest path from origin
+public:
+	Vertex(); //Constructor
+	int getDistance();
+	void setDistance(int distanceV);
+	void markVertex();
+	void unmarkVertex();
+	int getPrevIndex();
+	void setPrevIndex(int prevInd);
+};
+
+class DistVect
+{
+	const int infVal = 300000;
+	int countV;
+	Vertex* dv;
+	int minInd; // Index of the closest unmarked verted
+	int minVal; // Distance of the closest unmarked vertex
+
+public:
+	DistVect(int v, int origin); //Constructor
+
+	void setMinDist(int v, int dist); 
+
+	void markVert(int v);
+
+	void unmarkVert(int v);
+
+	int allMarked();
+	
+	int GetMinInd();
+
+};
+
 // Prints shortest paths from src to all other vertices
 void Graph::shortestPath(int src)
 {
@@ -55,18 +90,10 @@ void Graph::shortestPath(int src)
 	priority_queue< iPair, vector <iPair>, greater<iPair> > pq;
 
 	// Create a vector for distances and initialize all
-	// distances as infinite (INF)
+	// distances as infinite (INF) except the origin that is initialized with 0
 		
-	int* vectorDist = new int[V];
+	
 
-	for (int j = 0; j < V; j++) {
-		vectorDist[j] = 30000;
-	};
-
-
-	// Insert source itself in priority queue and initialize
-	// its distance as 0.	
-	vectorDist[src] = 0;
 
 	
 	
@@ -138,3 +165,99 @@ int main()
 	return 0;
 }
 
+DistVect::DistVect(int v, int origin)
+{
+	dv = new Vertex[v];
+
+	for (int i = 0; i < v; i++) {
+		dv[i].setDistance(infVal);
+		dv[i].setPrevIndex(-1);
+		dv[i].unmarkVertex();
+	}
+
+	//setting the origin of the graph with distance equals to 0
+	dv[origin].setDistance(0);
+
+	// setting the default "random" minInd
+	if (v == 0 || v == countV)
+		minInd = 1;
+	else
+	{
+		minInd = origin + 1;
+	};
+
+	minVal = dv[minInd].getDistance();
+}
+
+void DistVect::setMinDist(int v, int dist)
+{
+	dv[v].setDistance(dist);
+}
+
+void DistVect:: markVert(int v)
+{
+	dv[v].markVertex();	
+}
+
+void DistVect::unmarkVert(int v)
+{
+	dv[v].unmarkVertex();
+}
+
+void getMinInd()
+{
+	int min = INT_MAX;
+		
+
+}
+
+int DistVect::allMarked()
+{
+	int stop = 0,i=0, result = 1;
+
+	while (stop==0 && i < countV)
+	{
+		if (marked[i] == 0)
+		{
+			stop = 1;
+			result = 0;
+		};
+	};//end while
+
+	return result;
+}
+
+int DistVect::GetMin()
+{
+	return dv[minInd];
+}
+
+int Vertex::getDistance()
+{
+	return distance;
+}
+
+void Vertex::setDistance(int distanceV)
+{
+	distance = distanceV;
+}
+
+void Vertex::markVertex()
+{
+	marked = 1;
+}
+
+void Vertex::unmarkVertex()
+{
+	marked = 0;
+}
+
+int Vertex::getPrevIndex()
+{
+	return prevIndex;
+}
+
+void Vertex::setPrevIndex(int prevIndexV)
+{
+	prevIndex = prevIndexV;
+}
