@@ -53,6 +53,7 @@ public:
 	void setDistance(int distanceV);
 	void markVertex();
 	void unmarkVertex();
+	int isUnmarkedVertex();
 	int getPrevIndex();
 	void setPrevIndex(int prevInd);
 };
@@ -74,9 +75,9 @@ public:
 
 	void unmarkVert(int v);
 
+	int getMinInd();
+
 	int allMarked();
-	
-	int GetMinInd();
 
 };
 
@@ -204,11 +205,20 @@ void DistVect::unmarkVert(int v)
 	dv[v].unmarkVertex();
 }
 
-void getMinInd()
+int DistVect::getMinInd()
 {
-	int min = INT_MAX;
+	int min = INT_MAX, minIndex = -1;
 		
+	for (int i = 0; i < countV; i++) 
+	{
+		if(dv[i].isUnmarkedVertex() && dv[i].getDistance < min)
+		{
+			min = dv[i].getDistance();
+			minInd = i;
+		}
+	}
 
+	return minIndex;
 }
 
 int DistVect::allMarked()
@@ -250,6 +260,15 @@ void Vertex::markVertex()
 void Vertex::unmarkVertex()
 {
 	marked = 0;
+}
+
+int Vertex::isUnmarkedVertex()
+{
+	if (marked == 0)
+		return 1;
+	else
+		return 0;
+	
 }
 
 int Vertex::getPrevIndex()
