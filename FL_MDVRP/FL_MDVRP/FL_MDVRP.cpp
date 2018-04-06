@@ -23,6 +23,8 @@ public:
 				   // function to add an edge to graph
 	void addEdge(int u, int v, int w);
 
+	void dijkstra(int src);
+
 	// prints shortest path from s
 	void shortestPath(int s);
 };
@@ -60,7 +62,7 @@ public:
 
 class DistVect
 {
-	const int infVal = 300000;
+	const int infVal = INT_MAX;
 	int countV;
 	Vertex* dv;
 	int minInd; // Index of the closest unmarked verted
@@ -77,64 +79,57 @@ public:
 
 	int getMinInd();
 
+	int getMinDist();
+
 	int allMarked();
+
+	void setPrevIndex(int currIndexV, int prevIndexV);
+
+	int getPrevIndex(int v);
 
 };
 
 // Prints shortest paths from src to all other vertices
-void Graph::shortestPath(int src)
+void Graph::dijkstra(int src)
 {
-	// Create a priority queue to store vertices that
-	// are being preprocessed. This is weird syntax in C++.
-	// Refer below link for details of this syntax
-	// http://geeksquiz.com/implement-min-heap-using-stl/
-	priority_queue< iPair, vector <iPair>, greater<iPair> > pq;
+	// The output array.  dist[i] will hold the shortest
+	// distance from src to i
+	DistVect dv = new DistVect(src, V);
 
-	// Create a vector for distances and initialize all
-	// distances as infinite (INF) except the origin that is initialized with 0
-		
-	
+	//bool sptSet[V]; // sptSet[i] will true if vertex i is included in shortest
+					// path tree or shortest distance from src to i is finalized
 
+					// Initialize all distances as INFINITE and stpSet[] as false
+	//for (int i = 0; i < V; i++)
+		//dist[i] = INT_MAX, sptSet[i] = false;
 
-	
-	
-	/* Looping till priority queue becomes empty (or all
-	distances are not finalized) */
-	int stop = 0
-	while (!stop)
+	// Distance of source vertex from itself is always 0
+	//dist[src] = 0;
+
+	// Find shortest path for all vertices
+	for (int count = 0; count < V - 1; count++)
 	{
-		// The first vertex in pair is the minimum distance
-		// vertex, extract it from priority queue.
-		// vertex label is stored in second of pair (it
-		// has to be done this way to keep the vertices
-		// sorted distance (distance must be first item
-		// in pair)
-		int u = pq.top().second;
-		pq.pop();
+		// Pick the minimum distance vertex from the set of vertices not
+		// yet processed. u is always equal to src in first iteration.
+		//int u = minDistance(dist, sptSet);
+		int u = dv.getMinDist();
 
-		// 'i' is used to get all adjacent vertices of a vertex
-		list< pair<int, int> >::iterator i;
-		for (i = adj[u].begin(); i != adj[u].end(); ++i)
-		{
-			// Get vertex label and weight of current adjacent
-			// of u.
-			int v = (*i).first;
-			int weight = (*i).second;
+		// Mark the picked vertex as processed
+		sptSet[u] = true;
 
-			//  If there is shorted path to v through u.
-			if (dist[v] > dist[u] + weight)
-			{
-				// Updating distance of v
-				dist[v] = dist[u] + weight;
-				pq.push(make_pair(dist[v], v));
-			}
-		}
+		// Update dist value of the adjacent vertices of the picked vertex.
+		for (int v = 0; v < V; v++)
+
+			// Update dist[v] only if is not in sptSet, there is an edge from 
+			// u to v, and total weight of path from src to  v through u is 
+			// smaller than current value of dist[v]
+			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+				&& dist[u] + graph[u][v] < dist[v])
+				dist[v] = dist[u] + graph[u][v];
 	}
 
-	// Print shortest distances stored in dist[]
-	printf("Vertex   Distance from Source\n");
-	for (int i = 0; i < V; ++i)
-		printf("%d \t\t %d\n", i, dist[i]);
+	// print the constructed distance array
+	printSolution(dist, V);
 }
 
 
@@ -179,13 +174,7 @@ DistVect::DistVect(int v, int origin)
 	//setting the origin of the graph with distance equals to 0
 	dv[origin].setDistance(0);
 
-	// setting the default "random" minInd
-	if (v == 0 || v == countV)
-		minInd = 1;
-	else
-	{
-		minInd = origin + 1;
-	};
+	minInd = origin;
 
 	minVal = dv[minInd].getDistance();
 }
@@ -207,7 +196,7 @@ void DistVect::unmarkVert(int v)
 
 int DistVect::getMinInd()
 {
-	int min = INT_MAX, minIndex = -1;
+	int min = INT_MAX;
 		
 	for (int i = 0; i < countV; i++) 
 	{
@@ -218,7 +207,13 @@ int DistVect::getMinInd()
 		}
 	}
 
-	return minIndex;
+	return minInd;
+}
+
+int DistVect::getMinDist()
+{
+	return dv[minInd].getDistance();
+	
 }
 
 int DistVect::allMarked()
@@ -227,7 +222,7 @@ int DistVect::allMarked()
 
 	while (stop==0 && i < countV)
 	{
-		if (marked[i] == 0)
+		if (dv[i].isUnmarkedVertex())
 		{
 			stop = 1;
 			result = 0;
@@ -237,9 +232,15 @@ int DistVect::allMarked()
 	return result;
 }
 
-int DistVect::GetMin()
+void DistVect::setPrevIndex(int currIndexV, int prevIndexV)
 {
-	return dv[minInd];
+	dv[currIndexV].setPrevIndex(prevIndexV);
+}
+
+int DistVect::getPrevIndex(int v) 
+{
+	return dv[v].getPrevIndex();
+
 }
 
 int Vertex::getDistance()
@@ -264,11 +265,7 @@ void Vertex::unmarkVertex()
 
 int Vertex::isUnmarkedVertex()
 {
-	if (marked == 0)
-		return 1;
-	else
-		return 0;
-	
+	return (marked == 0);
 }
 
 int Vertex::getPrevIndex()
