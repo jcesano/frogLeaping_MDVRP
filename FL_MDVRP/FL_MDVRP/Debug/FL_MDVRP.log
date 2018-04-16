@@ -1,2 +1,3 @@
 ﻿  FL_MDVRP.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(6): fatal error C1083: Cannot open include file: 'bits/stdc++.h': No such file or directory
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)
