@@ -7,6 +7,59 @@
 
 using namespace std;
 
+class SolFact
+{
+	int * solVect;
+
+	bool isFeasible;
+
+public:
+	SolFact(int n);
+
+	void setSolFactValue(int pos, int val);
+
+	int getSolFactValue(int pos);
+};
+
+
+SolFact::SolFact(int n)
+{
+	solVect = new int[n];
+	isFeasible = true;
+}
+
+void SolFact::setSolFactValue(int pos, int val)
+{
+	solVect[pos];
+};
+
+int SolFact:: getSolFactValue(int pos)
+{
+	return this->solVect[pos];
+};
+
+
+class SolFactNode
+{
+	SolFact * solution;
+
+	SolFactCol * next
+
+};
+
+class SolFactCol
+{
+	SolFactNode * head;
+
+public:
+	SolFactCol();
+};
+
+SolFactCol::SolFactCol()
+{
+	head = NULL;
+}
+
 class Vertex
 {
 	int distance;
