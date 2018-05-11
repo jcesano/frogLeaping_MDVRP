@@ -7,58 +7,157 @@
 
 using namespace std;
 
-class SolFact
+class FeasSolNode; //forward declaration
+class FeasibleSolution; //forward declaration
+
+class FeasibleSolCol
+{
+	FeasSolNode * head;
+
+public:
+	FeasibleSolCol();
+
+	void AddFeasibleSol(FeasibleSolution * fs);
+
+	void printFeasSolCol();
+};
+
+FeasibleSolCol::FeasibleSolCol()
+{
+	head = NULL;
+}
+
+class FeasSolNode
+{
+	FeasibleSolution * feasibleSol;
+
+	FeasSolNode * next;
+
+public:
+
+	FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr);
+
+	void printNodeItems();
+};
+
+FeasSolNode::FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr)
+{
+	feasibleSol = fs;
+	next = fsnodeptr;
+}
+
+class FeasibleSolution
 {
 	int * solVect;
+
+	int size;
 
 	bool isFeasible;
 
 public:
-	SolFact(int n);
+	FeasibleSolution(int n);
+
+	FeasibleSolution(FeasibleSolution * fs);
 
 	void setSolFactValue(int pos, int val);
 
 	int getSolFactValue(int pos);
+
+	FeasibleSolution * swapItems(int pos1, int pos2);
+
+	FeasibleSolCol * genPermutations();	
+
+	void printFeasibleSolution();
 };
 
 
-SolFact::SolFact(int n)
+FeasibleSolution::FeasibleSolution(int n)
 {
 	solVect = new int[n];
+	size = n;
 	isFeasible = true;
 }
 
-void SolFact::setSolFactValue(int pos, int val)
+FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 {
-	solVect[pos];
+	solVect = new int[fs->size];
+	size = fs->size	;
+	isFeasible = true;
+
+	for(int i = 0; i<this->size;i++)
+	{
+		this->solVect[i] = fs->getSolFactValue(i);
+	}
+}
+
+void FeasibleSolution::setSolFactValue(int pos, int val)
+{
+	solVect[pos] = val;
 };
 
-int SolFact:: getSolFactValue(int pos)
+int FeasibleSolution::getSolFactValue(int pos)
 {
 	return this->solVect[pos];
-};
-
-
-class SolFactNode
-{
-	SolFact * solution;
-
-	SolFactCol * next
-
-};
-
-class SolFactCol
-{
-	SolFactNode * head;
-
-public:
-	SolFactCol();
-};
-
-SolFactCol::SolFactCol()
-{
-	head = NULL;
 }
+
+// Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
+FeasibleSolution * FeasibleSolution::swapItems(int pos1, int pos2)
+{
+	// in position pos1, set element of position pos2
+	this->setSolFactValue(pos1, this->getSolFactValue(pos2));
+
+	// in position pos2, set element of position pos1
+	this->setSolFactValue(pos2, this->getSolFactValue(pos1));
+
+	return this;
+};
+
+void FeasibleSolution::printFeasibleSolution()
+{
+	for(int i = 0; i < this->size;i++)
+	{
+		printf("%d ", this->solVect[i]);
+	}
+
+	printf("\n");
+}
+
+FeasibleSolCol * FeasibleSolution::genPermutations()
+{
+	FeasibleSolCol * colptr = NULL;
+	
+	if (this->size == 1) 
+	{
+		return NULL;
+	}// end if
+	
+	if (this->size == 2)
+	{
+		colptr = new FeasibleSolCol();	
+		
+		// swap first and second and generate a new FeasibleSolution
+		colptr->AddFeasibleSol(this->swapItems(0, 1));
+	}
+	else
+		{
+			FeasibleSolution * colptr_i_j;
+			colptr = new FeasibleSolCol();
+
+			for(int i=0; i < this->size;i++)
+			{
+				for(int j = i+1; j < this->size;j++)
+				{
+					colptr_i_j = new FeasibleSolution(this);
+
+					colptr_i_j->swapItems(i, j);
+
+					colptr->AddFeasibleSol(colptr_i_j);
+				}//end for j
+			}//end for i
+		}// end else
+
+	return colptr;
+};
 
 class Vertex
 {
@@ -441,27 +540,67 @@ int main()
 {
     
 	// create the graph given in above fugure
-	int V = 9;
-	Graph g(V);
+	int V = 5;
+	//Graph g(V);
 
 	//  making above shown graph
-	g.addEdge(0, 1, 4);
-	g.addEdge(0, 7, 8);
-	g.addEdge(1, 2, 8);
-	g.addEdge(1, 7, 11);
-	g.addEdge(2, 3, 7);
-	g.addEdge(2, 8, 2);
-	g.addEdge(2, 5, 4);
-	g.addEdge(3, 4, 9);
-	g.addEdge(3, 5, 14);
-	g.addEdge(4, 5, 10);
-	g.addEdge(5, 6, 2);
-	g.addEdge(6, 7, 1);
-	g.addEdge(6, 8, 6);
-	g.addEdge(7, 8, 7);
+	//g.addEdge(0, 1, 4);
+	//g.addEdge(0, 7, 8);
+	//g.addEdge(1, 2, 8);
+	//g.addEdge(1, 7, 11);
+	//g.addEdge(2, 3, 7);
+	//g.addEdge(2, 8, 2);
+	//g.addEdge(2, 5, 4);
+	//g.addEdge(3, 4, 9);
+	//g.addEdge(3, 5, 14);
+	//g.addEdge(4, 5, 10);
+	//g.addEdge(5, 6, 2);
+	//g.addEdge(6, 7, 1);
+	//g.addEdge(6, 8, 6);
+	//g.addEdge(7, 8, 7);
 
-	g.dijkstra(0);
+	//g.dijkstra(0);
+
+	FeasibleSolution * fs;
+	FeasibleSolCol * fscol;
+
+	fs = new FeasibleSolution(V);
+
+	for(int i = 0; i<V;i++)
+	{
+		fs->setSolFactValue(i, i);
+	}
+
+	fscol = fs->genPermutations();
+
+
+	fscol->printFeasSolCol();
 
 	return 0;
 }
 
+void FeasSolNode::printNodeItems()
+{
+	this->feasibleSol->printFeasibleSolution();
+
+	this->next->printNodeItems();
+}
+
+void FeasibleSolCol::AddFeasibleSol(FeasibleSolution * fs)
+{
+	FeasSolNode * ptr;
+
+	ptr = new FeasSolNode(fs, head);
+
+	head = ptr;
+};
+
+void FeasibleSolCol::printFeasSolCol()
+{
+	printf("Printing permutations \n");
+
+	if (head != NULL)
+	{
+		head->printNodeItems();
+	}
+}
