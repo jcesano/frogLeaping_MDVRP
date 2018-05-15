@@ -14,17 +14,33 @@ class FeasibleSolCol
 {
 	FeasSolNode * head;
 
+	int colSize;
+
 public:
 	FeasibleSolCol();
 
 	void AddFeasibleSol(FeasibleSolution * fs);
 
 	void printFeasSolCol();
+
+	int getSize();
+
+	FeasibleSolution * getFeasibleSolution(int i);
+	
+	void removeFeasibleSolutions(FeasibleSolCol * sourceSolutionCol);
+
+	void removeFeasibleSolution(FeasibleSolution * fs);
+
+	int feasibleSolExists(FeasibleSolution * fs);
+
+	void ConcatCol(FeasibleSolCol * fs);
 };
 
 FeasibleSolCol::FeasibleSolCol()
 {
 	head = NULL;
+
+	this->colSize = 0;
 }
 
 class FeasSolNode
@@ -38,6 +54,16 @@ public:
 	FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr);
 
 	void printNodeItems();
+
+	FeasibleSolution * getSolution();
+
+	FeasSolNode * getNextFeasSolNode();
+
+	void setNextFeasSolNode(FeasSolNode * node);
+
+	void removeFeasibleSolutions(FeasibleSolCol * sourceSolutionCol);
+
+	void removeFeasibleSolution(FeasibleSolution * fs);
 };
 
 FeasSolNode::FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr)
@@ -65,7 +91,11 @@ public:
 
 	FeasibleSolution * swapItems(int pos1, int pos2);
 
-	FeasibleSolCol * genPermutations();	
+	FeasibleSolCol * genOneSwapPermutations();
+
+	FeasibleSolCol * genPermutations(int distance, FeasibleSolCol * sourceSolutionCol);
+
+	int isTheSame(FeasibleSolution * fs);
 
 	void printFeasibleSolution();
 };
@@ -103,14 +133,41 @@ int FeasibleSolution::getSolFactValue(int pos)
 // Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
 FeasibleSolution * FeasibleSolution::swapItems(int pos1, int pos2)
 {
+	int tempValue;
+
+	tempValue = this->getSolFactValue(pos1); //store value of position pos1
+
 	// in position pos1, set element of position pos2
 	this->setSolFactValue(pos1, this->getSolFactValue(pos2));
 
 	// in position pos2, set element of position pos1
-	this->setSolFactValue(pos2, this->getSolFactValue(pos1));
+	this->setSolFactValue(pos2, tempValue);
 
 	return this;
 };
+
+int FeasibleSolution::isTheSame(FeasibleSolution * fs)
+{
+	int result = 1, i = 0;
+
+
+	if(this->size != fs->size)
+	{
+		return 0;
+	};
+
+	while(result == 0 && i < this->size)
+	{
+		if(this->solVect[i] != fs->solVect[i])
+		{
+			result = 0;
+		}
+
+		i++;
+	};
+
+	return result;
+}
 
 void FeasibleSolution::printFeasibleSolution()
 {
@@ -122,7 +179,42 @@ void FeasibleSolution::printFeasibleSolution()
 	printf("\n");
 }
 
-FeasibleSolCol * FeasibleSolution::genPermutations()
+FeasibleSolCol * FeasibleSolution::genPermutations(int distance, FeasibleSolCol * sourceSolutionCol)
+{
+	if (distance == 1)
+	{
+		FeasibleSolCol * fscol = this->genOneSwapPermutations();
+
+		if(sourceSolutionCol == NULL)
+		{
+			return fscol;
+		}
+		else{
+				fscol->removeFeasibleSolutions(sourceSolutionCol);
+				return fscol;
+			}		
+	}
+	else{
+			FeasibleSolCol * tempCol = this->genOneSwapPermutations(), * tempCol_i = NULL, * fullCol = new FeasibleSolCol();
+			FeasibleSolution * fs_i;			
+
+			
+			for(int i = 1; i< tempCol->getSize();i++)
+			{
+				fs_i = tempCol->getFeasibleSolution(i);
+
+				sourceSolutionCol->AddFeasibleSol(fs_i);
+
+				tempCol_i = fs_i->genPermutations(distance - 1, sourceSolutionCol);
+
+				fullCol->ConcatCol(tempCol_i);
+			}
+
+			return fullCol;
+		}
+}
+
+FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 {
 	FeasibleSolCol * colptr = NULL;
 	
@@ -158,6 +250,7 @@ FeasibleSolCol * FeasibleSolution::genPermutations()
 
 	return colptr;
 };
+
 
 class Vertex
 {
@@ -571,7 +664,9 @@ int main()
 		fs->setSolFactValue(i, i);
 	}
 
-	fscol = fs->genPermutations();
+	int distance;
+	distance = 1;
+	fscol = fs->genPermutations(2,NULL);
 
 
 	fscol->printFeasSolCol();
@@ -583,7 +678,26 @@ void FeasSolNode::printNodeItems()
 {
 	this->feasibleSol->printFeasibleSolution();
 
-	this->next->printNodeItems();
+	if(next != NULL)
+	{
+		this->next->printNodeItems();
+	}	
+}
+
+FeasibleSolution * FeasSolNode::getSolution()
+{
+	return this->feasibleSol;
+}
+
+FeasSolNode * FeasSolNode::getNextFeasSolNode()
+{
+	return this->next;
+}
+
+
+void FeasSolNode::setNextFeasSolNode(FeasSolNode * node)
+{
+	this->next = node;
 }
 
 void FeasibleSolCol::AddFeasibleSol(FeasibleSolution * fs)
@@ -593,6 +707,8 @@ void FeasibleSolCol::AddFeasibleSol(FeasibleSolution * fs)
 	ptr = new FeasSolNode(fs, head);
 
 	head = ptr;
+
+	this->colSize = this->colSize + 1;
 };
 
 void FeasibleSolCol::printFeasSolCol()
@@ -602,5 +718,127 @@ void FeasibleSolCol::printFeasSolCol()
 	if (head != NULL)
 	{
 		head->printNodeItems();
+	}
+}
+
+int FeasibleSolCol::getSize()
+{
+	return this->colSize;
+}
+
+//returns the solution in position i in the list, first position is 1.
+FeasibleSolution * FeasibleSolCol::getFeasibleSolution(int i)
+{
+	// assign the first element
+	FeasSolNode * result = head;
+
+	if(this->head != NULL)
+	{
+		// if i == 1 then for is not executed, otherwise we start from i = 2 
+		// cause result is pointing to the first Node already 
+		for(int j = 2; j <= i; j++)
+		{
+			result = result->getNextFeasSolNode();
+		}
+	}
+
+	if (result != NULL)
+	{
+		return result->getSolution();
+	}
+	
+	return NULL;	
+}
+
+void FeasibleSolCol::removeFeasibleSolutions(FeasibleSolCol * sourceSolutionCol)
+{
+	if (sourceSolutionCol != NULL)
+	{
+		for (int i = 1; i <= sourceSolutionCol->colSize; i++)
+		{
+			FeasibleSolution * fs = sourceSolutionCol->getFeasibleSolution(i);
+			if (this->feasibleSolExists(fs) == 1)
+			{
+				this->removeFeasibleSolution(fs);
+			}
+		}
+	}
+
+}
+
+void FeasibleSolCol::removeFeasibleSolution(FeasibleSolution * fs)
+{
+	FeasSolNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
+
+	if(fs != NULL)
+	{
+		while (nodePtr != NULL)
+		{
+			if (nodePtr->getSolution() != NULL)
+			{
+				if (nodePtr->getSolution()->isTheSame(fs) == 1)
+				{
+
+					// if the element is located at the begining of the list
+					if (head == nodePtr)
+					{
+						nodePtrTemp = head;
+						head = head->getNextFeasSolNode();
+						nodePtr = head;
+						// add a delete nodePtrTemp
+					}
+					else{
+							nodePtrTemp = nodePtr;
+							nodePtrPrev->setNextFeasSolNode(nodePtr->getNextFeasSolNode());
+							nodePtr = nodePtrTemp->getNextFeasSolNode();
+
+							// add a delete nodePtrTemp
+						}
+				}
+				else{
+						nodePtrPrev = nodePtr;
+						nodePtr = nodePtr->getNextFeasSolNode();
+					}
+			} // end if (nodePtr->getSolution() != NULL)
+		} // end while (nodePtr != NULL)
+	} // end if(fs != NULL)
+}
+
+int FeasibleSolCol::feasibleSolExists(FeasibleSolution * fs)
+{
+	int found = 0, i;
+
+	if(this != NULL)
+	{
+		FeasSolNode * nodePtr;
+		FeasibleSolution * solPtr;
+
+		i = 1;
+
+		nodePtr = this->head;
+
+		while (found == 0 && i <= this->getSize() && nodePtr != NULL)
+		{
+			solPtr = nodePtr->getSolution();
+
+			found = solPtr->isTheSame(fs);
+
+			nodePtr = nodePtr->getNextFeasSolNode();
+			i = i + 1;
+		}		
+	}
+	
+	return found;
+}
+
+void FeasibleSolCol::ConcatCol(FeasibleSolCol * fscol)
+{
+	FeasSolNode * tmp;
+	FeasibleSolution * fs;
+
+	for(int i = 1; i <= fscol->getSize();i++)
+	{
+		fs = fscol->getFeasibleSolution(i);
+		this->AddFeasibleSol(fs);
 	}
 }
