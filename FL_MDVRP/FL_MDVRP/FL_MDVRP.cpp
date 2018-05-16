@@ -31,6 +31,10 @@ public:
 
 	void removeFeasibleSolution(FeasibleSolution * fs);
 
+	FeasibleSolCol * removeRepetedItems();
+
+	int areThereRepetedItems();
+
 	int feasibleSolExists(FeasibleSolution * fs);
 
 	void ConcatCol(FeasibleSolCol * fs);
@@ -60,10 +64,6 @@ public:
 	FeasSolNode * getNextFeasSolNode();
 
 	void setNextFeasSolNode(FeasSolNode * node);
-
-	void removeFeasibleSolutions(FeasibleSolCol * sourceSolutionCol);
-
-	void removeFeasibleSolution(FeasibleSolution * fs);
 };
 
 FeasSolNode::FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr)
@@ -98,6 +98,18 @@ public:
 	int isTheSame(FeasibleSolution * fs);
 
 	void printFeasibleSolution();
+
+	FeasibleSolution * genRandomSwapSolution(int bottom, int top);
+
+	FeasibleSolCol * genRandomFeasibleSolCol();
+	
+	void setRandomSolution();
+
+	void setIndexesAsValues();
+
+	void removeValue(int position);
+
+	int popRandomValue();
 };
 
 
@@ -177,6 +189,50 @@ void FeasibleSolution::printFeasibleSolution()
 	}
 
 	printf("\n");
+}
+
+FeasibleSolution * FeasibleSolution::genRandomSwapSolution(int bottom, int top)
+{
+	int randomValue;
+	FeasibleSolution * randomFs = new FeasibleSolution(this);
+
+	randomValue = (rand() % (top + 1 - bottom)) + bottom;
+
+	randomFs->swapItems(bottom, randomValue);
+
+	return randomFs;
+}
+
+FeasibleSolCol * FeasibleSolution::genRandomFeasibleSolCol()
+{
+	FeasibleSolCol * randomFsCol = new FeasibleSolCol();
+	FeasibleSolution * fs = NULL;
+
+	randomFsCol->AddFeasibleSol(this);
+
+	fs = this;
+	for(int i = 0; i < this->size-1; i++)
+	{
+		fs = fs->genRandomSwapSolution(i, this->size - 1);
+
+		randomFsCol->AddFeasibleSol(fs);
+	}
+
+	return randomFsCol;
+}
+
+void FeasibleSolution::setRandomSolution()
+{
+	FeasibleSolution * fsIndex = new FeasibleSolution(this->size);
+
+	fsIndex->setIndexesAsValues();
+
+	for(int i = 0; i <= this->size-1; i++)
+	{
+		int randValue = fsIndex->popRandomValue();
+
+		this->setSolFactValue(i, randValue);
+	}	
 }
 
 FeasibleSolCol * FeasibleSolution::genPermutations(int distance, FeasibleSolCol * sourceSolutionCol)
@@ -262,6 +318,33 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 	return colptr;
 };
 
+
+void FeasibleSolution::setIndexesAsValues()
+{
+	for (int i = 0; i < this->size; i++)
+	{
+		this->setSolFactValue(i, i);
+	};
+}
+
+void FeasibleSolution::removeValue(int position)
+{
+	for(int i = position; i < this->size-2; i++)
+	{
+		this->setSolFactValue(i, this->getSolFactValue(i + 1));
+	}
+}
+
+int FeasibleSolution::popRandomValue()
+{
+	int randomIndex = rand() % ( this->size); // random number between 0 and size-1
+
+	int randomValue = this->getSolFactValue(randomIndex);
+
+	this->removeValue(randomIndex);
+
+	return randomValue;
+}
 
 class Vertex
 {
@@ -814,6 +897,43 @@ void FeasibleSolCol::removeFeasibleSolution(FeasibleSolution * fs)
 			} // end if (nodePtr->getSolution() != NULL)
 		} // end while (nodePtr != NULL)
 	} // end if(fs != NULL)
+}
+
+FeasibleSolCol * FeasibleSolCol::removeRepetedItems()
+{
+	FeasibleSolCol * remRepItemsCol = new FeasibleSolCol();
+	FeasibleSolution * fs = NULL;
+
+	for(int i = 1; i <= this->getSize(); i++)
+	{
+		fs = this->getFeasibleSolution(i);
+
+		if(remRepItemsCol->feasibleSolExists(fs) == 0)
+		{
+			remRepItemsCol->AddFeasibleSol(fs);
+		}		
+	}
+
+	return remRepItemsCol;
+}
+
+// It returns the position of the first repeated item. Otherwise returns 0.
+int FeasibleSolCol::areThereRepetedItems()
+{
+	int repeated = 0, i = 1;
+	FeasibleSolCol * auxCol = new FeasibleSolCol();
+	FeasibleSolution * fs = NULL;
+
+	while (i <= this->getSize() && repeated == 0)
+	{
+		fs = this->getFeasibleSolution(i);
+		if (auxCol->feasibleSolExists(fs) == 0)
+		{
+			repeated = i;
+		}
+	}
+
+	return repeated;
 }
 
 int FeasibleSolCol::feasibleSolExists(FeasibleSolution * fs)
