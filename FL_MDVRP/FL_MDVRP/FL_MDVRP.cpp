@@ -3,12 +3,40 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <time.h>
 
 
 using namespace std;
 
 class FeasSolNode; //forward declaration
 class FeasibleSolution; //forward declaration
+
+class Permutation
+{
+	int i;
+	int j;
+public:
+	Permutation();
+
+	int get_i_Value();
+	int get_j_Value();
+};
+
+Permutation::Permutation()
+{
+	i = -1;
+	j = -1;
+}
+
+int Permutation::get_i_Value()
+{
+	return i;
+}
+
+int Permutation::get_j_Value()
+{
+	return j;
+}
 
 class FeasibleSolCol
 {
@@ -74,32 +102,34 @@ FeasSolNode::FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr)
 
 class FeasibleSolution
 {
-	int * solVect;
+	short int * solVect;
 
-	int size;
+	short int size;
 
 	bool isFeasible;
 
+	time_t timeSeedUsed;
+
 public:
-	FeasibleSolution(int n);
+	FeasibleSolution(short int n);
 
 	FeasibleSolution(FeasibleSolution * fs);
 
-	void setSolFactValue(int pos, int val);
+	void setSolFactValue(short int pos, short int val);
 
-	int getSolFactValue(int pos);
+	int getSolFactValue(short int pos);
 
-	FeasibleSolution * swapItems(int pos1, int pos2);
+	FeasibleSolution * swapItems(short int pos1, short int pos2);
 
 	FeasibleSolCol * genOneSwapPermutations();
 
-	FeasibleSolCol * genPermutations(int distance, FeasibleSolCol * sourceSolutionCol);
+	FeasibleSolCol * genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol);
 
-	int isTheSame(FeasibleSolution * fs);
+	bool isTheSame(FeasibleSolution * fs);
 
 	void printFeasibleSolution();
 
-	FeasibleSolution * genRandomSwapSolution(int bottom, int top);
+	FeasibleSolution * genRandomSwapSolution(short int bottom, short int top);
 
 	FeasibleSolCol * genRandomFeasibleSolCol();
 	
@@ -107,45 +137,59 @@ public:
 
 	void setIndexesAsValues();
 
-	void removeValue(int position);
+	void removeValue(short int position);
 
-	int popRandomValue();
+	short int popRandomValue();
+
+	int factorial(short int n);
 };
 
 
-FeasibleSolution::FeasibleSolution(int n)
+FeasibleSolution::FeasibleSolution(short int n)
 {
-	solVect = new int[n];
+	solVect = new short int[n];
 	size = n;
 	isFeasible = true;
+
+	// initialize random seed
+	timeSeedUsed = time(NULL);
+
+	srand(timeSeedUsed);
+
 }
 
 FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 {
-	solVect = new int[fs->size];
+	solVect = new short int[fs->size];
 	size = fs->size	;
 	isFeasible = true;
 
-	for(int i = 0; i<this->size;i++)
+	for(short int i = 0; i<this->size;i++)
 	{
 		this->solVect[i] = fs->getSolFactValue(i);
 	}
+
+	// initialize random seed
+	timeSeedUsed = time(NULL);
+
+	srand(timeSeedUsed);
+
 }
 
-void FeasibleSolution::setSolFactValue(int pos, int val)
+void FeasibleSolution::setSolFactValue(short int pos, short int val)
 {
 	solVect[pos] = val;
 };
 
-int FeasibleSolution::getSolFactValue(int pos)
+int FeasibleSolution::getSolFactValue(short int pos)
 {
 	return this->solVect[pos];
 }
 
 // Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
-FeasibleSolution * FeasibleSolution::swapItems(int pos1, int pos2)
+FeasibleSolution * FeasibleSolution::swapItems(short int pos1, short int pos2)
 {
-	int tempValue;
+	short int tempValue;
 
 	tempValue = this->getSolFactValue(pos1); //store value of position pos1
 
@@ -158,21 +202,21 @@ FeasibleSolution * FeasibleSolution::swapItems(int pos1, int pos2)
 	return this;
 };
 
-int FeasibleSolution::isTheSame(FeasibleSolution * fs)
+bool FeasibleSolution::isTheSame(FeasibleSolution * fs)
 {
-	int result = 1, i = 0;
-
-
+	bool result = true;
+	short int i = 0;
+	
 	if(this->size != fs->size)
 	{
 		return 0;
 	};
 
-	while(result == 1 && i < this->size)
+	while(result == true && i < this->size)
 	{
 		if(this->solVect[i] != fs->solVect[i])
 		{
-			result = 0;
+			result = false;
 		}
 
 		i++;
@@ -183,7 +227,7 @@ int FeasibleSolution::isTheSame(FeasibleSolution * fs)
 
 void FeasibleSolution::printFeasibleSolution()
 {
-	for(int i = 0; i < this->size;i++)
+	for(short int i = 0; i < this->size;i++)
 	{
 		printf("%d ", this->solVect[i]);
 	}
@@ -191,14 +235,25 @@ void FeasibleSolution::printFeasibleSolution()
 	printf("\n");
 }
 
-FeasibleSolution * FeasibleSolution::genRandomSwapSolution(int bottom, int top)
+FeasibleSolution * FeasibleSolution::genRandomSwapSolution(short int bottom, short int top)
 {
-	int randomValue;
+	short int randomValue;
+
 	FeasibleSolution * randomFs = new FeasibleSolution(this);
 
-	randomValue = (rand() % (top + 1 - bottom)) + bottom;
-
-	randomFs->swapItems(bottom, randomValue);
+	if(top - bottom == 1)
+	{
+		randomFs->swapItems(bottom, top);
+	}
+	else{
+			
+			do
+			{
+				randomValue = (rand() % (top + 1 - bottom)) + bottom;
+			} while (randomValue == bottom);
+			
+			randomFs->swapItems(bottom, randomValue);
+		}		
 
 	return randomFs;
 }
@@ -211,7 +266,7 @@ FeasibleSolCol * FeasibleSolution::genRandomFeasibleSolCol()
 	randomFsCol->AddFeasibleSol(this);
 
 	fs = this;
-	for(int i = 0; i < this->size-1; i++)
+	for(short int i = 0; i < this->size-1; i++)
 	{
 		fs = fs->genRandomSwapSolution(i, this->size - 1);
 
@@ -227,15 +282,17 @@ void FeasibleSolution::setRandomSolution()
 
 	fsIndex->setIndexesAsValues();
 
-	for(int i = 0; i <= this->size-1; i++)
+	for(short int i = 0; i <= this->size-1; i++)
 	{
-		int randValue = fsIndex->popRandomValue();
+		short int randValue = fsIndex->popRandomValue();
 
 		this->setSolFactValue(i, randValue);
 	}	
+
+	delete fsIndex;
 }
 
-FeasibleSolCol * FeasibleSolution::genPermutations(int distance, FeasibleSolCol * sourceSolutionCol)
+FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol)
 {
 	if (distance == 1)
 	{
@@ -302,9 +359,9 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 			FeasibleSolution * colptr_i_j;
 			colptr = new FeasibleSolCol();
 
-			for(int i=0; i < this->size;i++)
+			for(short int i=0; i < this->size;i++)
 			{
-				for(int j = i+1; j < this->size;j++)
+				for(short int j = i+1; j < this->size;j++)
 				{
 					colptr_i_j = new FeasibleSolution(this);
 
@@ -321,29 +378,48 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 
 void FeasibleSolution::setIndexesAsValues()
 {
-	for (int i = 0; i < this->size; i++)
+	for (short int i = 0; i < this->size; i++)
 	{
 		this->setSolFactValue(i, i);
 	};
 }
 
-void FeasibleSolution::removeValue(int position)
+void FeasibleSolution::removeValue(short int position)
 {
-	for(int i = position; i < this->size-2; i++)
+	for(int i = position; i < this->size-1; i++)
 	{
 		this->setSolFactValue(i, this->getSolFactValue(i + 1));
 	}
+
+	this->size--;
 }
 
-int FeasibleSolution::popRandomValue()
+short int FeasibleSolution::popRandomValue()
 {
-	int randomIndex = rand() % ( this->size); // random number between 0 and size-1
+	short int randomIndex = rand() % ( this->size); // random number between 0 and size-1
 
-	int randomValue = this->getSolFactValue(randomIndex);
+	short int randomValue = this->getSolFactValue(randomIndex);
 
 	this->removeValue(randomIndex);
 
 	return randomValue;
+}
+
+int FeasibleSolution::factorial(short int n)
+{
+	long int result = 1;
+
+	if(n == 0)
+	{
+		return 1;
+	};
+
+	for(int i = 1; i <= n; i++)
+	{
+		result = result * i;
+	};
+
+	return result;
 }
 
 class Vertex
@@ -353,6 +429,8 @@ class Vertex
 	int index;		// index of vertex in graph. Is the id of the vertex.
 	int prevIndex; // index of previous vertex in the shortest path from origin
 	int prevPathIndex; // index of previous vertex in the marking vertex path
+	
+	short int vertexType; // type of vertex: 0 = "simple node"; 1 = "Customer Node"; 2 = "Depot"
 
 public:
 	Vertex(); //Constructor
@@ -364,9 +442,11 @@ public:
 	int getIndex();
 	void setIndex(int v);
 	int getPrevIndex();
+	int getVertexType();
 	void setPrevIndex(int prevInd);
 	int getPrevPathIndex();
 	void setPrevPathIndex(int v);
+	void setVertexType(short int vertexType);
 };
 
 Vertex::Vertex()
@@ -376,6 +456,7 @@ Vertex::Vertex()
 	this->marked = 0;
 	this->prevIndex = -2;
 	this->prevPathIndex = -2;
+	this->vertexType = 0;
 }
 
 int Vertex::getDistance()
@@ -418,6 +499,11 @@ int Vertex::getPrevIndex()
 	return prevIndex;
 }
 
+int Vertex::getVertexType()
+{
+	return this->vertexType;
+}
+
 void Vertex::setPrevIndex(int prevIndexV)
 {
 	prevIndex = prevIndexV;
@@ -431,6 +517,11 @@ int Vertex::getPrevPathIndex()
 void Vertex::setPrevPathIndex(int v)
 {
 	this->prevPathIndex = v;
+}
+
+void Vertex::setVertexType(short int v_Type)
+{
+	this->vertexType = v_Type;
 }
 
 class DistVect
@@ -467,6 +558,8 @@ public:
 	void sortSolution();
 
 	void printSolution();
+
+	short int getDistanceBtwn(short int i, short int j);
 
 };
 
@@ -582,58 +675,315 @@ void DistVect::printSolution()
 	}
 }
 
-
-// This class represents a directed graph using
-// adjacency list representation
-class Graph
+short int DistVect::getDistanceBtwn(short int i, short int j)
 {
-	int V;    // No. of vertices
-	int** a;
+	short int v_origin, v_end;
+
+	if(i < j)
+	{
+		v_origin = i;
+		v_end = j;
+	}
+	else
+		{
+			v_origin = j;
+			v_end = i;
+		};
+
+	short int prevDistance, currentDistance, currentDiffDistance;
+		
+	prevDistance = 0;
+	currentDistance = dv[v_origin].getDistance();
+	currentDiffDistance = 0;
+
+	for(short int w = v_origin; w < v_end; w++)
+	{
+		prevDistance = currentDistance;
+		currentDistance = dv[w + 1].getDistance();
+		currentDiffDistance = currentDiffDistance + (currentDistance - prevDistance);
+	}
+
+	return currentDiffDistance;
+}
+
+
+class DistanceTable
+{
+	short int V;    // No. of vertices
+	short int** a;
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
 
-
-
 public:
-	int const NO_ADJ = -1;
+	short int const NO_ADJ = -1;
 
-	Graph(int V);  // Constructor
+	DistanceTable(short int V);  // Constructor
 
-				   // function to add an edge to graph
-	void addEdge(int u, int v, int w);
+								 // function to add an edge to graph
+	void addEdge(short int u, short int v, short int w);
 
-	void dijkstra(int src);
+	void loadMinDistanceTable(DistVect * dv); // load the table with the minimum distance among all vertexes
 
-	int getNextClosestVertex(int v, int * prevPathVertex, DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
+	void loadMinDistanceEdge(DistVect * dv, short int i, short int j); // load minimum distance between i and j
+
+	void printDistanceTable();
 };
 
 // Allocates memory for adjacency list
-Graph::Graph(int vertexCount)
+DistanceTable::DistanceTable(short int vertexCount)
 {
 	this->V = vertexCount;
 
-	a = new int*[V];
+	a = new short int*[V];
 
-	for (int i = 0; i < V; i++) {
-		a[i] = new int[V];
+	for (short int i = 0; i < V; i++) {
+		a[i] = new short int[V];
 	};
 
-	for (int u = 0; u < V; u++) {
+	for (short int u = 0; u < V; u++) {
 
-		for (int v = 0; v < V; v++) {
+		for (short int v = 0; v < V; v++) {
 			a[u][v] = NO_ADJ;
 		}
 	}
 }
 
-void Graph::addEdge(int u, int v, int w)
+void DistanceTable::addEdge(short int u, short int v, short int w)
 {
 	a[u][v] = w;
 	a[v][u] = w;
 }
 
+// load the table with the minimum distance among all vertexes
+void DistanceTable::loadMinDistanceTable(DistVect * dv)
+{
+	for (short int i = 0; i < this->V; i++)
+	{
+		for (short j = 0; j < this->V; j++)
+		{
+			loadMinDistanceEdge(dv, i, j);
+		}
+	}
+}
+
+void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
+{
+	short int min_dist = dv->getDistanceBtwn(i, j);
+
+	this->a[i][j] = min_dist;
+	this->a[j][i] = min_dist;
+}
+
+void DistanceTable::printDistanceTable()
+{
+	printf("Printing Distance Table \n");
+
+	for(short int i = 0; i < this->V; i++)
+	{
+		for(short int j = i+1; j < this->V; j++)
+		{
+			printf("(%d, %d) = %d ", i, j, this->a[i][j]);
+		}
+
+		printf(" \n");
+	}	
+}
+
+class IndexListNode
+{
+	short int index;
+	IndexListNode * next;
+public:
+	IndexListNode(short int index, IndexListNode * nextPtr); // Constructor
+
+	short int getIndex();
+
+	IndexListNode * getNextPtr();
+
+	void setIndex(short int index);
+
+	void setNextPtr(IndexListNode * nextPtr);
+
+};
+
+IndexListNode::IndexListNode(short int v_index, IndexListNode * nextPtr)
+{
+	this->index = v_index;
+	this->next = nextPtr;
+}
+
+short int IndexListNode::getIndex()
+{
+	return this->index;
+}
+
+IndexListNode * IndexListNode::getNextPtr()
+{
+	return this->next;
+}
+
+void IndexListNode::setIndex(short int v_index)
+{
+	this->index = v_index;
+}
+
+void IndexListNode::setNextPtr(IndexListNode * nextPtr)
+{
+	this->next = nextPtr;
+}
+
+class IndexList 
+{
+	IndexListNode * head;
+
+	short int size;
+
+public:
+
+	IndexList(); // Constructor
+	
+	void addIndex(short int index);
+
+	void removeIndex(short int index);
+};
+
+IndexList::IndexList()
+{
+	this->head = NULL;
+	this->size = 0;
+}
+
+void IndexList::addIndex(short int index)
+{
+	IndexListNode * node = new IndexListNode(index, head);
+
+	head = node;
+
+	this->size++;
+}
+
+void IndexList::removeIndex(short int index)
+{
+	IndexListNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
+
+	while (nodePtr != NULL)
+	{
+		if (nodePtr->getIndex() == index)
+		{
+			// if the element is located at the begining of the list
+			if (head == nodePtr)
+			{
+				nodePtrTemp = head;
+				head = head->getNextPtr();
+				nodePtr = head;
+				
+				// add a delete nodePtrTemp
+				this->size--;
+			}
+			else {
+					nodePtrTemp = nodePtr;
+					nodePtrPrev->setNextPtr(nodePtr->getNextPtr());
+					nodePtr = nodePtrTemp->getNextPtr();
+					
+					// add a delete nodePtrTemp
+					this->size--;
+				 }
+		} // if (nodePtr->getIndex == index)
+		else {
+				nodePtrPrev = nodePtr;
+				nodePtr = nodePtr->getNextPtr();
+			 }
+		
+	} // end while (nodePtr != NULL)
+}
+
+// This class represents a directed graph using
+// adjacency list representation
+class Graph
+{
+	short int V;    // No. of vertices
+	short int** a;
+	// In a weighted graph, we need to store vertex
+	// and weight pair for every edge
+	
+	IndexList * custormerList;
+	IndexList * depotList;
+
+	short int origin;
+
+public:
+	short int const NO_ADJ = -1;
+
+	Graph(short int V);  // Constructor
+
+	void setOrigin(short int v);
+
+	short int getOrigin();
+
+				   // function to add an edge to graph
+	void addEdge(short int u, short int v, short int w);
+
+	void setAsCustomer(short int v);
+
+	void setAsDepot(short int v);
+
+	DistVect * dijkstra(short int src);
+
+	short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
+};
+
+// Allocates memory for adjacency list
+Graph::Graph(short int vertexCount)
+{
+	this->V = vertexCount;
+
+	a = new short int*[V];
+
+	for (short int i = 0; i < V; i++) {
+		a[i] = new short int[V];
+	};
+
+	for (short int u = 0; u < V; u++) {
+
+		for (short int v = 0; v < V; v++) {
+			a[u][v] = NO_ADJ;
+		}
+	}
+
+	this->custormerList = new IndexList();
+	this->depotList = new IndexList();
+
+	this->origin = -1;
+}
+
+void Graph::setOrigin(short int v)
+{
+	this->origin = v;
+}
+
+short int Graph::getOrigin()
+{
+	return this->origin;
+}
+
+void Graph::addEdge(short int u, short int v, short int w)
+{
+	a[u][v] = w;
+	a[v][u] = w;
+}
+
+void Graph::setAsCustomer(short int v)
+{
+	this->custormerList->addIndex(v);
+}
+
+void Graph::setAsDepot(short int v)
+{
+	this->depotList->addIndex(v);
+}
+
 // Prints shortest paths from src to all other vertices
-void Graph::dijkstra(int src)
+DistVect * Graph::dijkstra(short int src)
 {
 	// The output array.  dist[i] will hold the shortest
 	// distance from src to i
@@ -649,26 +999,26 @@ void Graph::dijkstra(int src)
 	// Distance of source vertex from itself is always 0
 	//dist[src] = 0;
 
-	int currentPathVertex = src, prevPathVertex = -1;
+	short int currentPathVertex = src, prevPathVertex = -1;
 
 	// Find shortest path for all vertices
-	for (int count = 0; count < V - 1; count++)
+	for (short int count = 0; count < V - 1; count++)
 	{
 		// Pick the minimum distance vertex from the set of vertices not
 		// yet processed. u is always equal to src in first iteration.
 		//int u = minDistance(dist, sptSet);
-		int currDistance = dvptr->getMinDist(currentPathVertex);
+		short int currDistance = dvptr->getMinDist(currentPathVertex);
 
 		// Mark the picked vertex as processed
 		//sptSet[u] = true;
 		dvptr->markVert(currentPathVertex);
 		dvptr->setPrevPathIndex(currentPathVertex, prevPathVertex);
 
-		int curr_closestVertDistance = INT_MAX; // is the closest distance to u from all adj vertexes
-		int curr_closestVert = -1;              // is the closest index to u from all adj vertexes
+		short int curr_closestVertDistance = INT_MAX; // is the closest distance to u from all adj vertexes
+		short int curr_closestVert = -1;              // is the closest index to u from all adj vertexes
 
 		// Update dist value of the adjacent vertices of the picked vertex.
-		for (int v = 0; v < V; v++)
+		for (short int v = 0; v < V; v++)
 		{
 		
 
@@ -696,14 +1046,16 @@ void Graph::dijkstra(int src)
 
 	// print the constructed distance array
 	dvptr->printSolution();
+
+	return dvptr;
 }
 
-int Graph::getNextClosestVertex(int v, int * prevPathVertex, DistVect* dvptr)
+short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, DistVect* dvptr)
 {	
-	int minDistVertex = INT_MAX;
-	int minDistVertexInd = -1;
+	short int minDistVertex = SHRT_MAX; 
+	short int minDistVertexInd = -1;
 
-	for(int i=0;i < V;i++)
+	for(short int i=0;i < V;i++)
 	{
 		if(a[v][i] != NO_ADJ && i != v && a[v][i] < minDistVertex && dvptr->isUnmarkedVertex(i))
 		{
@@ -722,60 +1074,83 @@ int Graph::getNextClosestVertex(int v, int * prevPathVertex, DistVect* dvptr)
 		}		
 }
 
-
 int main()
 {
     
 	// create the graph given in above fugure
-	int V = 5;
-	//Graph g(V);
+	int V = 9;
+	Graph g(V);
 
 	//  making above shown graph
-	//g.addEdge(0, 1, 4);
-	//g.addEdge(0, 7, 8);
-	//g.addEdge(1, 2, 8);
-	//g.addEdge(1, 7, 11);
-	//g.addEdge(2, 3, 7);
-	//g.addEdge(2, 8, 2);
-	//g.addEdge(2, 5, 4);
-	//g.addEdge(3, 4, 9);
-	//g.addEdge(3, 5, 14);
-	//g.addEdge(4, 5, 10);
-	//g.addEdge(5, 6, 2);
-	//g.addEdge(6, 7, 1);
-	//g.addEdge(6, 8, 6);
-	//g.addEdge(7, 8, 7);
+	/* main to test Dijkstra algorithm */
+	g.addEdge(0, 1, 4);
+	g.addEdge(0, 7, 8);
+	g.addEdge(1, 2, 8);
+	g.addEdge(1, 7, 11);
+	g.addEdge(2, 3, 7);
+	g.addEdge(2, 8, 2);
+	g.addEdge(2, 5, 4);
+	g.addEdge(3, 4, 9);
+	g.addEdge(3, 5, 14);
+	g.addEdge(4, 5, 10);
+	g.addEdge(5, 6, 2);
+	g.addEdge(6, 7, 1);
+	g.addEdge(6, 8, 6);
+	g.addEdge(7, 8, 7);
 
-	//g.dijkstra(0);
-
+	g.dijkstra(0);
+	
+	
+	/* Main to test all permutations of distance = 1 and distance = 2 
 	FeasibleSolution * fs;
 	FeasibleSolCol * fscol;
 
 	fs = new FeasibleSolution(V);
 
+	// setting indexes as values in the FeasibleSolution	
 	for(int i = 0; i<V;i++)
 	{
 		fs->setSolFactValue(i, i);
 	}
-
+		
 	int distance;
-	distance = 2;
+	distance = 1;
 	fscol = fs->genPermutations(distance,NULL);
+	fscol->printFeasSolCol();
+	*/
 
+	/* main to test random vector (FeasibleSolution)
+	FeasibleSolution * fs = new FeasibleSolution(V);
+
+	fs->setRandomSolution();
+
+	fs->printFeasibleSolution();
+	*/
+
+	/* main to test the random solution generator 
+	FeasibleSolution * fs = new FeasibleSolution(V);
+	fs->setRandomSolution();
+	FeasibleSolCol * fscol = fs->genRandomFeasibleSolCol();
 
 	fscol->printFeasSolCol();
+	*/
 
 	return 0;
 }
 
 void FeasSolNode::printNodeItems()
 {
-	this->feasibleSol->printFeasibleSolution();
-
-	if(next != NULL)
+	if(this->feasibleSol != NULL)
 	{
-		this->next->printNodeItems();
-	}	
+		this->feasibleSol->printFeasibleSolution();
+	}
+
+	FeasSolNode * tempNodePtr = next;
+	while (tempNodePtr != NULL)
+	{
+		tempNodePtr->feasibleSol->printFeasibleSolution();
+		tempNodePtr = tempNodePtr->next;
+	};
 }
 
 FeasibleSolution * FeasSolNode::getSolution()
