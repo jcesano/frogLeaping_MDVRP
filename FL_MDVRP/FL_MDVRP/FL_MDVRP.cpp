@@ -696,10 +696,10 @@ short int DistVect::getDistanceBtwn(short int i, short int j)
 	currentDistance = dv[v_origin].getDistance();
 	currentDiffDistance = 0;
 
-	for(short int w = v_origin; w < v_end; w++)
+	for(short int w = v_origin + 1; w <= v_end; w++)
 	{
 		prevDistance = currentDistance;
-		currentDistance = dv[w + 1].getDistance();
+		currentDistance = dv[w].getDistance();
 		currentDiffDistance = currentDiffDistance + (currentDistance - prevDistance);
 	}
 
@@ -722,9 +722,13 @@ public:
 								 // function to add an edge to graph
 	void addEdge(short int u, short int v, short int w);
 
+	void addDiagEdge(short int u, short int w);
+
 	void loadMinDistanceTable(DistVect * dv); // load the table with the minimum distance among all vertexes
 
 	void loadMinDistanceEdge(DistVect * dv, short int i, short int j); // load minimum distance between i and j
+
+	void fillDistanceTable(DistVect * dv); // fill the distance table with the minimum distance between each pair of vertexes
 
 	void printDistanceTable();
 };
@@ -754,6 +758,11 @@ void DistanceTable::addEdge(short int u, short int v, short int w)
 	a[v][u] = w;
 }
 
+void DistanceTable::addDiagEdge(short int u, short int w)
+{
+	a[u][u] = w;
+}
+
 // load the table with the minimum distance among all vertexes
 void DistanceTable::loadMinDistanceTable(DistVect * dv)
 {
@@ -772,6 +781,25 @@ void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
 
 	this->a[i][j] = min_dist;
 	this->a[j][i] = min_dist;
+}
+
+void DistanceTable::fillDistanceTable(DistVect * dv)
+{
+	int i, dist_i_j;
+
+	for( i = 0; i < this->V; i++)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			dist_i_j = dv->getDistanceBtwn(i, j);
+			this->addEdge(i, j, dist_i_j);
+		}
+	}
+
+	for(i = 0; i < this->V; i++)
+	{
+		this->addDiagEdge(i, 0);
+	}
 }
 
 void DistanceTable::printDistanceTable()
@@ -1098,7 +1126,7 @@ int main()
 	g.addEdge(6, 8, 6);
 	g.addEdge(7, 8, 7);
 
-	g.dijkstra(0);
+	DistVect * dv = g.dijkstra(0);
 	
 	
 	/* Main to test all permutations of distance = 1 and distance = 2 
@@ -1134,6 +1162,13 @@ int main()
 
 	fscol->printFeasSolCol();
 	*/
+
+	/* main to fill the Distance Table */
+	DistanceTable dt(V);
+
+	dt.fillDistanceTable(dv);
+
+	dt.printDistanceTable();
 
 	return 0;
 }
