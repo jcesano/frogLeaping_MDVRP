@@ -693,13 +693,13 @@ short int DistVect::getDistanceBtwn(short int i, short int j)
 	short int prevDistance, currentDistance, currentDiffDistance;
 		
 	prevDistance = 0;
-	currentDistance = dv[v_origin].getDistance();
+	currentDistance = ptr[v_origin]->getDistance();
 	currentDiffDistance = 0;
 
 	for(short int w = v_origin + 1; w <= v_end; w++)
 	{
 		prevDistance = currentDistance;
-		currentDistance = dv[w].getDistance();
+		currentDistance = ptr[w]->getDistance();
 		currentDiffDistance = currentDiffDistance + (currentDistance - prevDistance);
 	}
 
