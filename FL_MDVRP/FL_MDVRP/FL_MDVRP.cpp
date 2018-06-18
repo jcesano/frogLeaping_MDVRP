@@ -1,12 +1,17 @@
 // FL_MDVRP.cpp : Defines the entry point for the console application.
 //
 
+
 #include "stdafx.h"
+#include "SortedLinkedList.h"
 #include <iostream>
 #include <time.h>
 
 
+
+
 using namespace std;
+
 
 class FeasSolNode; //forward declaration
 class FeasibleSolution; //forward declaration
@@ -15,6 +20,7 @@ class Permutation
 {
 	int i;
 	int j;
+
 public:
 	Permutation();
 
