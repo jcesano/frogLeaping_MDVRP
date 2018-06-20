@@ -1,8 +1,7 @@
 #include "SortedLinkedList.h"
 
 
-
-float FrogObject::getValue() 
+float FrogObject::getValue()
 {
 	return this->value;
 };
@@ -16,11 +15,6 @@ FrogObjNode::FrogObjNode(FrogObject * fs, FrogObjNode * fsnodeptr)
 {
 	feasibleSol = fs;
 	next = fsnodeptr;
-}
-
-virtual bool FrogObject::isTheSame(FrogObject * fs)
-{
-	return false;
 }
 
 void FrogObjNode::printNodeItems()

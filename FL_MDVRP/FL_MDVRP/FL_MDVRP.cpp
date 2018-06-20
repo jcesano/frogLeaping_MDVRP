@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "SortedLinkedList.h"
+#include "FrogLeapSolution.h"
 #include <iostream>
 #include <time.h>
 
@@ -1116,7 +1117,7 @@ int main()
 	Graph g(V);
 
 	//  making above shown graph
-	/* main to test Dijkstra algorithm */
+	/* main to test Dijkstra algorithm 
 	g.addEdge(0, 1, 4);
 	g.addEdge(0, 7, 8);
 	g.addEdge(1, 2, 8);
@@ -1132,7 +1133,7 @@ int main()
 	g.addEdge(6, 8, 6);
 	g.addEdge(7, 8, 7);
 
-	DistVect * dv = g.dijkstra(0);
+	DistVect * dv = g.dijkstra(0); */
 	
 	
 	/* Main to test all permutations of distance = 1 and distance = 2 
@@ -1169,12 +1170,18 @@ int main()
 	fscol->printFeasSolCol();
 	*/
 
-	/* main to fill the Distance Table */
+	/* main to fill the Distance Table 
 	DistanceTable dt(V);
 
 	dt.fillDistanceTable(dv);
 
-	dt.printDistanceTable();
+	dt.printDistanceTable(); */
+
+	short int size = 5;
+	FrogLeapSolution * fls = new FrogLeapSolution(size);
+
+	
+
 
 	return 0;
 }

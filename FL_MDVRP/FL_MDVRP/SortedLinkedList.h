@@ -15,11 +15,11 @@ class FrogObject
 
 		float getValue();
 
-		virtual void setValue(float valueV);
+		void setValue(float valueV);
 
-		virtual void printFrogObj();
+		virtual void printFrogObj() = 0;
 
-		virtual bool isTheSame(FrogObject * fs);
+		virtual bool isTheSame(FrogObject * fs) = 0;
 };
 
 class FrogObjNode
