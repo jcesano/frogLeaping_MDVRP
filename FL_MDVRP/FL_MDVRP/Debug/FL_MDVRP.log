@@ -1,14 +1,18 @@
 ﻿  stdafx.cpp
+  Vehicle.cpp
+  IndexListNode.cpp
+  IndexList.cpp
   FrogObjNode.cpp
   FrogObjectCol.cpp
   FrogObject.cpp
   FrogLeapSolution.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(42): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   FL_MDVRP.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(163): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(181): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(1051): warning C4305: 'initializing': truncation from 'int' to 'short'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(1051): warning C4309: 'initializing': truncation of constant value
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(1391): warning C4101: 'tmp': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(165): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(183): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(947): warning C4305: 'initializing': truncation from 'int' to 'short'
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(947): warning C4309: 'initializing': truncation of constant value
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(1290): warning C4101: 'tmp': unreferenced local variable
   Generating Code...
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)

@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "FrogLeapSolution.h"
 #include "FrogObjectCol.h"
+#include "IndexList.h"
+#include "IndexListNode.h"
 #include <iostream>
 #include <time.h>
 
@@ -428,15 +430,16 @@ int FeasibleSolution::factorial(short int n)
 	return result;
 }
 
+enum VertexType {SimpleNode, Customer, Depot};
 class Vertex
 {
 	int distance;
 	int marked;
-	int index;		// index of vertex in graph. Is the id of the vertex.
+	int id;		// index of vertex in graph. Is the id of the vertex.
 	int prevIndex; // index of previous vertex in the shortest path from origin
 	int prevPathIndex; // index of previous vertex in the marking vertex path
 	
-	short int vertexType; // type of vertex: 0 = "simple node"; 1 = "Customer Node"; 2 = "Depot"
+	VertexType v_type; // type of vertex: "simple node"; "Customer Node"; "Depot".
 
 public:
 	Vertex(); //Constructor
@@ -445,24 +448,24 @@ public:
 	void markVertex();
 	void unmarkVertex();
 	int isUnmarkedVertex();
-	int getIndex();
-	void setIndex(int v);
+	int getId();
+	void setId(int v);
 	int getPrevIndex();
-	int getVertexType();
+	VertexType getVertexType();
 	void setPrevIndex(int prevInd);
 	int getPrevPathIndex();
 	void setPrevPathIndex(int v);
-	void setVertexType(short int vertexType);
+	void setVertexType(VertexType v_Type_V);
 };
 
 Vertex::Vertex()
 {
 	this->distance = -1;
-	this->index = -1;
+	this->id = -1;
 	this->marked = 0;
 	this->prevIndex = -2;
 	this->prevPathIndex = -2;
-	this->vertexType = 0;
+	this->v_type = SimpleNode;
 }
 
 int Vertex::getDistance()
@@ -490,14 +493,14 @@ int Vertex::isUnmarkedVertex()
 	return (marked == 0);
 }
 
-int Vertex::getIndex()
+int Vertex::getId()
 {
-	return index;
+	return id;
 }
 
-void Vertex::setIndex(int v)
+void Vertex::setId(int v)
 {
-	index = v;
+	id = v;
 }
 
 int Vertex::getPrevIndex()
@@ -505,9 +508,9 @@ int Vertex::getPrevIndex()
 	return prevIndex;
 }
 
-int Vertex::getVertexType()
+VertexType Vertex::getVertexType()
 {
-	return this->vertexType;
+	return this->v_type;
 }
 
 void Vertex::setPrevIndex(int prevIndexV)
@@ -525,9 +528,9 @@ void Vertex::setPrevPathIndex(int v)
 	this->prevPathIndex = v;
 }
 
-void Vertex::setVertexType(short int v_Type)
+void Vertex::setVertexType(VertexType v_Type_V)
 {
-	this->vertexType = v_Type;
+	this->v_type = v_Type_V;
 }
 
 class DistVect
@@ -577,7 +580,7 @@ DistVect::DistVect(int v, int v_origin)
 
 	for (int i = 0; i < v; i++) {
 		dv[i].setDistance(infVal);
-		dv[i].setIndex(i);
+		dv[i].setId(i);
 		dv[i].setPrevIndex(-1);
 		dv[i].unmarkVertex();
 		ptr[i] = &dv[i];
@@ -823,113 +826,6 @@ void DistanceTable::printDistanceTable()
 	}	
 }
 
-class IndexListNode
-{
-	short int index;
-	IndexListNode * next;
-public:
-	IndexListNode(short int index, IndexListNode * nextPtr); // Constructor
-
-	short int getIndex();
-
-	IndexListNode * getNextPtr();
-
-	void setIndex(short int index);
-
-	void setNextPtr(IndexListNode * nextPtr);
-
-};
-
-IndexListNode::IndexListNode(short int v_index, IndexListNode * nextPtr)
-{
-	this->index = v_index;
-	this->next = nextPtr;
-}
-
-short int IndexListNode::getIndex()
-{
-	return this->index;
-}
-
-IndexListNode * IndexListNode::getNextPtr()
-{
-	return this->next;
-}
-
-void IndexListNode::setIndex(short int v_index)
-{
-	this->index = v_index;
-}
-
-void IndexListNode::setNextPtr(IndexListNode * nextPtr)
-{
-	this->next = nextPtr;
-}
-
-class IndexList 
-{
-	IndexListNode * head;
-
-	short int size;
-
-public:
-
-	IndexList(); // Constructor
-	
-	void addIndex(short int index);
-
-	void removeIndex(short int index);
-};
-
-IndexList::IndexList()
-{
-	this->head = NULL;
-	this->size = 0;
-}
-
-void IndexList::addIndex(short int index)
-{
-	IndexListNode * node = new IndexListNode(index, head);
-
-	head = node;
-
-	this->size++;
-}
-
-void IndexList::removeIndex(short int index)
-{
-	IndexListNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
-
-	while (nodePtr != NULL)
-	{
-		if (nodePtr->getIndex() == index)
-		{
-			// if the element is located at the begining of the list
-			if (head == nodePtr)
-			{
-				nodePtrTemp = head;
-				head = head->getNextPtr();
-				nodePtr = head;
-				
-				// add a delete nodePtrTemp
-				this->size--;
-			}
-			else {
-					nodePtrTemp = nodePtr;
-					nodePtrPrev->setNextPtr(nodePtr->getNextPtr());
-					nodePtr = nodePtrTemp->getNextPtr();
-					
-					// add a delete nodePtrTemp
-					this->size--;
-				 }
-		} // if (nodePtr->getIndex == index)
-		else {
-				nodePtrPrev = nodePtr;
-				nodePtr = nodePtr->getNextPtr();
-			 }
-		
-	} // end while (nodePtr != NULL)
-}
 
 // This class represents a directed graph using
 // adjacency list representation
@@ -1112,11 +1008,11 @@ int main()
 {
     
 	// create the graph given in above fugure
-	//int V = 9;
-	//Graph g(V);
+	short int V = 9;
+	Graph g(V);
 
 	//  making above shown graph
-	/* main to test Dijkstra algorithm 
+	/* main to test Dijkstra algorithm */
 	g.addEdge(0, 1, 4);
 	g.addEdge(0, 7, 8);
 	g.addEdge(1, 2, 8);
@@ -1132,7 +1028,7 @@ int main()
 	g.addEdge(6, 8, 6);
 	g.addEdge(7, 8, 7);
 
-	DistVect * dv = g.dijkstra(0); */
+	DistVect * dv = g.dijkstra(0); 
 	
 	
 	/* Main to test all permutations of distance = 1 and distance = 2 
@@ -1166,22 +1062,25 @@ int main()
 	fs->setRandomSolution();
 	FeasibleSolCol * fscol = fs->genRandomFeasibleSolCol();
 
-	fscol->printFeasSolCol();
-	*/
+	fscol->printFeasSolCol(); */
+	
 
-	/* main to fill the Distance Table 
+	/* main to fill the Distance Table */
 	DistanceTable dt(V);
 
 	dt.fillDistanceTable(dv);
 
-	dt.printDistanceTable(); */
+	dt.printDistanceTable(); 
 
-	short int size = 5;
-	FrogLeapSolution * fls = new FrogLeapSolution(size);
+	/* main test frogSolution 
+	FrogLeapSolution * fls = new FrogLeapSolution(V);
 
 	fls->genRandomSolution();
 
 	fls->printFrogObj();
+
+	FeasibleSolution * fs_1 =fls->decodeSolution();
+	*/
 
 	return 0;
 }

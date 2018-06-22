@@ -149,8 +149,11 @@
     <ClInclude Include="FrogObject.h" />
     <ClInclude Include="FrogObjectCol.h" />
     <ClInclude Include="FrogObjNode.h" />
+    <ClInclude Include="IndexList.h" />
+    <ClInclude Include="IndexListNode.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Vehicle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FL_MDVRP.cpp" />
@@ -158,12 +161,15 @@
     <ClCompile Include="FrogObject.cpp" />
     <ClCompile Include="FrogObjectCol.cpp" />
     <ClCompile Include="FrogObjNode.cpp" />
+    <ClCompile Include="IndexList.cpp" />
+    <ClCompile Include="IndexListNode.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

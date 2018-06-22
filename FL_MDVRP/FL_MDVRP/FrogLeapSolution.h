@@ -8,26 +8,30 @@
 
 class FrogLeapSolution: public FrogObject
 {
-private:
-	float * values;
-	short int size;
-
-public:
+	private:
 	
-	FrogLeapSolution(short int size_v);
+		float * values;
+		short int size;
+		time_t timeSeedUsed;
 
-	float getFLValue(short int i);
+		float genRandomFloatingNumber(float a, float b);
 
-	void setSize(short int size_v);
+	public:
+	
+		FrogLeapSolution(short int size_v);
 
-	short int getSize();
+		float getFLValue(short int i);
 
-	void genRandomSolution();
+		void setSize(short int size_v);
 
-	// abstract methods
-	void printFrogObj();
+		short int getSize();
 
-	bool isTheSame(FrogObject * fs);
+		void genRandomSolution();
+
+		// abstract methods
+		void printFrogObj();
+
+		bool isTheSame(FrogObject * fs);
 };
 
 #endif

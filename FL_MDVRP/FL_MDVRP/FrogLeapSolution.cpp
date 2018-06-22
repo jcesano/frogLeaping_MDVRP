@@ -1,11 +1,8 @@
 #include "stdafx.h"
 #include "FrogLeapSolution.h"
-
+#include "Vehicle.h"
 #include <iostream>
 #include <time.h>
-
-
-
 
 FrogLeapSolution::FrogLeapSolution(short int size_v):FrogObject()
 {
@@ -28,16 +25,25 @@ short int FrogLeapSolution::getSize()
 	return this->size;
 }
 
+float FrogLeapSolution::genRandomFloatingNumber(float a, float b)
+{
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
+
 void FrogLeapSolution::genRandomSolution()
 {
 	float u;
-	int a = 50;
+	int a = this->size;
 
-	srand((unsigned)time(NULL));
+	this->timeSeedUsed = (unsigned)time(NULL);
+	srand(this->timeSeedUsed);
 
 	for (int i = 0; i < this->size; i++)
 	{
-		u = (float)rand() / (float)(RAND_MAX / a);
+		u = this->genRandomFloatingNumber(0, this->size);
 		this->values[i] = u;
 	};
 }
