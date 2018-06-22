@@ -1,9 +1,10 @@
 #ifndef FROGLEAPSOLUTION_H_   /* Include guard */
 #define FROGLEAPSOLUTION_H_
 
-#include "SortedLinkedList.h"
-#include <iostream>
-#include <time.h>
+//=================================
+// included dependencies
+#include "FrogObject.h"
+
 
 class FrogLeapSolution: public FrogObject
 {
@@ -27,9 +28,6 @@ public:
 	void printFrogObj();
 
 	bool isTheSame(FrogObject * fs);
-
-
-
 };
 
 #endif

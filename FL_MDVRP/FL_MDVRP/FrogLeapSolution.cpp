@@ -1,7 +1,13 @@
+#include "stdafx.h"
 #include "FrogLeapSolution.h"
 
+#include <iostream>
+#include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(short int size_v)
+
+
+
+FrogLeapSolution::FrogLeapSolution(short int size_v):FrogObject()
 {
 	this->size = size_v;
 	this->values = new float[this->size];	
@@ -24,7 +30,16 @@ short int FrogLeapSolution::getSize()
 
 void FrogLeapSolution::genRandomSolution()
 {
-	
+	float u;
+	int a = 50;
+
+	srand((unsigned)time(NULL));
+
+	for (int i = 0; i < this->size; i++)
+	{
+		u = (float)rand() / (float)(RAND_MAX / a);
+		this->values[i] = u;
+	};
 }
 
 // inherited methods
@@ -45,14 +60,14 @@ bool FrogLeapSolution::isTheSame(FrogObject * fs)
 {
 	FrogLeapSolution * fls = (FrogLeapSolution *)fs;
 
-	if (this->getSize() != fs->getSize())
+	if (this->getSize() != fls->getSize())
 	{
 		return false;
 	}
 
 	for (int i = 0; i < this->getSize(); i++)
 	{
-		if (this->values[i] != fs->values[i]
+		if (this->values[i] != fls->values[i])
 			return false;		
 	}
 

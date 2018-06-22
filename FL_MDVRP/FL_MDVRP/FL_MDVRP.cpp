@@ -3,11 +3,10 @@
 
 
 #include "stdafx.h"
-#include "SortedLinkedList.h"
 #include "FrogLeapSolution.h"
+#include "FrogObjectCol.h"
 #include <iostream>
 #include <time.h>
-
 
 
 
@@ -1113,8 +1112,8 @@ int main()
 {
     
 	// create the graph given in above fugure
-	int V = 9;
-	Graph g(V);
+	//int V = 9;
+	//Graph g(V);
 
 	//  making above shown graph
 	/* main to test Dijkstra algorithm 
@@ -1180,8 +1179,9 @@ int main()
 	short int size = 5;
 	FrogLeapSolution * fls = new FrogLeapSolution(size);
 
-	
+	fls->genRandomSolution();
 
+	fls->printFrogObj();
 
 	return 0;
 }
