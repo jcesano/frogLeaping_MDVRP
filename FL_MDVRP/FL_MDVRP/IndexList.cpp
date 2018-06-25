@@ -53,3 +53,31 @@ void IndexList::removeIndex(short int index)
 
 	} // end while (nodePtr != NULL)
 }
+
+short int IndexList::getSize()
+{
+	return this->size;
+}
+
+short int IndexList::getItem(short int position)
+{
+	short int currentPos = 0;
+	IndexListNode * currPtr;
+
+	currPtr = this->head;
+
+	while (currPtr != NULL) 
+	{
+		if(currentPos == position)
+		{
+			return currPtr->getIndex();
+		}
+		else
+		{
+			currentPos++;
+			currPtr = currPtr->getNextPtr();
+		};		
+	}	
+
+	return -1;
+}

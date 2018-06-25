@@ -20,8 +20,6 @@ class Vehicle : public FrogObject
 		void printFrogObj();
 
 		bool isTheSame(FrogObject * fs);
-
-
 };
 
 #endif

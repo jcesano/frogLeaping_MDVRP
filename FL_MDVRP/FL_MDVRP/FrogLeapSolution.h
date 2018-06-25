@@ -5,6 +5,7 @@
 // included dependencies
 #include "FrogObject.h"
 
+class FeasibleSolution;
 
 class FrogLeapSolution: public FrogObject
 {
@@ -27,6 +28,8 @@ class FrogLeapSolution: public FrogObject
 		short int getSize();
 
 		void genRandomSolution();
+
+		FeasibleSolution * decodeFrogLeapSolution();
 
 		// abstract methods
 		void printFrogObj();

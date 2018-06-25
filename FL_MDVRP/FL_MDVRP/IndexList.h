@@ -16,6 +16,10 @@ public:
 	void addIndex(short int index);
 
 	void removeIndex(short int index);
+
+	short int getSize();
+
+	short int getItem(short int position);
 };
 
 #endif

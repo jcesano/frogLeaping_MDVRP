@@ -48,6 +48,12 @@ void FrogLeapSolution::genRandomSolution()
 	};
 }
 
+FeasibleSolution * FrogLeapSolution::decodeFrogLeapSolution()
+{
+	//FeasibleSolution * decodeSolution = new FeasibleSolution();
+	return NULL;
+}
+
 // inherited methods
 void FrogLeapSolution::printFrogObj()
 {
