@@ -12,7 +12,7 @@ class Vehicle : public FrogObject
 		short int size;
 
 	public:
-		Vehicle();
+		Vehicle(short int id);
 
 		void addCustomerId(short int customerId);
 

@@ -22,7 +22,9 @@ public:
 
 	int getSize();
 
-	FrogObject * getFrogObject(int i);
+	FrogObject * getFrogObject(short int i);
+
+	FrogObject * getFrogObjectById(short int objid);
 
 	void removeFrogObjects(FrogObjectCol * sourceSolutionCol);
 
@@ -33,6 +35,8 @@ public:
 	int areThereRepetedItems();
 
 	int frogObjectExists(FrogObject * fs);
+
+	int frogObjectExists(short int id);
 
 	void ConcatCol(FrogObjectCol * fs);
 };

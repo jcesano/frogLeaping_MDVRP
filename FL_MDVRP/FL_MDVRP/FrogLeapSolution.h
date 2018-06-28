@@ -6,6 +6,7 @@
 #include "FrogObject.h"
 
 class FeasibleSolution;
+class DecodedFrogLeapSolution;
 
 class FrogLeapSolution: public FrogObject
 {
@@ -13,13 +14,14 @@ class FrogLeapSolution: public FrogObject
 	
 		float * values;
 		short int size;
+		short int n_vehicles;
 		time_t timeSeedUsed;
 
 		float genRandomFloatingNumber(float a, float b);
 
 	public:
 	
-		FrogLeapSolution(short int size_v);
+		FrogLeapSolution(short int size_v, short int n_vehicles_v, short int id);
 
 		float getFLValue(short int i);
 
@@ -29,7 +31,7 @@ class FrogLeapSolution: public FrogObject
 
 		void genRandomSolution();
 
-		FeasibleSolution * decodeFrogLeapSolution();
+		DecodedFrogLeapSolution * decodeFrogLeapSolution();
 
 		// abstract methods
 		void printFrogObj();

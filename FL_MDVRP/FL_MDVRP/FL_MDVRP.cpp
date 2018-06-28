@@ -1,16 +1,13 @@
 #include "stdafx.h"
-// FL_MDVRP.cpp : Defines the entry point for the console application.
-//
 
-
-//#include "FrogLeapSolution.h"
+#include "FrogLeapSolution.h"
 //#include "FrogObjectCol.h"
 //#include "IndexList.h"
-//#include "FeasibleSolution.h"
+#include "FeasibleSolution.h"
 //#include "DistanceTable.h"
 #include "Graph.h"
-//#include "FeasibleSolCol.h"
-//#include "DistanceTable.h"
+#include "FeasibleSolCol.h"
+#include "DistanceTable.h"
 
 #include <iostream>
 #include <time.h>
@@ -25,6 +22,8 @@ int main()
 	// create the graph given in above fugure
 	
 	short int V = 9;
+	short int nVehicles = 4;
+
 	Graph g(V);
 
 	//  making above shown graph
@@ -53,16 +52,19 @@ int main()
 	g.addEdge(6, 7, 1);
 	g.addEdge(6, 8, 6);
 	g.addEdge(7, 8, 7);
+	
+	DistVect * dv = g.dijkstra(0); 
 	*/
-	//DistVect * dv = g.dijkstra(0); 
-		
+
 	/* Main to test all permutations of distance = 1 and distance = 2 
+
 	FeasibleSolution * fs;
 	FeasibleSolCol * fscol;
 
 	fs = new FeasibleSolution(V);
+	*/
 
-	// setting indexes as values in the FeasibleSolution	
+	/* setting indexes as values in the FeasibleSolution	
 	for(int i = 0; i<V;i++)
 	{
 		fs->setSolFactValue(i, i);
@@ -74,8 +76,8 @@ int main()
 	fscol->printFeasSolCol();
 	*/
 
-	/* main to test random vector (FeasibleSolution)
-	FeasibleSolution * fs = new FeasibleSolution(V);
+	/* main to test random vector (FeasibleSolution) 
+	fs = new FeasibleSolution(V);
 
 	fs->setRandomSolution();
 
@@ -83,30 +85,29 @@ int main()
 	*/
 
 	/* main to test the random solution generator 
-	FeasibleSolution * fs = new FeasibleSolution(V);
+	//FeasibleSolution * fs = new FeasibleSolution(V);
 	fs->setRandomSolution();
-	FeasibleSolCol * fscol = fs->genRandomFeasibleSolCol();
+	fscol = fs->genRandomFeasibleSolCol();
 
-	fscol->printFeasSolCol(); */
-	
+	fscol->printFeasSolCol(); 
+	*/
 
-	/* main to fill the Distance Table */
-	//DistanceTable dt(V);
+	/* main to fill the Distance Table 
+	DistanceTable dt(V);
 
-	//dt.fillDistanceTable(dv);
+	dt.fillDistanceTable(dv);
 
-	//dt.printDistanceTable(); 
+	dt.printDistanceTable(); 
+	*/
 
-	/* main test frogSolution 
-	FrogLeapSolution * fls = new FrogLeapSolution(V);
+	/* main test frogSolution */
+	FrogLeapSolution * fls = new FrogLeapSolution(V, nVehicles, 0);
 
 	fls->genRandomSolution();
 
 	fls->printFrogObj();
 
-	FeasibleSolution * fs_1 =fls->decodeSolution();
-	*/
-
+	//FeasibleSolution * fs_1 =fls->decodeSolution();
 	return 0;
 }
 

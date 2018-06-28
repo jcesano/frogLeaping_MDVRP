@@ -2,7 +2,7 @@
 #include "Vehicle.h"
 #include "IndexList.h"
 
-Vehicle::Vehicle()
+Vehicle::Vehicle(short int id):FrogObject(id)
 {
 	customers = NULL;
 	size = 0;

@@ -37,7 +37,7 @@ int FrogObjectCol::getSize()
 	return this->colSize;
 }
 
-FrogObject * FrogObjectCol::getFrogObject(int i)
+FrogObject * FrogObjectCol::getFrogObject(short int i)
 {
 	// assign the first element
 	FrogObjNode * result = head;
@@ -127,6 +127,67 @@ int FrogObjectCol::areThereRepetedItems()
 int FrogObjectCol::frogObjectExists(FrogObject * fs)
 {
 	return 0;
+}
+
+int FrogObjectCol::frogObjectExists(short int objid)
+{
+	bool found = false, i;
+
+	if (this != NULL)
+	{
+		FrogObjNode * nodePtr;
+		FrogObject * solPtr;
+
+		i = 1;
+
+		nodePtr = this->head;
+
+		while (found == false && i <= this->getSize() && nodePtr != NULL)
+		{
+			solPtr = nodePtr->getFrogItem();
+
+			found = solPtr->isTheSame(objid);
+
+			nodePtr = nodePtr->getNextFrogObjNode();
+			i = i + 1;
+		}
+	}
+
+	return found;
+
+}
+
+FrogObject * FrogObjectCol::getFrogObjectById(short int objid)
+{
+	bool found = false, i;
+	FrogObject * result = NULL;
+
+	if (this != NULL)
+	{
+		FrogObjNode * nodePtr;
+		FrogObject * solPtr;
+
+		i = 1;
+
+		nodePtr = this->head;
+
+		while (found == false && i <= this->getSize() && nodePtr != NULL)
+		{
+			solPtr = nodePtr->getFrogItem();
+
+			found = solPtr->isTheSame(objid);
+
+			if(found == true)
+			{
+				result = solPtr;
+			}
+
+			nodePtr = nodePtr->getNextFrogObjNode();
+			i = i + 1;
+		}
+	}
+
+	return result;
 }
 
 void FrogObjectCol::ConcatCol(FrogObjectCol * fs)

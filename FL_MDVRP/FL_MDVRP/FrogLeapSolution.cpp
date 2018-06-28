@@ -1,12 +1,16 @@
 #include "stdafx.h"
 #include "FrogLeapSolution.h"
+#include "DecodedFrogLeapSolution.h"
 #include "Vehicle.h"
+#include <stdio.h>      /* printf */
+#include <math.h>       /* floor */
 #include <iostream>
 #include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(short int size_v):FrogObject()
+FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, short int id):FrogObject(id)
 {
 	this->size = size_v;
+	this->n_vehicles = n_vehicles_v;
 	this->values = new float[this->size];	
 }
 
@@ -43,15 +47,21 @@ void FrogLeapSolution::genRandomSolution()
 
 	for (int i = 0; i < this->size; i++)
 	{
-		u = this->genRandomFloatingNumber(0, this->size);
+		u = this->genRandomFloatingNumber(0, this->n_vehicles + 1);
 		this->values[i] = u;
 	};
 }
 
-FeasibleSolution * FrogLeapSolution::decodeFrogLeapSolution()
+DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution()
 {
-	//FeasibleSolution * decodeSolution = new FeasibleSolution();
-	return NULL;
+	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution();
+	
+	for (short int i = 0; i < this->getSize(); i++)
+	{
+		decodedSolution->addFrogLeapItem(this->getFLValue(i), i);
+	}
+	
+	return decodedSolution;
 }
 
 // inherited methods
@@ -60,12 +70,13 @@ void FrogLeapSolution::printFrogObj()
 	printf("Printing values of frog leaping solution \n");
 	printf("Values are the following: \n");
 
-	for(int i = 0; i < this->getSize();i++)
+	for(int i = 0; i < this->getSize() - 1;i++)
 	{
 		printf("%.2f, ", this->values[i]);
 	}
 
-	printf("\n");
+	//printing the last element (replacing the comma by the point)
+	printf("%.2f. \n", this->values[this->getSize() - 1]);	
 }
 
 bool FrogLeapSolution::isTheSame(FrogObject * fs)

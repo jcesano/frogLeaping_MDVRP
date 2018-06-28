@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DecodedFrogLeapSolution.h" />
     <ClInclude Include="DistanceTable.h" />
     <ClInclude Include="DistVect.h" />
     <ClInclude Include="FeasibleSolCol.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DecodedFrogLeapSolution.cpp" />
     <ClCompile Include="DistanceTable.cpp" />
     <ClCompile Include="DistVect.cpp" />
     <ClCompile Include="FeasibleSolCol.cpp" />
