@@ -145,31 +145,45 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DistanceTable.h" />
+    <ClInclude Include="DistVect.h" />
+    <ClInclude Include="FeasibleSolCol.h" />
+    <ClInclude Include="FeasibleSolution.h" />
+    <ClInclude Include="FeasSolNode.h" />
     <ClInclude Include="FrogLeapSolution.h" />
     <ClInclude Include="FrogObject.h" />
     <ClInclude Include="FrogObjectCol.h" />
     <ClInclude Include="FrogObjNode.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="IndexList.h" />
     <ClInclude Include="IndexListNode.h" />
+    <ClInclude Include="Permutation.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Vehicle.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DistanceTable.cpp" />
+    <ClCompile Include="DistVect.cpp" />
+    <ClCompile Include="FeasibleSolCol.cpp" />
+    <ClCompile Include="FeasibleSolution.cpp" />
+    <ClCompile Include="FeasSolNode.cpp" />
     <ClCompile Include="FL_MDVRP.cpp" />
     <ClCompile Include="FrogLeapSolution.cpp" />
     <ClCompile Include="FrogObject.cpp" />
     <ClCompile Include="FrogObjectCol.cpp" />
     <ClCompile Include="FrogObjNode.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="IndexList.cpp" />
     <ClCompile Include="IndexListNode.cpp" />
+    <ClCompile Include="Permutation.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Vehicle.cpp" />
+    <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

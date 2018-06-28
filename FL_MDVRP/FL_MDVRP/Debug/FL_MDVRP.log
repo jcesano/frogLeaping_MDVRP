@@ -1,18 +1,26 @@
-﻿  FL_MDVRP.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(25): error C2143: syntax error: missing ';' before '*'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(25): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(25): error C2238: unexpected token(s) preceding ';'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(27): error C2143: syntax error: missing ';' before '*'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(27): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(27): error C2238: unexpected token(s) preceding ';'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(35): error C2143: syntax error: missing ';' before '*'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(35): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.h(35): error C2238: unexpected token(s) preceding ';'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(428): error C2027: use of undefined type 'Graph'
-  c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(215): note: see declaration of 'Graph'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(428): error C2227: left of '->getCustomerCount' must point to class/struct/union/generic type
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(430): error C2027: use of undefined type 'Graph'
-  c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(215): note: see declaration of 'Graph'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(430): error C2227: left of '->getCustomerId' must point to class/struct/union/generic type
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(690): warning C4305: 'initializing': truncation from 'int' to 'short'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(690): warning C4309: 'initializing': truncation of constant value
+﻿  stdafx.cpp
+  Vertex.cpp
+  Vehicle.cpp
+  Permutation.cpp
+  IndexListNode.cpp
+  IndexList.cpp
+  Graph.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(88): warning C4305: 'initializing': truncation from 'int' to 'short'
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(88): warning C4309: 'initializing': truncation of constant value
+  FrogObjNode.cpp
+  FrogObjectCol.cpp
+  FrogObject.cpp
+  FrogLeapSolution.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(42): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  FL_MDVRP.cpp
+  FeasSolNode.cpp
+  FeasibleSolution.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolution.cpp(32): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  FeasibleSolCol.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolcol.cpp(184): warning C4101: 'tmp': unreferenced local variable
+  DistVect.cpp
+  DistanceTable.cpp
+  Generating Code...
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)

@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "IndexList.h"
 #include "IndexListNode.h"

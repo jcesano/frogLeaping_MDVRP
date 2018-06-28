@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FeasibleSolution.h"
+#include "FeasibleSolCol.h"
 
 FeasibleSolution::FeasibleSolution(short int n)
 {

@@ -1,6 +1,11 @@
 #ifndef FEASIBLESOLUTION_H_   /* Include guard */
 #define FEASIBLESOLUTION_H_
 
+#include <iostream>
+#include <time.h>
+
+class FeasibleSolCol;
+
 class FeasibleSolution
 {
 	short int * solVect;
