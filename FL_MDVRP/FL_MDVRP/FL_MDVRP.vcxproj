@@ -158,7 +158,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="IndexList.h" />
     <ClInclude Include="IndexListNode.h" />
-    <ClInclude Include="Permutation.h" />
+    <ClInclude Include="Pair.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Vehicle.h" />
@@ -179,7 +179,7 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="IndexList.cpp" />
     <ClCompile Include="IndexListNode.cpp" />
-    <ClCompile Include="Permutation.cpp" />
+    <ClCompile Include="Pair.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

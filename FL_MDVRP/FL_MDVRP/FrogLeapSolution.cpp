@@ -47,7 +47,7 @@ void FrogLeapSolution::genRandomSolution()
 
 	for (int i = 0; i < this->size; i++)
 	{
-		u = this->genRandomFloatingNumber(0, this->n_vehicles + 1);
+		u = this->genRandomFloatingNumber(0, this->n_vehicles);
 		this->values[i] = u;
 	};
 }

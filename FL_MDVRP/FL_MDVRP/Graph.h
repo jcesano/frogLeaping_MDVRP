@@ -18,6 +18,8 @@ class Graph
 
 	short int origin;
 
+	short int nVehiclesPerDepot;
+
 public:
 	short int const NO_ADJ = -1;
 
@@ -33,6 +35,10 @@ public:
 	void setAsCustomer(short int v);
 
 	void setAsDepot(short int v);
+
+	void setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot);
+
+	short int getNumberOfVehiclesPerDepot();
 
 	DistVect * dijkstra(short int src);
 

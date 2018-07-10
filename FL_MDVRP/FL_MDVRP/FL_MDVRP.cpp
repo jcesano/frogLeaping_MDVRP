@@ -12,8 +12,6 @@
 #include <iostream>
 #include <time.h>
 
-
-
 using namespace std;
 
 int main()
@@ -22,14 +20,16 @@ int main()
 	// create the graph given in above fugure
 	
 	short int V = 9;
-	short int nVehicles = 4;
+	short int nVehiclesPerDepot = 2;
 
 	Graph g(V);
 
 	//  making above shown graph
-	/* main to test Dijkstra algorithm 
+	/* main to test Dijkstra algorithm */
 	g.setAsDepot(0);
 	g.setAsDepot(6);
+
+	g.setNumberOfVehiclesPerDepot(nVehiclesPerDepot);
 
 	g.setAsCustomer(1);
 	g.setAsCustomer(2);
@@ -54,7 +54,7 @@ int main()
 	g.addEdge(7, 8, 7);
 	
 	DistVect * dv = g.dijkstra(0); 
-	*/
+	
 
 	/* Main to test all permutations of distance = 1 and distance = 2 
 
@@ -101,11 +101,11 @@ int main()
 	*/
 
 	/* main test frogSolution */
-	FrogLeapSolution * fls = new FrogLeapSolution(V, nVehicles, 0);
+	//FrogLeapSolution * fls = new FrogLeapSolution(V, nVehiclesPerDepot, 0);
 
-	fls->genRandomSolution();
+	//fls->genRandomSolution();
 
-	fls->printFrogObj();
+	//fls->printFrogObj();
 
 	//FeasibleSolution * fs_1 =fls->decodeSolution();
 	return 0;

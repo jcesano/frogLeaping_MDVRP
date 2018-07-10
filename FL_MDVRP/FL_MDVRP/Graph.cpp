@@ -53,6 +53,16 @@ void Graph::setAsDepot(short int v)
 	this->depotList->addIndex(v);
 }
 
+void Graph::setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot_v)
+{	
+	this->nVehiclesPerDepot = nVehiclesPerDepot_v;
+}
+
+short int Graph::getNumberOfVehiclesPerDepot()
+{
+	return this->nVehiclesPerDepot;
+}
+
 // Prints shortest paths from src to all other vertices
 DistVect * Graph::dijkstra(short int src)
 {
