@@ -3,18 +3,24 @@
 
 #include "FrogObject.h"
 
-class IndexList;
+class FrogObjectCol;
+class Pair;
 
 class Vehicle : public FrogObject
 {
 	private:
-		IndexList * customers;
+		FrogObjectCol * customers;
 		short int size;
+		short int depotIndex;
 
 	public:
 		Vehicle(short int id);
 
-		void addCustomerId(short int customerId);
+		void addCustomerPair(Pair * customerPair);
+
+		void setDepotIndex(short int depot_v);
+
+		short int getDepotIndex();
 
 		// abstract methods
 		void printFrogObj();

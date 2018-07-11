@@ -92,22 +92,25 @@ int main()
 	fscol->printFeasSolCol(); 
 	*/
 
-	/* main to fill the Distance Table 
+	/* main to fill the Distance Table */
 	DistanceTable dt(V);
 
 	dt.fillDistanceTable(dv);
 
 	dt.printDistanceTable(); 
-	*/
+	
 
 	/* main test frogSolution */
-	//FrogLeapSolution * fls = new FrogLeapSolution(V, nVehiclesPerDepot, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(V, nVehiclesPerDepot, 3, 0);
 
-	//fls->genRandomSolution();
+	fls->genRandomSolution();
 
-	//fls->printFrogObj();
+	fls->printFrogObj();
 
-	//FeasibleSolution * fs_1 =fls->decodeSolution();
+	DecodedFrogLeapSolution * dfls_1 =g.decodeSolution(&dt,fls);
+
+	//dfls_1->printFrogObj();
+
 	return 0;
 }
 

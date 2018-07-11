@@ -2,6 +2,13 @@
 #include "Graph.h"
 #include "DistVect.h"
 #include "IndexList.h"
+#include "DecodedFrogLeapSolution.h"
+#include "Vehicle.h"
+#include "FrogLeapSolution.h"
+#include "Pair.h"
+
+#include <stdlib.h>
+#include <stdio.h>
 
 // Allocates memory for adjacency list
 Graph::Graph(short int vertexCount)
@@ -53,6 +60,11 @@ void Graph::setAsDepot(short int v)
 	this->depotList->addIndex(v);
 }
 
+short int Graph::getNumberOfDepots()
+{
+	return this->depotList->getSize();
+}
+
 void Graph::setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot_v)
 {	
 	this->nVehiclesPerDepot = nVehiclesPerDepot_v;
@@ -61,6 +73,11 @@ void Graph::setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot_v)
 short int Graph::getNumberOfVehiclesPerDepot()
 {
 	return this->nVehiclesPerDepot;
+}
+
+short int Graph::getNumberOfVehicles()
+{
+	return this->getNumberOfVehiclesPerDepot() * this->getNumberOfDepots();
 }
 
 // Prints shortest paths from src to all other vertices
@@ -155,7 +172,7 @@ short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, D
 	}
 }
 
-short int Graph::getCustomerCount()
+short int Graph::getNumberOfCustomers()
 {
 	return this->custormerList->getSize();
 }
@@ -163,4 +180,23 @@ short int Graph::getCustomerCount()
 short int Graph::getCustomerId(short int position)
 {
 	return this->custormerList->getItem(position);
+}
+
+DecodedFrogLeapSolution * Graph::decodeSolution(DistanceTable * t, FrogLeapSolution * fls)
+{
+	DecodedFrogLeapSolution * result = new DecodedFrogLeapSolution();
+	
+	short int numberOfDepots = this->depotList->getSize();
+	short int numberOfVehicles = numberOfDepots * this->nVehiclesPerDepot;
+	
+
+	return result;
+}
+
+FrogLeapSolution * Graph::genRandomFrogLeapSolution()
+{
+	FrogLeapSolution * result = new FrogLeapSolution(this->getNumberOfCustomers(),this->getNumberOfCustomers()*this->getNumberOfVehiclesPerDepot(), this->getNumberOfDepots(), 0);
+
+	result->genRandomSolution();
+	return result;
 }

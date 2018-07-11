@@ -15,13 +15,13 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		DecodedFrogLeapSolution();
 
-		//void addVehicle();
+		void addVehicle(Vehicle * v);
 
 		//Vehicle * getVehicle(short int pos);
 
-		short int decodeFrogLeapItem(float fvalue);
+		short int decodeFrogLeapValue(float fvalue);
 
-		void addFrogLeapItem(float fvalue, short int customerId);
+		void decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots);		
 
 		// abstract methods
 		void printFrogObj();

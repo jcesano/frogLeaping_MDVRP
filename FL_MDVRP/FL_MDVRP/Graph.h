@@ -3,6 +3,9 @@
 
 class DistVect;
 class IndexList;
+class DecodedFrogLeapSolution;
+class DistanceTable;
+class FrogLeapSolution;
 
 // This class represents a directed graph using
 // adjacency list representation
@@ -36,17 +39,25 @@ public:
 
 	void setAsDepot(short int v);
 
+	short int getNumberOfDepots();
+
 	void setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot);
 
 	short int getNumberOfVehiclesPerDepot();
 
+	short int getNumberOfVehicles();
+	
 	DistVect * dijkstra(short int src);
 
 	short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
 
-	short int getCustomerCount();
+	short int getNumberOfCustomers();
 
 	short int getCustomerId(short int position);
+
+	DecodedFrogLeapSolution * decodeSolution(DistanceTable * t, FrogLeapSolution * fls);
+
+	FrogLeapSolution * genRandomFrogLeapSolution();
 };
 
 #endif

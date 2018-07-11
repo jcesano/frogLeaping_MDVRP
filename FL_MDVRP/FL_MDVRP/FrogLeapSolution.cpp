@@ -7,10 +7,11 @@
 #include <iostream>
 #include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, short int id):FrogObject(id)
+FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, short int n_depots_v, short int id):FrogObject(id)
 {
 	this->size = size_v;
 	this->n_vehicles = n_vehicles_v;
+	this->n_depots = n_depots_v;
 	this->values = new float[this->size];	
 }
 
@@ -58,7 +59,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution()
 	
 	for (short int i = 0; i < this->getSize(); i++)
 	{
-		decodedSolution->addFrogLeapItem(this->getFLValue(i), i);
+		decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
 	}
 	
 	return decodedSolution;

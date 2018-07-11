@@ -13,15 +13,16 @@ class FrogLeapSolution: public FrogObject
 	private:
 	
 		float * values;
-		short int size;
-		short int n_vehicles;
+		short int size;			// number of customers
+		short int n_vehicles;	// number of vehicles
+		short int n_depots;		// number of depots
 		time_t timeSeedUsed;
 
 		float genRandomFloatingNumber(float a, float b);
 
 	public:
 	
-		FrogLeapSolution(short int size_v, short int n_vehicles_v, short int id);
+		FrogLeapSolution(short int size_v, short int n_vehicles_v, short int n_depots_v, short int id);
 
 		float getFLValue(short int i);
 

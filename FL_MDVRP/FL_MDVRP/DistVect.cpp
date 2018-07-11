@@ -168,7 +168,7 @@ void DistVect::importCustomers(Graph * g)
 {
 	short int custId;
 
-	for (short int i = 0; i < g->getCustomerCount(); i++)
+	for (short int i = 0; i < g->getNumberOfCustomers(); i++)
 	{
 		custId = g->getCustomerId(i);
 		this->dv[custId].setVertexType(VertexType::Customer);

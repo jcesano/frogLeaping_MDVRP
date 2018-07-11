@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Vehicle.h"
-#include "IndexList.h"
+#include "FrogObjectCol.h"
+#include "Pair.h"
 
 Vehicle::Vehicle(short int id):FrogObject(id)
 {
@@ -8,14 +9,24 @@ Vehicle::Vehicle(short int id):FrogObject(id)
 	size = 0;
 }
 
-void Vehicle::addCustomerId(short int customerId)
+void Vehicle::addCustomerPair(Pair * customerPair)
 {
 	if (this->customers == NULL)
 	{
-		this->customers = new IndexList;		
+		this->customers = new FrogObjectCol();		
 	}
 
-	this->customers->addIndex(customerId);
+	this->customers->addFrogObject(customerPair);
+}
+
+void Vehicle::setDepotIndex(short int depot_v)
+{
+	this->depotIndex = depot_v;
+}
+
+short int Vehicle::getDepotIndex()
+{
+	return this->depotIndex;
 }
 
 // abstract methods
