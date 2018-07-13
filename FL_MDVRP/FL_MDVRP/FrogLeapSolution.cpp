@@ -2,6 +2,7 @@
 #include "FrogLeapSolution.h"
 #include "DecodedFrogLeapSolution.h"
 #include "Vehicle.h"
+#include "Graph.h"
 #include <stdio.h>      /* printf */
 #include <math.h>       /* floor */
 #include <iostream>

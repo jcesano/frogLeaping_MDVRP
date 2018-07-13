@@ -58,6 +58,8 @@ public:
 	DecodedFrogLeapSolution * decodeSolution(DistanceTable * t, FrogLeapSolution * fls);
 
 	FrogLeapSolution * genRandomFrogLeapSolution();
+
+	int evalSolution(DecodedFrogLeapSolution * dfls);
 };
 
 #endif

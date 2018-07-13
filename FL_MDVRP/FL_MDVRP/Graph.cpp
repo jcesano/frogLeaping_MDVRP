@@ -184,10 +184,12 @@ short int Graph::getCustomerId(short int position)
 
 DecodedFrogLeapSolution * Graph::decodeSolution(DistanceTable * t, FrogLeapSolution * fls)
 {
-	DecodedFrogLeapSolution * result = new DecodedFrogLeapSolution();
+	DecodedFrogLeapSolution * result = NULL;
 	
 	short int numberOfDepots = this->depotList->getSize();
 	short int numberOfVehicles = numberOfDepots * this->nVehiclesPerDepot;
+
+	fls->decodeFrogLeapSolution()
 	
 
 	return result;
@@ -199,4 +201,10 @@ FrogLeapSolution * Graph::genRandomFrogLeapSolution()
 
 	result->genRandomSolution();
 	return result;
+}
+
+int Graph::evalSolution(DecodedFrogLeapSolution * dfls)
+{
+	
+	return -1;
 }

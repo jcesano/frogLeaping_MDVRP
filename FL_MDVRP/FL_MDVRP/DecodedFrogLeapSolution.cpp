@@ -35,7 +35,14 @@ Vehicle * DecodedFrogLeapSolution::getVehicle(short int pos)
 
 short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue)
 {
-	return floor(fvalue);
+	short int result = floor(fvalue);
+
+	if (result == this->vehicles->getSize())
+	{
+		result--;
+	};
+
+	return result;
 }
 
 void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots)

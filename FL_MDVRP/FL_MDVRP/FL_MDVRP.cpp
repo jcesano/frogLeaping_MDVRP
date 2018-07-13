@@ -21,6 +21,8 @@ int main()
 	
 	short int V = 9;
 	short int nVehiclesPerDepot = 2;
+	short int nDepots = 2;
+	short int nCustomers = 2;
 
 	Graph g(V);
 
@@ -93,21 +95,24 @@ int main()
 	*/
 
 	/* main to fill the Distance Table */
-	DistanceTable dt(V);
+	DistanceTable * dt = new DistanceTable(V);
 
-	dt.fillDistanceTable(dv);
+	dt->fillDistanceTable(dv);
 
-	dt.printDistanceTable(); 
+	dt->printDistanceTable(); 
 	
 
 	/* main test frogSolution */
-	FrogLeapSolution * fls = new FrogLeapSolution(V, nVehiclesPerDepot, 3, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
 
 	fls->genRandomSolution();
 
 	fls->printFrogObj();
 
-	DecodedFrogLeapSolution * dfls_1 =g.decodeSolution(&dt,fls);
+	//DecodedFrogLeapSolution * dfls_1 = g.decodeSolution(&dt,fls);
+	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(g);
+
+	g.evalSolution(dfls_1);
 
 	//dfls_1->printFrogObj();
 

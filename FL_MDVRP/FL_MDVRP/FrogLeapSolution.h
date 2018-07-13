@@ -7,6 +7,7 @@
 
 class FeasibleSolution;
 class DecodedFrogLeapSolution;
+class Graph;
 
 class FrogLeapSolution: public FrogObject
 {
