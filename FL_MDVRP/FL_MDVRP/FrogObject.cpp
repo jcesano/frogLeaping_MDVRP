@@ -11,6 +11,7 @@ FrogObject::FrogObject()
 FrogObject::FrogObject(short int id_v)
 {
 	this->id = id_v;
+	this->value = 0;
 }
 
 float FrogObject::getValue()

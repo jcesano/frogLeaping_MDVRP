@@ -23,6 +23,8 @@ class Graph
 
 	short int nVehiclesPerDepot;
 
+	DistanceTable * distanceTable;
+
 public:
 	short int const NO_ADJ = -1;
 
@@ -60,6 +62,10 @@ public:
 	FrogLeapSolution * genRandomFrogLeapSolution();
 
 	int evalSolution(DecodedFrogLeapSolution * dfls);
+
+	void setDistanceTable(DistanceTable * t);
+
+	DistanceTable * getDistanceTable();
 };
 
 #endif

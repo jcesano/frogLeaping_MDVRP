@@ -32,6 +32,11 @@ void DistanceTable::addDiagEdge(short int u, short int w)
 	a[u][u] = w;
 }
 
+short int DistanceTable::getEdge(short int u, short int v)
+{
+	return this->a[u][v];
+}
+
 // load the table with the minimum distance among all vertexes
 void DistanceTable::loadMinDistanceTable(DistVect * dv)
 {

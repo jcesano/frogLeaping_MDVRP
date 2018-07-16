@@ -100,6 +100,8 @@ int main()
 	dt->fillDistanceTable(dv);
 
 	dt->printDistanceTable(); 
+
+	g.setDistanceTable(dt);
 	
 
 	/* main test frogSolution */
@@ -110,7 +112,7 @@ int main()
 	fls->printFrogObj();
 
 	//DecodedFrogLeapSolution * dfls_1 = g.decodeSolution(&dt,fls);
-	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(g);
+	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(&g);
 
 	g.evalSolution(dfls_1);
 

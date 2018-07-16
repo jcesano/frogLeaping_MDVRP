@@ -54,7 +54,7 @@ void FrogLeapSolution::genRandomSolution()
 	};
 }
 
-DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution()
+DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution();
 	

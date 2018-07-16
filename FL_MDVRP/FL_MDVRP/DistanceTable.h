@@ -14,11 +14,12 @@ public:
 	short int const NO_ADJ = -1;
 
 	DistanceTable(short int V);  // Constructor
-
-								 // function to add an edge to graph
-	void addEdge(short int u, short int v, short int w);
+								 
+	void addEdge(short int u, short int v, short int w); // function to add an edge to graph
 
 	void addDiagEdge(short int u, short int w);
+
+	short int getEdge(short int u, short int v);
 
 	void loadMinDistanceTable(DistVect * dv); // load the table with the minimum distance among all vertexes
 

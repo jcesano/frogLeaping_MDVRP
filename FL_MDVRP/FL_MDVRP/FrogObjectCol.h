@@ -18,6 +18,8 @@ public:
 
 	void addFrogObject(FrogObject * fs);
 
+	void addFrogObjectOrdered(FrogObject * fs);
+
 	void printFrogObjCol();
 
 	int getSize();

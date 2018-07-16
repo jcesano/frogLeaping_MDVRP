@@ -19,7 +19,54 @@ void FrogObjectCol::addFrogObject(FrogObject * fs)
 
 	head = ptr;
 
-	this->colSize = this->colSize + 1;
+	this->colSize++;
+}
+
+void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
+{
+	FrogObjNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
+	bool stopLoop = false;
+
+
+	if (fs != NULL)
+	{
+		if (head == NULL)
+		{
+			head = new FrogObjNode(fs, NULL);
+		}
+		else
+		{
+			stopLoop = false;
+			nodePtrPrev = nodePtr;
+			nodePtr = nodePtr->getNextFrogObjNode();
+
+			while (!stopLoop && nodePtr != NULL)
+			{
+
+				//if the new value is lower than first => add new value before
+				if (fs->getValue() <= nodePtr->getFrogItem()->getValue())
+				{
+					nodePtrTemp = new FrogObjNode(fs, nodePtr);
+					nodePtrPrev->setNextFrogObjNode(nodePtrTemp);
+					this->colSize++;
+					stopLoop = true;
+				}
+				else //keep looking
+				{
+					nodePtrPrev = nodePtr;
+					nodePtr = nodePtr->getNextFrogObjNode();
+				}
+			}// end while
+
+			//if I am in the end of the list
+			if (nodePtr == NULL)
+			{
+				nodePtr = new FrogObjNode(fs, NULL);
+				nodePtrPrev->setNextFrogObjNode(nodePtr);
+				this->colSize++;
+			};
+		}//end else (head == NULL)
+	}// end if(fs != NULL)
 }
 
 void FrogObjectCol::printFrogObjCol()
@@ -40,24 +87,23 @@ int FrogObjectCol::getSize()
 FrogObject * FrogObjectCol::getFrogObject(short int i)
 {
 	// assign the first element
-	FrogObjNode * result = head;
+	FrogObjNode * currentNode = head;
+	FrogObject * result = NULL;
 
-	if (this->head != NULL)
+	if ((this->head != NULL) && (i <= this->getSize()))
 	{
 		// if i == 1 then for is not executed, otherwise we start from i = 2 
 		// cause result is pointing to the first Node already 
-		for (int j = 2; j <= i; j++)
+		for (int j = 1; j <= i; j++)
 		{
-			result = result->getNextFrogObjNode();
+			result = currentNode->getFrogItem();
+			currentNode = currentNode->getNextFrogObjNode();
 		}
 	}
-
-	if (result != NULL)
+	else
 	{
-		return result->getFrogItem();
+		return NULL;
 	}
-
-	return NULL;
 }
 
 void FrogObjectCol::removeFrogObjects(FrogObjectCol * sourceSolutionCol)
@@ -97,7 +143,8 @@ void FrogObjectCol::removeFrogObject(FrogObject * fs)
 						// add a delete nodePtrTemp
 						this->colSize--;
 					}
-					else {
+					else 
+					{
 						nodePtrTemp = nodePtr;
 						nodePtrPrev->setNextFrogObjNode(nodePtr->getNextFrogObjNode());
 						nodePtr = nodePtrTemp->getNextFrogObjNode();
@@ -181,9 +228,11 @@ FrogObject * FrogObjectCol::getFrogObjectById(short int objid)
 			{
 				result = solPtr;
 			}
-
-			nodePtr = nodePtr->getNextFrogObjNode();
-			i = i + 1;
+			else
+			{
+				nodePtr = nodePtr->getNextFrogObjNode();
+				i = i + 1;					
+			}
 		}
 	}
 

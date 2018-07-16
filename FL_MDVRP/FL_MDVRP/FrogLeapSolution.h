@@ -33,7 +33,7 @@ class FrogLeapSolution: public FrogObject
 
 		void genRandomSolution();
 
-		DecodedFrogLeapSolution * decodeFrogLeapSolution();
+		DecodedFrogLeapSolution * decodeFrogLeapSolution(Graph * g);
 
 		// abstract methods
 		void printFrogObj();

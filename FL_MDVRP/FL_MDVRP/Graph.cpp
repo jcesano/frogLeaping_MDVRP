@@ -6,6 +6,7 @@
 #include "Vehicle.h"
 #include "FrogLeapSolution.h"
 #include "Pair.h"
+#include "DistanceTable.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -189,9 +190,8 @@ DecodedFrogLeapSolution * Graph::decodeSolution(DistanceTable * t, FrogLeapSolut
 	short int numberOfDepots = this->depotList->getSize();
 	short int numberOfVehicles = numberOfDepots * this->nVehiclesPerDepot;
 
-	fls->decodeFrogLeapSolution()
+	fls->decodeFrogLeapSolution(this);
 	
-
 	return result;
 }
 
@@ -205,6 +205,15 @@ FrogLeapSolution * Graph::genRandomFrogLeapSolution()
 
 int Graph::evalSolution(DecodedFrogLeapSolution * dfls)
 {
-	
-	return -1;
+	return dfls->evalSolution(this->getDistanceTable());
+}
+
+void Graph::setDistanceTable(DistanceTable * t)
+{
+	distanceTable = t;
+}
+
+DistanceTable * Graph::getDistanceTable()
+{
+	return this->distanceTable;
 }

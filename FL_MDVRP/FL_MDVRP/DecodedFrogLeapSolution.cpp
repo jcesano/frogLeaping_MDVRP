@@ -69,6 +69,20 @@ void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	veh->addCustomerPair(customerPair);
 }
 
+int DecodedFrogLeapSolution::evalSolution(DistanceTable * dt)
+{
+	Vehicle * vehPtr = NULL;
+	int result = 0;
+
+	for(int i = 1; i < this->vehicles->getSize(); i++)
+	{
+		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
+		result = result + vehPtr->evalPath(dt);
+	}
+
+	return result;
+}
+
 // abstract methods
 void DecodedFrogLeapSolution::printFrogObj()
 {
