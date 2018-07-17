@@ -33,11 +33,11 @@ Vehicle * DecodedFrogLeapSolution::getVehicle(short int pos)
 }
 */
 
-short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue)
+short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int numberOfVehicles)
 {
 	short int result = floor(fvalue);
 
-	if (result == this->vehicles->getSize())
+	if (result == numberOfVehicles)
 	{
 		result--;
 	};
@@ -45,15 +45,15 @@ short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue)
 	return result;
 }
 
-void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots)
+void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles)
 {
-	short int vehicleId = this->decodeFrogLeapValue(fvalue);
+	short int vehicleId = this->decodeFrogLeapValue(fvalue, numberOfVehicles);
 
 	Vehicle * veh = (Vehicle *)this->vehicles->getFrogObjectById(vehicleId);
 
 	if(veh == NULL)
 	{
-		Vehicle * veh = new Vehicle(vehicleId);
+		veh = new Vehicle(vehicleId);
 		short int depotIndex = vehicleId / numberOfDepots;
 		veh->setDepotIndex(depotIndex);
 
@@ -61,23 +61,23 @@ void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	}
 
 	Pair * customerPair = new Pair(PairType::IntVsFloat);
-	customerPair->set_i_IntValue(customerId);
+	customerPair->set_i_IntValue(customerIndex);
 	customerPair->set_j_FloatValue(fvalue);
 	customerPair->setValue(fvalue);
-	customerPair->setId(customerId);
+	customerPair->setId(customerIndex);
 
 	veh->addCustomerPair(customerPair);
 }
 
-int DecodedFrogLeapSolution::evalSolution(DistanceTable * dt)
+int DecodedFrogLeapSolution::evalSolution(Graph * g)
 {
 	Vehicle * vehPtr = NULL;
 	int result = 0;
 
-	for(int i = 1; i < this->vehicles->getSize(); i++)
+	for(int i = 0; i < this->vehicles->getSize(); i++)
 	{
 		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
-		result = result + vehPtr->evalPath(dt);
+		result = result + vehPtr->evalPath(g);
 	}
 
 	return result;

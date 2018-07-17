@@ -5,7 +5,7 @@
 
 class FrogObjectCol;
 class Vehicle;
-class DistanceTable;
+class Graph;
 
 class DecodedFrogLeapSolution : public FrogObject
 {
@@ -20,11 +20,11 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		//Vehicle * getVehicle(short int pos);
 
-		short int decodeFrogLeapValue(float fvalue);
+		short int decodeFrogLeapValue(float fvalue, short int numberOfVehicles);
 
-		void decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots);		
+		void decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots, short int numberOfVehicles);		
 
-		int evalSolution(DistanceTable * dt);
+		int evalSolution(Graph *  g);
 
 		// abstract methods
 		void printFrogObj();

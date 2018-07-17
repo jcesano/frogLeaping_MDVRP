@@ -90,15 +90,16 @@ FrogObject * FrogObjectCol::getFrogObject(short int i)
 	FrogObjNode * currentNode = head;
 	FrogObject * result = NULL;
 
-	if ((this->head != NULL) && (i <= this->getSize()))
+	if ((this->head != NULL) && (i < this->getSize()) && (i >= 0))
 	{
-		// if i == 1 then for is not executed, otherwise we start from i = 2 
-		// cause result is pointing to the first Node already 
-		for (int j = 1; j <= i; j++)
-		{
-			result = currentNode->getFrogItem();
+		// if i == 0 then for is not executed, otherwise we start from i = 1
+		// cause result is pointing to the first Node already (first node is in position = 0)
+		for (int j = 0; j < i; j++)
+		{			
 			currentNode = currentNode->getNextFrogObjNode();
 		}
+
+		result = currentNode->getFrogItem();
 	}
 	else
 	{

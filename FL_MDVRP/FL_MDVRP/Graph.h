@@ -19,6 +19,9 @@ class Graph
 	IndexList * custormerList;
 	IndexList * depotList;
 
+	short int * customerArray;
+	short int * depotArray;
+
 	short int origin;
 
 	short int nVehiclesPerDepot;
@@ -48,6 +51,12 @@ public:
 	short int getNumberOfVehiclesPerDepot();
 
 	short int getNumberOfVehicles();
+
+	void setUpCustomerList();
+
+	void setUpDepotList();
+
+	void setUpCustomerAndDepotLists();
 	
 	DistVect * dijkstra(short int src);
 
@@ -57,11 +66,9 @@ public:
 
 	short int getCustomerId(short int position);
 
-	DecodedFrogLeapSolution * decodeSolution(DistanceTable * t, FrogLeapSolution * fls);
+	short int getDepotId(short int position);
 
 	FrogLeapSolution * genRandomFrogLeapSolution();
-
-	int evalSolution(DecodedFrogLeapSolution * dfls);
 
 	void setDistanceTable(DistanceTable * t);
 

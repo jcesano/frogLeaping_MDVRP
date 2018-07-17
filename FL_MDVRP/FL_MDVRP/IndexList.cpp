@@ -60,22 +60,18 @@ short int IndexList::getSize()
 
 short int IndexList::getItem(short int position)
 {
-	short int currentPos = 0;
 	IndexListNode * currPtr;
 
 	currPtr = this->head;
 
-	while (currPtr != NULL) 
+	if ((currPtr != NULL) && (position >= 0) && (position < this->getSize()))
 	{
-		if(currentPos == position)
+		for(int i = 0; i < position;i++)
 		{
-			return currPtr->getIndex();
-		}
-		else
-		{
-			currentPos++;
 			currPtr = currPtr->getNextPtr();
-		};		
+		}
+
+		return currPtr->getIndex();			
 	}	
 
 	return -1;

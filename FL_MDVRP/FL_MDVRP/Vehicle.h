@@ -4,7 +4,7 @@
 #include "FrogObject.h"
 
 class FrogObjectCol;
-class DistanceTable;
+class Graph;
 class Pair;
 
 class Vehicle : public FrogObject
@@ -23,7 +23,7 @@ class Vehicle : public FrogObject
 
 		short int getDepotIndex();
 
-		int evalPath(DistanceTable * dt);
+		int evalPath(Graph * g);
 
 		// abstract methods
 		void printFrogObj();

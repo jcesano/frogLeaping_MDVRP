@@ -2,6 +2,7 @@
 #include "Vehicle.h"
 #include "FrogObjectCol.h"
 #include "Pair.h"
+#include "Graph.h"
 #include "DistanceTable.h"
 
 Vehicle::Vehicle(short int id):FrogObject(id)
@@ -30,28 +31,31 @@ short int Vehicle::getDepotIndex()
 	return this->depotIndex;
 }
 
-int Vehicle::evalPath(DistanceTable * dt)
+int Vehicle::evalPath(Graph * g)
 {
 	int vehiclePathResult = 0;
 
-	short int depotIndex = this->getDepotIndex();
+	short int depotIndex = this->getDepotIndex(), depotId;
 	Pair * originPair, * destinationPair;
-	int origin, destination;
+	int originIndex, originId, destinationIndex, destinationId;
+	DistanceTable * dt = g->getDistanceTable();
 
-	origin = depotIndex;
+	originId = g->getDepotId(depotIndex);
 
 	if(this->customers->getSize() > 0)
 	{
-		for(int i = 1; i <= this->customers->getSize(); i++)
+		for(int i = 0; i < this->customers->getSize(); i++)
 		{
 			destinationPair = (Pair *) this->customers->getFrogObject(i);
-			destination = destinationPair->get_i_IntValue();
+			destinationIndex = destinationPair->get_i_IntValue();
+			destinationId = g->getCustomerId(destinationIndex);
 
-			vehiclePathResult = vehiclePathResult + dt->getEdge(origin, destination);
+			vehiclePathResult = vehiclePathResult + dt->getEdge(originId, destinationId);
 
-			origin = destination;
+			originId = destinationId;
 		}		
 	}
+
 	return vehiclePathResult;
 }
 

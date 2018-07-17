@@ -60,7 +60,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 	
 	for (short int i = 0; i < this->getSize(); i++)
 	{
-		decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
+		decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots, this->n_vehicles);
 	}
 	
 	return decodedSolution;

@@ -81,6 +81,36 @@ short int Graph::getNumberOfVehicles()
 	return this->getNumberOfVehiclesPerDepot() * this->getNumberOfDepots();
 }
 
+void Graph::setUpCustomerList()
+{
+	short int n_customers = this->getNumberOfCustomers();
+
+	this->customerArray = new short int[n_customers];
+
+	for(int i = 0; i < n_customers; i++)
+	{
+		customerArray[i] = this->custormerList->getItem(i);
+	}
+}
+
+void Graph::setUpDepotList()
+{
+	short int n_depots = this->getNumberOfDepots();
+	
+	this->depotArray = new short int[n_depots];
+
+	for (int i = 0; i < n_depots; i++)
+	{
+		depotArray[i] = this->depotList->getItem(i);
+	}
+}
+
+void Graph::setUpCustomerAndDepotLists()
+{
+	setUpCustomerList();
+	setUpDepotList();
+}
+
 // Prints shortest paths from src to all other vertices
 DistVect * Graph::dijkstra(short int src)
 {
@@ -179,20 +209,13 @@ short int Graph::getNumberOfCustomers()
 }
 
 short int Graph::getCustomerId(short int position)
-{
-	return this->custormerList->getItem(position);
+{		
+	return this->customerArray[position];
 }
 
-DecodedFrogLeapSolution * Graph::decodeSolution(DistanceTable * t, FrogLeapSolution * fls)
-{
-	DecodedFrogLeapSolution * result = NULL;
-	
-	short int numberOfDepots = this->depotList->getSize();
-	short int numberOfVehicles = numberOfDepots * this->nVehiclesPerDepot;
-
-	fls->decodeFrogLeapSolution(this);
-	
-	return result;
+short int Graph::getDepotId(short int position)
+{	
+	return this->depotArray[position];
 }
 
 FrogLeapSolution * Graph::genRandomFrogLeapSolution()
@@ -201,11 +224,6 @@ FrogLeapSolution * Graph::genRandomFrogLeapSolution()
 
 	result->genRandomSolution();
 	return result;
-}
-
-int Graph::evalSolution(DecodedFrogLeapSolution * dfls)
-{
-	return dfls->evalSolution(this->getDistanceTable());
 }
 
 void Graph::setDistanceTable(DistanceTable * t)
