@@ -33,17 +33,15 @@ void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
 		if (head == NULL)
 		{
 			head = new FrogObjNode(fs, NULL);
+			this->colSize++;
 		}
 		else
 		{
 			stopLoop = false;
-			nodePtrPrev = nodePtr;
-			nodePtr = nodePtr->getNextFrogObjNode();
-
-			while (!stopLoop && nodePtr != NULL)
+			
+			do
 			{
-
-				//if the new value is lower than first => add new value before
+				//if the new value is lower than current item => add new value before
 				if (fs->getValue() <= nodePtr->getFrogItem()->getValue())
 				{
 					nodePtrTemp = new FrogObjNode(fs, nodePtr);
@@ -56,7 +54,7 @@ void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
 					nodePtrPrev = nodePtr;
 					nodePtr = nodePtr->getNextFrogObjNode();
 				}
-			}// end while
+			} while (!stopLoop && nodePtr != NULL);
 
 			//if I am in the end of the list
 			if (nodePtr == NULL)
@@ -64,7 +62,7 @@ void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
 				nodePtr = new FrogObjNode(fs, NULL);
 				nodePtrPrev->setNextFrogObjNode(nodePtr);
 				this->colSize++;
-			};
+			}
 		}//end else (head == NULL)
 	}// end if(fs != NULL)
 }

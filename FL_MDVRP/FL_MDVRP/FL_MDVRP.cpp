@@ -113,7 +113,7 @@ int main()
 
 	fls->genRandomSolution();
 
-	fls->printFrogObj();
+	fls->printFrogObj(); 
 
 	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(g);
 
