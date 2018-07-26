@@ -98,11 +98,11 @@ int main()
 	/* main to fill the Distance Table */
 	DistanceTable * dt = new DistanceTable(V);
 
-	dt->fillDistanceTable(dv);
+	dt->fillDistanceTable(dv, g);
 
-	dt->printDistanceTable(); 
+	//dt->printDistanceTable(); 
 
-	g->setDistanceTable(dt);
+	//g->setDistanceTable(dt);
 	
 
 	/* main test frogSolution */

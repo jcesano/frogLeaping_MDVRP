@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DistanceTable.h"
 #include "DistVect.h"
+#include "Graph.h"
 
 // Allocates memory for adjacency list
 DistanceTable::DistanceTable(short int vertexCount)
@@ -57,23 +58,78 @@ void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
 	this->a[j][i] = min_dist;
 }
 
-void DistanceTable::fillDistanceTable(DistVect * dv)
+void DistanceTable::fillDistanceTable(DistVect * dv, Graph * g)
 {
-	int i, dist_i_j;
-
-	for (i = 0; i < this->V; i++)
+	bool stop = false;
+	
+	do 
 	{
-		for (int j = 0; j < i; j++)
+		fillDistanceTableFromPrevVertex(dv, g);
+
+		fillDistanceTableFromPrevPath(dv, g);		
+		
+	} while (!allEdgesFilled());
+}
+
+void DistanceTable::fillDistanceTableFromPrevVertex(DistVect * dv, Graph * g)
+{
+	for(int v = 0; v <= this->V; v++)
+	{
+		fillFromPrevVertex(dv, g, v);
+	}
+
+}
+
+void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, short int v)
+{
+	short int currentVertex = v, prevVertex;
+	int edgeValue = -1, acumEdgeValue = 0;
+
+	while (currentVertex != -1)
+	{
+		prevVertex = dv->getPrevIndex(currentVertex);
+
+		if(prevVertex != -1)
 		{
-			dist_i_j = dv->getDistanceBtwn(i, j);
-			this->addEdge(i, j, dist_i_j);
+			edgeValue = g->getEdgeValue(currentVertex, prevVertex);
+			acumEdgeValue += edgeValue;
+
+			if(this->getEdge(currentVertex, prevVertex) == NO_ADJ)
+			{
+				this->addEdge(currentVertex, prevVertex, edgeValue);
+			}			
+
+			if(currentVertex != v)
+			{
+				if (this->getEdge(v, prevVertex) == NO_ADJ)
+				{
+					this->addEdge(v, prevVertex, acumEdgeValue);
+				}				
+			}			
+		}
+
+		currentVertex = prevVertex;
+	}
+}
+
+void DistanceTable::fillDistanceTableFromPrevPath(DistVect * dv, Graph * g)
+{
+
+}
+
+bool DistanceTable::allEdgesFilled()
+{
+	for (short int u = 0; u < V; u++) {
+
+		for (short int v = 0; v < V; v++) {
+			if (a[u][v] == NO_ADJ)
+			{
+				return false;
+			}
 		}
 	}
 
-	for (i = 0; i < this->V; i++)
-	{
-		this->addDiagEdge(i, 0);
-	}
+	return true;
 }
 
 void DistanceTable::printDistanceTable()

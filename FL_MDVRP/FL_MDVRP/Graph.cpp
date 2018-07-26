@@ -131,7 +131,7 @@ DistVect * Graph::dijkstra(short int src)
 	short int currentPathVertex = src, prevPathVertex = -1;
 
 	// Find shortest path for all vertices
-	for (short int count = 0; count < V - 1; count++)
+	for (short int count = 0; count < V; count++)
 	{
 		// Pick the minimum distance vertex from the set of vertices not
 		// yet processed. u is always equal to src in first iteration.
@@ -149,8 +149,6 @@ DistVect * Graph::dijkstra(short int src)
 													  // Update dist value of the adjacent vertices of the picked vertex.
 		for (short int v = 0; v < V; v++)
 		{
-
-
 			// Update dist[v] only if is not in sptSet, there is an edge from 
 			// u to v, and total weight of path from src to  v through u is 
 			// smaller than current value of dist[v]
@@ -167,7 +165,7 @@ DistVect * Graph::dijkstra(short int src)
 			}
 		}
 
-		currentPathVertex = getNextClosestVertex(currentPathVertex, &prevPathVertex, dvptr);
+		currentPathVertex = getNextClosestVertex(currentPathVertex, &prevPathVertex, dvptr, src);
 
 	} //end for(int count = 0; count < V - 1; count++)
 
@@ -179,10 +177,15 @@ DistVect * Graph::dijkstra(short int src)
 	return dvptr;
 }
 
-short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, DistVect* dvptr)
+short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, DistVect* dvptr, short int src)
 {
 	short int minDistVertex = SHRT_MAX;
 	short int minDistVertexInd = -1;
+
+	if(dvptr->allMarked())
+	{
+		return -1;
+	}
 
 	for (short int i = 0; i < V; i++)
 	{
@@ -195,10 +198,17 @@ short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, D
 
 	if (minDistVertexInd == -1)
 	{
-		return this->getNextClosestVertex(dvptr->getPrevPathIndex(v), prevPathVertex, dvptr);
+		return this->getNextClosestVertex(dvptr->getPrevPathIndex(v), prevPathVertex, dvptr, src);
 	}
-	else {
+	else 
+	{
 		(*prevPathVertex) = v;
+		
+		if(minDistVertexInd == 3)
+		{
+			printf("debug");
+		}
+
 		return minDistVertexInd;
 	}
 }
@@ -234,4 +244,9 @@ void Graph::setDistanceTable(DistanceTable * t)
 DistanceTable * Graph::getDistanceTable()
 {
 	return this->distanceTable;
+}
+
+short int Graph::getEdgeValue(short int origin, short int destiny)
+{
+	return this->a[origin][destiny];
 }

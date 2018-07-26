@@ -40,6 +40,8 @@ public:
 	// function to add an edge to graph
 	void addEdge(short int u, short int v, short int w);
 
+	short int getEdgeValue(short int origin, short int destiny);
+
 	void setAsCustomer(short int v);
 
 	void setAsDepot(short int v);
@@ -60,7 +62,7 @@ public:
 	
 	DistVect * dijkstra(short int src);
 
-	short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
+	short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr, short int src); // returns the next unmarked closest adjascent vertex to v	
 
 	short int getNumberOfCustomers();
 
@@ -73,6 +75,7 @@ public:
 	void setDistanceTable(DistanceTable * t);
 
 	DistanceTable * getDistanceTable();
+	
 };
 
 #endif

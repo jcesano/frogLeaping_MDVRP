@@ -55,6 +55,9 @@ int DistVect::allMarked()
 			stop = 1;
 			result = 0;
 		};
+
+		i++;
+
 	};//end while
 
 	return result;
@@ -106,11 +109,11 @@ void DistVect::sortSolution()
 
 void DistVect::printSolution()
 {
-	printf("Vertex | Distance from source: %d \n", this->origin);
+	printf("Vertex |  Previous Vertex | Distance from source: %d \n", this->origin);
 
 	for (int i = 0; i < countV; i++)
 	{
-		printf("%d      |          %d  \n", i, ptr[i]->getDistance());
+		printf("%d      |    %d      |        %d  \n", ptr[i]->getId(), ptr[i]->getPrevPathIndex(), ptr[i]->getDistance());
 	}
 }
 
