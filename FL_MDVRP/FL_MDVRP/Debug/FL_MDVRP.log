@@ -1,9 +1,16 @@
 ﻿  stdafx.cpp
   Vertex.cpp
   Vehicle.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(40): warning C4101: 'originIndex': unreferenced local variable
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(38): warning C4101: 'depotId': unreferenced local variable
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(39): warning C4101: 'originPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(50): warning C4101: 'originIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(48): warning C4101: 'depotId': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(49): warning C4101: 'originPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(108): warning C4474: 'printf' : too many arguments passed for format string
+  c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(108): note: placeholders and their parameters expect 2 variadic arguments, but 3 were provided
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(103): warning C4101: 'originIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(102): warning C4101: 'destinationPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(103): warning C4101: 'destinationIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(101): warning C4101: 'depotId': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(102): warning C4101: 'originPair': unreferenced local variable
   Pair.cpp
   IndexListNode.cpp
   IndexList.cpp
@@ -12,10 +19,10 @@ c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(146): wa
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(146): warning C4309: 'initializing': truncation of constant value
   FrogObjNode.cpp
   FrogObjectCol.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(191): warning C4804: '<=': unsafe use of type 'bool' in operation
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(198): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(220): warning C4804: '<=': unsafe use of type 'bool' in operation
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(233): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(201): warning C4804: '<=': unsafe use of type 'bool' in operation
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(208): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(230): warning C4804: '<=': unsafe use of type 'bool' in operation
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(243): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
   FrogObject.cpp
   FrogLeapSolution.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(48): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
@@ -29,8 +36,8 @@ c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolcol.cpp
   DistVect.cpp
   DistanceTable.cpp
   DecodedFrogLeapSolution.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(38): warning C4244: 'initializing': conversion from 'double' to 'short', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(44): warning C4244: 'initializing': conversion from 'double' to 'short', possible loss of data
   Generating Code...
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(106): warning C4715: 'FrogObjectCol::getFrogObject': not all control paths return a value
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(116): warning C4715: 'FrogObjectCol::getFrogObject': not all control paths return a value
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)

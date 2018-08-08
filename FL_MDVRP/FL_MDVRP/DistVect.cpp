@@ -3,12 +3,14 @@
 #include "Vertex.h"
 #include "Graph.h"
 
-DistVect::DistVect(int v, int v_origin)
+DistVect::DistVect(short int v, short int v_origin)
 {
 	dv = new Vertex[v];
 	ptr = new Vertex*[v];
 
-	for (int i = 0; i < v; i++) {
+	this->lastMarked = -1;
+
+	for (short int i = 0; i < v; i++) {
 		dv[i].setDistance(infVal);
 		dv[i].setId(i);
 		dv[i].setPrevIndex(-1);
@@ -31,6 +33,7 @@ void DistVect::setMinDist(int v, int dist)
 void DistVect::markVert(int v)
 {
 	dv[v].markVertex();
+	this->setLastMarkedVertex(v);
 }
 
 void DistVect::unmarkVert(int v)
@@ -202,3 +205,12 @@ void DistVect::pointCustomers()
 }
 
 
+short int DistVect::getLastMarkedVertex()
+{
+	return this->lastMarked;
+}
+
+void DistVect::setLastMarkedVertex(short int v)
+{
+	this->lastMarked = v;
+}

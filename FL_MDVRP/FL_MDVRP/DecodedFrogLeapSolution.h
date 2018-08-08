@@ -11,10 +11,14 @@ class DecodedFrogLeapSolution : public FrogObject
 {
 	private:
 		FrogObjectCol * vehicles;
+
+		Graph * ptrG;
 	
 	public:
 
 		DecodedFrogLeapSolution();
+
+		DecodedFrogLeapSolution(Graph * g);
 
 		void addVehicle(Vehicle * v);
 
@@ -24,7 +28,11 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		void decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots, short int numberOfVehicles);		
 
-		int evalSolution(Graph *  g);
+		int evalSolution();
+
+		void setGraph(Graph * g);
+
+		Graph * getGraph();
 
 		// abstract methods
 		void printFrogObj();

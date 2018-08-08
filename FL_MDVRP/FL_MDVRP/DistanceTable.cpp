@@ -6,19 +6,27 @@
 // Allocates memory for adjacency list
 DistanceTable::DistanceTable(short int vertexCount)
 {
+	short int i;
+
 	this->V = vertexCount;
 
-	a = new short int*[V];
+	a = new short int*[V];	
 
-	for (short int i = 0; i < V; i++) {
+	for (i = 0; i < V; i++) {
 		a[i] = new short int[V];
 	};
 
-	for (short int u = 0; u < V; u++) {
+	for (i = 0; i < V; i++) {
 
-		for (short int v = 0; v < V; v++) {
-			a[u][v] = NO_ADJ;
+		for (short int j = i+1; j < V; j++) {			
+			a[i][j] = NO_ADJ;
+			a[j][i] = NO_ADJ;
 		}
+	}
+
+	for(i = 0; i < V; i++)
+	{
+		a[i][i] = 0;
 	}
 }
 
@@ -61,29 +69,38 @@ void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
 void DistanceTable::fillDistanceTable(DistVect * dv, Graph * g)
 {
 	bool stop = false;
+	short int nextSrc = -1;
 	
 	do 
 	{
-		fillDistanceTableFromPrevVertex(dv, g);
+		fillDistanceTableFromPrevVertex(dv, g);		
 
-		fillDistanceTableFromPrevPath(dv, g);		
+		//this->fillFromPath(dv, g);
 		
-	} while (!allEdgesFilled());
+		// If all edges were completed then return -1
+		nextSrc = this->getNextSourceForDijkstra();
+
+		if (nextSrc != -1)
+		{
+			// delete dv
+			dv = g->dijkstra(nextSrc);
+		}
+	} while (nextSrc != -1);
+	// If all edges were completed then nextSrc = -1
 }
 
 void DistanceTable::fillDistanceTableFromPrevVertex(DistVect * dv, Graph * g)
 {
-	for(int v = 0; v <= this->V; v++)
+	for(short int v = 0; v < this->V; v++)
 	{
 		fillFromPrevVertex(dv, g, v);
 	}
-
 }
 
 void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, short int v)
 {
 	short int currentVertex = v, prevVertex;
-	int edgeValue = -1, acumEdgeValue = 0;
+	short int edgeValue = -1, acumEdgeValue = 0;
 
 	while (currentVertex != -1)
 	{
@@ -94,27 +111,63 @@ void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, short int v)
 			edgeValue = g->getEdgeValue(currentVertex, prevVertex);
 			acumEdgeValue += edgeValue;
 
+			// if not egde previously added
 			if(this->getEdge(currentVertex, prevVertex) == NO_ADJ)
 			{
 				this->addEdge(currentVertex, prevVertex, edgeValue);
 			}			
 
+			// this is to add an edgge from the origin vertex V. This ocurrs only once so we do not have 
+			// to check the edge was previously added
 			if(currentVertex != v)
 			{
-				if (this->getEdge(v, prevVertex) == NO_ADJ)
-				{
-					this->addEdge(v, prevVertex, acumEdgeValue);
-				}				
+				this->addEdge(v, prevVertex, acumEdgeValue);
 			}			
+
+		} // end if(prevVertex != -1)
+
+		currentVertex = prevVertex;
+	}
+}
+
+void DistanceTable::fillFromPath(DistVect * dv, Graph * g)
+{
+	short int currentVertex = dv->getLastMarkedVertex(), prevVertex;
+	short int edgeValue = -1, acumEdgeValue = 0;
+
+	while (currentVertex != -1)
+	{
+		prevVertex = dv->getPrevPathIndex(currentVertex);
+
+		if (prevVertex != -1)
+		{
+			edgeValue = g->getEdgeValue(currentVertex, prevVertex);			
+
+			// if not egde previously added
+			if (this->getEdge(currentVertex, prevVertex) == NO_ADJ)
+			{
+				this->addEdge(currentVertex, prevVertex, edgeValue);
+			}
 		}
 
 		currentVertex = prevVertex;
 	}
 }
 
-void DistanceTable::fillDistanceTableFromPrevPath(DistVect * dv, Graph * g)
+short int DistanceTable::getNextSourceForDijkstra()
 {
+	for(short int i = 0; i < this->V; i++)
+	{
+		for(short int j = i; j < this->V; j++)
+		{
+			if (this->a[i][j] == NO_ADJ)
+			{
+				return i;
+			}
+		}
+	}
 
+	return -1;
 }
 
 bool DistanceTable::allEdgesFilled()

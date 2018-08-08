@@ -100,9 +100,9 @@ int main()
 
 	dt->fillDistanceTable(dv, g);
 
-	//dt->printDistanceTable(); 
+	dt->printDistanceTable(); 
 
-	//g->setDistanceTable(dt);
+	g->setDistanceTable(dt);
 	
 
 	/* main test frogSolution */
@@ -117,9 +117,11 @@ int main()
 
 	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(g);
 
-	int evalSol = dfls_1->evalSolution(g);
-	
+	int evalSol = dfls_1->evalSolution();
+
 	printf("Evaluation of frogLeapingSolution is = %d", evalSol);
+
+	dfls_1->printFrogObj();	
 
 	return 0;
 }

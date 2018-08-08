@@ -14,8 +14,14 @@ class Vehicle : public FrogObject
 		short int size;
 		short int depotIndex;
 
+		int pathCost;
+
+		Graph * ptrGraph;
+
 	public:
 		Vehicle(short int id);
+
+		Vehicle(short int id, Graph * g);
 
 		void addCustomerPair(Pair * customerPair);
 
@@ -24,6 +30,14 @@ class Vehicle : public FrogObject
 		short int getDepotIndex();
 
 		int evalPath(Graph * g);
+
+		void setGraph(Graph * g);
+
+		Graph * getGraph();
+
+		void setPathCost(int cost);
+
+		int getPathCost();
 
 		// abstract methods
 		void printFrogObj();

@@ -14,16 +14,22 @@ class DistVect
 	Vertex* dv;
 	Vertex** ptr;
 	Vertex** ptrCustomers;
-	int origin; // Index of the closest unmarked verted	
+	short int origin; // Index of the closest unmarked verted	
+
+	short int lastMarked;
 
 public:
-	DistVect(int v, int v_origin); //Constructor
+	DistVect(short int v, short int v_origin); //Constructor
 
 	void setMinDist(int v, int dist);
 
 	void markVert(int v);
 
 	void unmarkVert(int v);
+
+	short int getLastMarkedVertex();
+
+	void setLastMarkedVertex(short int v);
 
 	int getMinDist(int v);
 

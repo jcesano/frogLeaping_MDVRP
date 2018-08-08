@@ -19,7 +19,7 @@ class FrogLeapSolution: public FrogObject
 		short int n_depots;		// number of depots
 		time_t timeSeedUsed;
 
-		float genRandomFloatingNumber(float a, float b);
+		float genRandomFloatingNumber(float a, float b);		
 
 	public:
 	

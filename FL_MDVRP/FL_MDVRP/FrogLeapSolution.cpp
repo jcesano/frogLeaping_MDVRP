@@ -13,7 +13,7 @@ FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, sho
 	this->size = size_v;
 	this->n_vehicles = n_vehicles_v;
 	this->n_depots = n_depots_v;
-	this->values = new float[this->size];	
+	this->values = new float[this->size];		
 }
 
 float FrogLeapSolution::getFLValue(short int i)
@@ -56,7 +56,7 @@ void FrogLeapSolution::genRandomSolution()
 
 DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 {
-	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution();
+	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(g);
 	
 	for (short int i = 0; i < this->getSize(); i++)
 	{
@@ -65,6 +65,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 	
 	return decodedSolution;
 }
+
 
 // inherited methods
 void FrogLeapSolution::printFrogObj()

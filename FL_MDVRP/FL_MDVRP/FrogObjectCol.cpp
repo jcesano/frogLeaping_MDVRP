@@ -45,7 +45,17 @@ void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
 				if (fs->getValue() <= nodePtr->getFrogItem()->getValue())
 				{
 					nodePtrTemp = new FrogObjNode(fs, nodePtr);
-					nodePtrPrev->setNextFrogObjNode(nodePtrTemp);
+
+					// if nodePtrPrev == NULL then i am in the begining of the list
+					if(nodePtrPrev != NULL)
+					{
+						nodePtrPrev->setNextFrogObjNode(nodePtrTemp);
+					}
+					else
+					{
+						head = nodePtrTemp;
+					}
+					
 					this->colSize++;
 					stopLoop = true;
 				}

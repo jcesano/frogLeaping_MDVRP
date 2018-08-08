@@ -118,7 +118,7 @@ DistVect * Graph::dijkstra(short int src)
 	// distance from src to i
 	DistVect * dvptr = new DistVect(V, src);
 
-	//bool sptSet[V]; // sptSet[i] will true if vertex i is included in shortest
+	//bool sptSet[V]; // sptSet[i] will be true if vertex i is included in shortest
 	// path tree or shortest distance from src to i is finalized
 
 	// Initialize all distances as INFINITE and stpSet[] as false
@@ -165,7 +165,7 @@ DistVect * Graph::dijkstra(short int src)
 			}
 		}
 
-		currentPathVertex = getNextClosestVertex(currentPathVertex, &prevPathVertex, dvptr, src);
+		currentPathVertex = getNextClosestVertex(dvptr);
 
 	} //end for(int count = 0; count < V - 1; count++)
 
@@ -177,11 +177,11 @@ DistVect * Graph::dijkstra(short int src)
 	return dvptr;
 }
 
-short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, DistVect* dvptr, short int src)
+short int Graph::getNextClosestVertex(DistVect* dvptr)
 {
 	short int minDistVertex = SHRT_MAX;
 	short int minDistVertexInd = -1;
-
+	
 	if(dvptr->allMarked())
 	{
 		return -1;
@@ -189,29 +189,51 @@ short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, D
 
 	for (short int i = 0; i < V; i++)
 	{
-		if (a[v][i] != NO_ADJ && i != v && a[v][i] < minDistVertex && dvptr->isUnmarkedVertex(i))
+		if (dvptr->getMinDist(i) < minDistVertex && dvptr->isUnmarkedVertex(i))
 		{
-			minDistVertex = a[v][i];
+			minDistVertex = dvptr->getMinDist(i);
 			minDistVertexInd = i;
 		}
 	}
 
-	if (minDistVertexInd == -1)
-	{
-		return this->getNextClosestVertex(dvptr->getPrevPathIndex(v), prevPathVertex, dvptr, src);
-	}
-	else 
-	{
-		(*prevPathVertex) = v;
-		
-		if(minDistVertexInd == 3)
-		{
-			printf("debug");
-		}
-
-		return minDistVertexInd;
-	}
+	return minDistVertexInd;
 }
+
+//short int Graph::getNextClosestVertex(short int v, short int * prevPathVertex, DistVect* dvptr, short int src)
+//{
+//	short int minDistVertex = SHRT_MAX;
+//	short int minDistVertexInd = -1;
+//
+//	if(dvptr->allMarked())
+//	{
+//		return -1;
+//	}
+//
+//	for (short int i = 0; i < V; i++)
+//	{
+//		if (a[v][i] != NO_ADJ && i != v && a[v][i] < minDistVertex && dvptr->isUnmarkedVertex(i))
+//		{
+//			minDistVertex = a[v][i];
+//			minDistVertexInd = i;
+//		}
+//	}
+//
+//	if (minDistVertexInd == -1)
+//	{
+//		return this->getNextClosestVertex(dvptr->getPrevPathIndex(v), prevPathVertex, dvptr, src);
+//	}
+//	else 
+//	{
+//		(*prevPathVertex) = v;
+//		
+//		if(minDistVertexInd == 3)
+//		{
+//			printf("debug");
+//		}
+//
+//		return minDistVertexInd;
+//	}
+//}
 
 short int Graph::getNumberOfCustomers()
 {

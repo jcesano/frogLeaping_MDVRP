@@ -10,6 +10,7 @@ class DistanceTable
 	short int** a;
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
+	
 
 public:
 	short int const NO_ADJ = -1;
@@ -21,7 +22,7 @@ public:
 	void addDiagEdge(short int u, short int w);
 
 	short int getEdge(short int u, short int v);
-
+	
 	void loadMinDistanceTable(DistVect * dv); // load the table with the minimum distance among all vertexes
 
 	void loadMinDistanceEdge(DistVect * dv, short int i, short int j); // load minimum distance between i and j
@@ -34,7 +35,9 @@ public:
 
 	void fillFromPrevVertex(DistVect * dv, Graph * g, short int v);
 
-	void fillDistanceTableFromPrevPath(DistVect * dv, Graph * g);
+	void fillFromPath(DistVect * dv, Graph * g);
+
+	short int getNextSourceForDijkstra();
 
 	bool allEdgesFilled();
 };

@@ -9,7 +9,13 @@
 DecodedFrogLeapSolution::DecodedFrogLeapSolution():FrogObject()
 {
 	this->vehicles = new FrogObjectCol();
+	this->ptrG = NULL;
+}
 
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(Graph * g) :FrogObject()
+{
+	this->vehicles = new FrogObjectCol();
+	this->ptrG = g;
 }
 
 void DecodedFrogLeapSolution::addVehicle(Vehicle * v)
@@ -53,7 +59,7 @@ void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 
 	if(veh == NULL)
 	{
-		veh = new Vehicle(vehicleId);
+		veh = new Vehicle(vehicleId, this->getGraph());
 		short int depotIndex = vehicleId / numberOfDepots;
 		veh->setDepotIndex(depotIndex);
 
@@ -69,7 +75,7 @@ void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	veh->addCustomerPair(customerPair);
 }
 
-int DecodedFrogLeapSolution::evalSolution(Graph * g)
+int DecodedFrogLeapSolution::evalSolution()
 {
 	Vehicle * vehPtr = NULL;
 	int result = 0;
@@ -77,7 +83,7 @@ int DecodedFrogLeapSolution::evalSolution(Graph * g)
 	for(int i = 0; i < this->vehicles->getSize(); i++)
 	{
 		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
-		result = result + vehPtr->evalPath(g);
+		result = result + vehPtr->evalPath(this->getGraph());
 	}
 
 	return result;
@@ -86,10 +92,29 @@ int DecodedFrogLeapSolution::evalSolution(Graph * g)
 // abstract methods
 void DecodedFrogLeapSolution::printFrogObj()
 {
+	short int numVehicles = this->vehicles->getSize();
+	Vehicle * vehPtr;
 
+	printf("Cantidad de vehículos: %d \n", numVehicles);
+
+	for(short int i = 0; i < numVehicles; i++)
+	{
+		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
+		vehPtr->printFrogObj();
+	}
 }
 
 bool DecodedFrogLeapSolution::isTheSame(FrogObject * fs)
 {
 	return (this == fs);
+}
+
+void DecodedFrogLeapSolution::setGraph(Graph * g)
+{
+	this->ptrG = g;
+}
+
+Graph * DecodedFrogLeapSolution::getGraph()
+{
+	return this->ptrG;
 }
