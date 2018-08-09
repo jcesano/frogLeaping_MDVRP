@@ -6,6 +6,8 @@ class IndexList;
 class DecodedFrogLeapSolution;
 class DistanceTable;
 class FrogLeapSolution;
+class Pair;
+class FrogObjectCol;
 
 // This class represents a directed graph using
 // adjacency list representation
@@ -16,10 +18,12 @@ class Graph
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
 
-	IndexList * custormerList;
+	FrogObjectCol * custormerList;
+
 	IndexList * depotList;
 
-	short int * customerArray;
+	Pair * * customerArray;
+
 	short int * depotArray;
 
 	short int origin;
@@ -42,7 +46,7 @@ public:
 
 	short int getEdgeValue(short int origin, short int destiny);
 
-	void setAsCustomer(short int v);
+	void setAsCustomer(short int customerIndex, int demand);
 
 	void setAsDepot(short int v);
 

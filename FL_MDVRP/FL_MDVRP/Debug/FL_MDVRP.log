@@ -15,8 +15,8 @@ c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(102): 
   IndexListNode.cpp
   IndexList.cpp
   Graph.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(146): warning C4305: 'initializing': truncation from 'int' to 'short'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(146): warning C4309: 'initializing': truncation of constant value
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(154): warning C4305: 'initializing': truncation from 'int' to 'short'
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(154): warning C4309: 'initializing': truncation of constant value
   FrogObjNode.cpp
   FrogObjectCol.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(201): warning C4804: '<=': unsafe use of type 'bool' in operation

@@ -7,6 +7,7 @@
 #include "FrogLeapSolution.h"
 #include "Pair.h"
 #include "DistanceTable.h"
+#include "FrogObjectCol.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,7 +30,8 @@ Graph::Graph(short int vertexCount)
 		}
 	}
 
-	this->custormerList = new IndexList();
+	this->custormerList = new FrogObjectCol();
+
 	this->depotList = new IndexList();
 
 	this->origin = -1;
@@ -51,9 +53,15 @@ void Graph::addEdge(short int u, short int v, short int w)
 	a[v][u] = w;
 }
 
-void Graph::setAsCustomer(short int v)
+void Graph::setAsCustomer(short int customerId, int demand)
 {
-	this->custormerList->addIndex(v);
+	Pair * customerPair = new Pair(PairType::IntVsInt);
+	customerPair->set_i_IntValue(customerId);
+	customerPair->set_j_IntValue(demand);
+	customerPair->setValue(customerId);
+	customerPair->setId(customerId);
+
+	this->custormerList->addFrogObjectOrdered(customerPair);
 }
 
 void Graph::setAsDepot(short int v)
@@ -85,11 +93,11 @@ void Graph::setUpCustomerList()
 {
 	short int n_customers = this->getNumberOfCustomers();
 
-	this->customerArray = new short int[n_customers];
+	this->customerArray = new Pair *[n_customers];
 
 	for(int i = 0; i < n_customers; i++)
 	{
-		customerArray[i] = this->custormerList->getItem(i);
+		customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
 	}
 }
 
@@ -242,7 +250,7 @@ short int Graph::getNumberOfCustomers()
 
 short int Graph::getCustomerId(short int position)
 {		
-	return this->customerArray[position];
+	return this->customerArray[position]->get_i_IntValue();
 }
 
 short int Graph::getDepotId(short int position)

@@ -32,12 +32,12 @@ int main()
 
 	g->setNumberOfVehiclesPerDepot(nVehiclesPerDepot);
 
-	g->setAsCustomer(1);
-	g->setAsCustomer(2);
-	g->setAsCustomer(3);
-	g->setAsCustomer(4);
-	g->setAsCustomer(7);
-	g->setAsCustomer(8);
+	g->setAsCustomer(1, 3);
+	g->setAsCustomer(2, 3);
+	g->setAsCustomer(3, 3);
+	g->setAsCustomer(4, 3);
+	g->setAsCustomer(7, 3);
+	g->setAsCustomer(8, 3);
 	
 	g->addEdge(0, 1, 4);
 	g->addEdge(0, 7, 8);
