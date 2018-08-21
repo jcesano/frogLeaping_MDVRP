@@ -8,6 +8,11 @@ FeasSolNode::FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr)
 	next = fsnodeptr;
 }
 
+FeasSolNode::~FeasSolNode()
+{
+	delete this->feasibleSol;
+}
+
 void FeasSolNode::printNodeItems()
 {
 	if (this->feasibleSol != NULL)

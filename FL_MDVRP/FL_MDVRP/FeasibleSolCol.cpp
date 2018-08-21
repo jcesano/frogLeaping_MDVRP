@@ -10,6 +10,18 @@ FeasibleSolCol::FeasibleSolCol()
 	this->colSize = 0;
 }
 
+FeasibleSolCol::~FeasibleSolCol()
+{
+	FeasSolNode * temp = head;
+
+	while (this->head != NULL)
+	{
+		temp = temp->getNextFeasSolNode();
+		delete head;
+		head = temp;
+	}
+}
+
 void FeasibleSolCol::AddFeasibleSol(FeasibleSolution * fs)
 {
 	FeasSolNode * ptr;

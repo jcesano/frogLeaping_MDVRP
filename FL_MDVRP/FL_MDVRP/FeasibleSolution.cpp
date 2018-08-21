@@ -33,6 +33,11 @@ FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 
 }
 
+FeasibleSolution::~FeasibleSolution()
+{
+	delete this->solVect;
+}
+
 void FeasibleSolution::setSolFactValue(short int pos, short int val)
 {
 	solVect[pos] = val;

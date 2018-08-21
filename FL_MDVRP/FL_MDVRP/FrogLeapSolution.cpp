@@ -16,6 +16,11 @@ FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, sho
 	this->values = new float[this->size];		
 }
 
+FrogLeapSolution::~FrogLeapSolution()
+{
+	delete[] values;
+}
+
 float FrogLeapSolution::getFLValue(short int i)
 {
 	return this->values[i];
@@ -44,8 +49,8 @@ void FrogLeapSolution::genRandomSolution()
 	float u;
 	int a = this->size;
 
-	this->timeSeedUsed = (unsigned)time(NULL);
-	srand(this->timeSeedUsed);
+//	this->timeSeedUsed = (unsigned)time(NULL);
+//	srand(this->timeSeedUsed);
 
 	for (int i = 0; i < this->size; i++)
 	{
@@ -54,14 +59,19 @@ void FrogLeapSolution::genRandomSolution()
 	};
 }
 
+//if generated instance of DecodedFrogLeapSolution is NULL then solution is not valid due to a vehicle capacity violation
 DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(g);
 	
-	for (short int i = 0; i < this->getSize(); i++)
+	short int i = 0;
+	bool feasible = true;
+
+	do 
 	{
-		decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots, this->n_vehicles);
-	}
+		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots, this->n_vehicles);
+		i++;
+	} while (i < this->getSize() && feasible == true);	
 	
 	return decodedSolution;
 }
@@ -70,7 +80,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 // inherited methods
 void FrogLeapSolution::printFrogObj()
 {
-	printf("Printing values of frog leaping solution \n");
+	printf("\nPrinting values of frog leaping solution \n");
 	printf("Values are the following: \n");
 
 	for(int i = 0; i < this->getSize() - 1;i++)

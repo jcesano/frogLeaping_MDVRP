@@ -8,6 +8,11 @@ FrogObjNode::FrogObjNode(FrogObject * fs, FrogObjNode * fsnodeptr)
 	next = fsnodeptr;
 }
 
+FrogObjNode::~FrogObjNode()
+{
+	delete this->frogItem;
+}
+
 void FrogObjNode::printNodeItems()
 {
 	if (this->frogItem != NULL)

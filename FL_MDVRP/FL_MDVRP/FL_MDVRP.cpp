@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "FrogLeapSolution.h"
+#include "FrogLeapController.h"
 #include "DecodedFrogLeapSolution.h"
 //#include "FrogObjectCol.h"
 //#include "IndexList.h"
@@ -27,8 +28,8 @@ int main()
 
 	//  making above shown graph
 	/* main to test Dijkstra algorithm */
-	g->setAsDepot(0);
-	g->setAsDepot(6);
+	g->setAsDepot(0, 0);
+	g->setAsDepot(6, 0);
 
 	g->setNumberOfVehiclesPerDepot(nVehiclesPerDepot);
 
@@ -59,13 +60,13 @@ int main()
 	DistVect * dv = g->dijkstra(0); 
 	
 
-	/* Main to test all permutations of distance = 1 and distance = 2 
+	/* Main to test all permutations of distance = 1 and distance = 2 */
 
 	FeasibleSolution * fs;
 	FeasibleSolCol * fscol;
 
 	fs = new FeasibleSolution(V);
-	*/
+	
 
 	/* setting indexes as values in the FeasibleSolution	
 	for(int i = 0; i<V;i++)
@@ -111,18 +112,35 @@ int main()
 
 	FrogLeapSolution * fls = new FrogLeapSolution(nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
 
-	fls->genRandomSolution();
+	FrogLeapController * controller = new FrogLeapController();
+	DecodedFrogLeapSolution * dfls_1 = NULL;
+	int evalSol;	
+	const int TOPE = 10;
 
-	fls->printFrogObj(); 
+	for(int i=0; i < TOPE; i++)
+	{
+		fls->genRandomSolution();
 
-	DecodedFrogLeapSolution * dfls_1 = fls->decodeFrogLeapSolution(g);
+		fls->printFrogObj();
 
-	int evalSol = dfls_1->evalSolution();
+		dfls_1 = fls->decodeFrogLeapSolution(g);
 
-	printf("Evaluation of frogLeapingSolution is = %d", evalSol);
+		if (dfls_1->getIsFeasibleSolution() == true) 
+		{
+			controller->incSuccessAttempts();
+			evalSol = dfls_1->evalSolution();
+			printf("Evaluation of frogLeapingSolution is = %d   ", evalSol);			
+		}
+		else
+		{
+			controller->incFailAttempts();
+		}
 
-	dfls_1->printFrogObj();	
-
+		dfls_1->printFrogObj();
+	}
+	
+	controller->printCtrl();
+	
 	return 0;
 }
 

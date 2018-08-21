@@ -8,6 +8,10 @@ FrogObject::FrogObject()
 	this->value = 0;
 }
 
+FrogObject::~FrogObject()
+{
+}
+
 FrogObject::FrogObject(short int id_v)
 {
 	this->id = id_v;

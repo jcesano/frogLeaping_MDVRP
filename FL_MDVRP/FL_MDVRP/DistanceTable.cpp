@@ -30,6 +30,16 @@ DistanceTable::DistanceTable(short int vertexCount)
 	}
 }
 
+DistanceTable::~DistanceTable()
+{
+	for(short int i = 0; i < this->V; i++)
+	{
+		delete a[i];
+	}
+
+	delete[] a;
+}
+
 void DistanceTable::addEdge(short int u, short int v, short int w)
 {
 	a[u][v] = w;

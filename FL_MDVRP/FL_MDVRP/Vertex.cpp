@@ -11,6 +11,10 @@ Vertex::Vertex()
 	this->v_type = SimpleNode;
 }
 
+Vertex::~Vertex()
+{
+}
+
 int Vertex::getDistance()
 {
 	return distance;

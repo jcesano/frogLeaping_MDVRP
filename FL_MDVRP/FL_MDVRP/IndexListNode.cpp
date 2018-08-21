@@ -7,6 +7,10 @@ IndexListNode::IndexListNode(short int v_index, IndexListNode * nextPtr)
 	this->next = nextPtr;
 }
 
+IndexListNode::~IndexListNode()
+{
+}
+
 short int IndexListNode::getIndex()
 {
 	return this->index;

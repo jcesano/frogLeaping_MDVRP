@@ -11,6 +11,10 @@ Pair::Pair(PairType type)
 	j_float = -1;
 }
 
+Pair::~Pair()
+{
+}
+
 PairType Pair::getType()
 {
 	return this->pairtype;

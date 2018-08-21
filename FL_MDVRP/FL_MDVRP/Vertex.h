@@ -15,6 +15,7 @@ class Vertex
 
 public:
 	Vertex(); //Constructor
+	~Vertex();
 	int getDistance();
 	void setDistance(int distanceV);
 	void markVertex();

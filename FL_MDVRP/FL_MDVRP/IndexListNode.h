@@ -8,6 +8,8 @@ class IndexListNode
 public:
 	IndexListNode(short int index, IndexListNode * nextPtr); // Constructor
 
+	~IndexListNode();
+
 	short int getIndex();
 
 	IndexListNode * getNextPtr();

@@ -21,6 +21,8 @@ class DistVect
 public:
 	DistVect(short int v, short int v_origin); //Constructor
 
+	~DistVect();
+
 	void setMinDist(int v, int dist);
 
 	void markVert(int v);

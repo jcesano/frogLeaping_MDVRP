@@ -72,6 +72,9 @@
     <ClInclude Include="Pair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FrogLeapController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DistanceTable.cpp">
@@ -126,6 +129,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrogLeapController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

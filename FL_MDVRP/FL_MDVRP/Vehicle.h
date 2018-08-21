@@ -7,12 +7,18 @@ class FrogObjectCol;
 class Graph;
 class Pair;
 
+const int VEHICLE_CAPACITY = 7;
+
 class Vehicle : public FrogObject
 {
 	private:
 		FrogObjectCol * customers;
 		short int size;
 		short int depotIndex;
+		int capacity;
+		int demand;
+		bool isFeasible;
+		short int notAddedCustomer;
 
 		int pathCost;
 
@@ -22,6 +28,8 @@ class Vehicle : public FrogObject
 		Vehicle(short int id);
 
 		Vehicle(short int id, Graph * g);
+
+		~Vehicle();
 
 		void addCustomerPair(Pair * customerPair);
 
@@ -38,6 +46,23 @@ class Vehicle : public FrogObject
 		void setPathCost(int cost);
 
 		int getPathCost();
+
+		int getCapacity();
+
+		int incDemand(int aditionalDemand);
+
+		int getDemand();
+
+		void setAsFeasible();
+
+		void setAsUnFeasible();
+
+		bool getIsFeasible();
+
+		short int getNotAddedCustomer();
+
+		void setNotAddedCustomer(short int customerId);
+
 
 		// abstract methods
 		void printFrogObj();

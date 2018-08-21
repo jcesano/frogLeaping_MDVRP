@@ -14,6 +14,8 @@ class FrogObjNode
 public:
 	FrogObjNode(FrogObject * fs, FrogObjNode * fsnodeptr);
 
+	~FrogObjNode();
+
 	void printNodeItems();
 
 	FrogObject * getFrogItem();

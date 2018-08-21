@@ -11,6 +11,8 @@ public:
 
 	FrogObject();
 
+	~FrogObject();
+
 	FrogObject(short int id_v);
 
 	float getValue();

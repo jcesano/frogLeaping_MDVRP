@@ -16,6 +16,8 @@ public:
 
 	FrogObjectCol();
 
+	~FrogObjectCol();
+
 	void addFrogObject(FrogObject * fs);
 
 	void addFrogObjectOrdered(FrogObject * fs);

@@ -5,17 +5,26 @@
 #include "Vehicle.h"
 #include <stdio.h>      /* printf */
 #include <math.h>       /* floor */
+#include "Graph.h"
 
 DecodedFrogLeapSolution::DecodedFrogLeapSolution():FrogObject()
 {
 	this->vehicles = new FrogObjectCol();
 	this->ptrG = NULL;
+	this->isFeasibleSolution = true;
 }
 
 DecodedFrogLeapSolution::DecodedFrogLeapSolution(Graph * g) :FrogObject()
 {
 	this->vehicles = new FrogObjectCol();
 	this->ptrG = g;
+	this->isFeasibleSolution = true;
+}
+
+DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
+{
+	delete this->vehicles;
+	delete this->ptrG;
 }
 
 void DecodedFrogLeapSolution::addVehicle(Vehicle * v)
@@ -51,8 +60,10 @@ short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int n
 	return result;
 }
 
-void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles)
+bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles)
 {
+	bool result = true;
+
 	short int vehicleId = this->decodeFrogLeapValue(fvalue, numberOfVehicles);
 
 	Vehicle * veh = (Vehicle *)this->vehicles->getFrogObjectById(vehicleId);
@@ -66,13 +77,32 @@ void DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 		this->vehicles->addFrogObject(veh);
 	}
 
-	Pair * customerPair = new Pair(PairType::IntVsFloat);
-	customerPair->set_i_IntValue(customerIndex);
-	customerPair->set_j_FloatValue(fvalue);
-	customerPair->setValue(fvalue);
-	customerPair->setId(customerIndex);
+	int customerDemand = this->ptrG->getCustomerDemandByIndex(customerIndex);
 
-	veh->addCustomerPair(customerPair);
+	if((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
+	{
+		veh->incDemand(customerDemand);
+		
+		Pair * customerPair = new Pair(PairType::IntVsFloat);
+		customerPair->set_i_IntValue(customerIndex);
+		customerPair->set_j_FloatValue(fvalue);
+		customerPair->setValue(fvalue);
+		customerPair->setId(customerIndex);
+
+		veh->addCustomerPair(customerPair);
+	}
+	else
+	{
+		result = false;
+		veh->incDemand(customerDemand);
+		veh->setAsUnFeasible();
+		this->setIsFeasibleSolution(false);
+		int customerId = this->ptrG->getCustomerId(customerIndex);
+		veh->setNotAddedCustomer(customerId);
+
+	}
+
+	return result;
 }
 
 int DecodedFrogLeapSolution::evalSolution()
@@ -117,4 +147,14 @@ void DecodedFrogLeapSolution::setGraph(Graph * g)
 Graph * DecodedFrogLeapSolution::getGraph()
 {
 	return this->ptrG;
+}
+
+void DecodedFrogLeapSolution::setIsFeasibleSolution(bool v_isFeasible)
+{
+	this->isFeasibleSolution = v_isFeasible;
+}
+
+bool DecodedFrogLeapSolution::getIsFeasibleSolution()
+{
+	return this->isFeasibleSolution;
 }

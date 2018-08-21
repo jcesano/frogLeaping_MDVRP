@@ -5,21 +5,26 @@ class IndexListNode;
 
 class IndexList
 {
-	IndexListNode * head;
+	private:
 
-	short int size;
+		IndexListNode * head;
 
-public:
+		short int size;
 
-	IndexList(); // Constructor
+	public:
 
-	void addIndex(short int index);
+		IndexList(); // Constructor
 
-	void removeIndex(short int index);
+		~IndexList();
 
-	short int getSize();
 
-	short int getItem(short int position);
+		void addIndex(short int index);
+
+		void removeIndex(short int index);
+
+		short int getSize();
+
+		short int getItem(short int position);
 };
 
 #endif

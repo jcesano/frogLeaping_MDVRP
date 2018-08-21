@@ -21,6 +21,8 @@ public:
 
 	FeasibleSolution(FeasibleSolution * fs);
 
+	~FeasibleSolution();
+
 	void setSolFactValue(short int pos, short int val);
 
 	int getSolFactValue(short int pos);

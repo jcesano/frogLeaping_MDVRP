@@ -13,6 +13,8 @@ class DecodedFrogLeapSolution : public FrogObject
 		FrogObjectCol * vehicles;
 
 		Graph * ptrG;
+
+		bool isFeasibleSolution;
 	
 	public:
 
@@ -20,19 +22,25 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		DecodedFrogLeapSolution(Graph * g);
 
+		~DecodedFrogLeapSolution();
+
 		void addVehicle(Vehicle * v);
 
 		//Vehicle * getVehicle(short int pos);
 
 		short int decodeFrogLeapValue(float fvalue, short int numberOfVehicles);
 
-		void decodeFrogLeapItem(float fvalue, short int customerId, short int numberOfDepots, short int numberOfVehicles);		
+		bool decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles);		
 
 		int evalSolution();
 
 		void setGraph(Graph * g);
 
 		Graph * getGraph();
+
+		void setIsFeasibleSolution(bool v_isFeasible);
+
+		bool getIsFeasibleSolution();
 
 		// abstract methods
 		void printFrogObj();

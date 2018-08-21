@@ -13,6 +13,8 @@ public:
 
 	FeasSolNode(FeasibleSolution * fs, FeasSolNode * fsnodeptr);
 
+	~FeasSolNode();
+
 	void printNodeItems();
 
 	FeasibleSolution * getSolution();

@@ -32,11 +32,30 @@ Graph::Graph(short int vertexCount)
 
 	this->custormerList = new FrogObjectCol();
 
-	this->depotList = new IndexList();
+	this->depotList = new FrogObjectCol();
 
 	this->origin = -1;
 }
 
+Graph::~Graph()
+{
+	delete this->custormerList;
+	delete this->depotList;
+	deleteArray(customerArray, this->getNumberOfCustomers());
+	deleteArray(depotArray, this->getNumberOfDepots());
+	delete this->distanceTable;
+}
+
+void Graph::deleteArray(Pair ** arrayPtr, short int v_size) {
+	short int size = v_size;
+
+	for (short int i = 0; i < size; i++)
+	{
+		delete arrayPtr[i];
+	}
+
+	delete[] arrayPtr;
+}
 void Graph::setOrigin(short int v)
 {
 	this->origin = v;
@@ -64,9 +83,16 @@ void Graph::setAsCustomer(short int customerId, int demand)
 	this->custormerList->addFrogObjectOrdered(customerPair);
 }
 
-void Graph::setAsDepot(short int v)
+void Graph::setAsDepot(short int depotId, int capacity)
 {
-	this->depotList->addIndex(v);
+	
+	Pair * depotPair = new Pair(PairType::IntVsInt);
+	depotPair->set_i_IntValue(depotId);
+	depotPair->set_j_IntValue(capacity);
+	depotPair->setValue(depotId);
+	depotPair->setId(depotId);
+
+	this->depotList->addFrogObjectOrdered(depotPair);
 }
 
 short int Graph::getNumberOfDepots()
@@ -105,11 +131,11 @@ void Graph::setUpDepotList()
 {
 	short int n_depots = this->getNumberOfDepots();
 	
-	this->depotArray = new short int[n_depots];
+	this->depotArray = new Pair *[n_depots];
 
 	for (int i = 0; i < n_depots; i++)
 	{
-		depotArray[i] = this->depotList->getItem(i);
+		depotArray[i] = (Pair *)this->depotList->getFrogObject(i);
 	}
 }
 
@@ -253,9 +279,19 @@ short int Graph::getCustomerId(short int position)
 	return this->customerArray[position]->get_i_IntValue();
 }
 
+int Graph::getCustomerDemandByIndex(short int position)
+{
+	return this->customerArray[position]->get_j_IntValue();
+}
+
 short int Graph::getDepotId(short int position)
 {	
-	return this->depotArray[position];
+	return this->depotArray[position]->get_i_IntValue();
+}
+
+int  Graph:: getDepotCapacityByIndex(short int position)
+{
+	return this->depotArray[position]->get_j_IntValue();
 }
 
 FrogLeapSolution * Graph::genRandomFrogLeapSolution()

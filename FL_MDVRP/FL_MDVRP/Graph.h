@@ -20,11 +20,11 @@ class Graph
 
 	FrogObjectCol * custormerList;
 
-	IndexList * depotList;
+	FrogObjectCol * depotList;
 
 	Pair * * customerArray;
 
-	short int * depotArray;
+	Pair * * depotArray;
 
 	short int origin;
 
@@ -37,6 +37,8 @@ public:
 
 	Graph(short int V);  // Constructor
 
+	~Graph();	// destructor 
+
 	void setOrigin(short int v);
 
 	short int getOrigin();
@@ -48,7 +50,7 @@ public:
 
 	void setAsCustomer(short int customerIndex, int demand);
 
-	void setAsDepot(short int v);
+	void setAsDepot(short int depotId, int capacity);
 
 	short int getNumberOfDepots();
 
@@ -74,14 +76,19 @@ public:
 
 	short int getCustomerId(short int position);
 
+	int getCustomerDemandByIndex(short int position);
+
 	short int getDepotId(short int position);
+
+	int getDepotCapacityByIndex(short int position);
 
 	FrogLeapSolution * genRandomFrogLeapSolution();
 
 	void setDistanceTable(DistanceTable * t);
 
 	DistanceTable * getDistanceTable();
-	
+
+	void deleteArray(Pair ** arrayPtr, short int v_size);	
 };
 
 #endif

@@ -16,6 +16,8 @@ public:
 	short int const NO_ADJ = -1;
 
 	DistanceTable(short int V);  // Constructor
+
+	~DistanceTable(); 
 								 
 	void addEdge(short int u, short int v, short int w); // function to add an edge to graph
 

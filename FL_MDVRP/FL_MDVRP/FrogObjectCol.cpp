@@ -11,6 +11,18 @@ FrogObjectCol::FrogObjectCol()
 	this->colSize = 0;
 }
 
+FrogObjectCol::~FrogObjectCol()
+{
+	FrogObjNode * temp = head;
+
+	while(this->head != NULL)
+	{
+		temp = temp->getNextFrogObjNode();
+		delete head;
+		head = temp;
+	}
+}
+
 void FrogObjectCol::addFrogObject(FrogObject * fs)
 {
 	FrogObjNode * ptr;

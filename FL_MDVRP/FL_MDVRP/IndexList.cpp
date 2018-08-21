@@ -9,6 +9,18 @@ IndexList::IndexList()
 	this->size = 0;
 }
 
+IndexList::~IndexList()
+{
+	IndexListNode * temp = head;
+
+	while (this->head != NULL)
+	{
+		temp = temp->getNextPtr();
+		delete head;
+		head = temp;
+	}
+}
+
 void IndexList::addIndex(short int index)
 {
 	IndexListNode * node = new IndexListNode(index, head);

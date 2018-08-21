@@ -11,6 +11,9 @@ Vehicle::Vehicle(short int id):FrogObject(id)
 	this->ptrGraph = NULL;
 	size = 0;
 	this->pathCost = 0;
+	this->capacity = VEHICLE_CAPACITY;
+	this->isFeasible = true;  // used for testing purpose in printing information
+
 }
 
 Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
@@ -19,6 +22,14 @@ Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
 	this->ptrGraph = g;
 	size = 0;
 	this->pathCost = 0;
+	this->capacity = VEHICLE_CAPACITY;
+	this->isFeasible = true;  // used for testing purpose in printing information
+}
+
+Vehicle::~Vehicle()
+{
+	delete this->customers;
+	delete this->ptrGraph;
 }
 
 void Vehicle::addCustomerPair(Pair * customerPair)
@@ -95,6 +106,46 @@ int Vehicle::getPathCost()
 	return this->pathCost;
 }
 
+int Vehicle::getCapacity()
+{
+	return this->capacity;
+}
+
+int Vehicle::incDemand(int aditionalDemand)
+{
+	return this->demand += aditionalDemand;
+}
+
+int Vehicle::getDemand()
+{
+	return this->demand;
+}
+
+void Vehicle::setAsFeasible()
+{
+	this->isFeasible = true;
+}
+
+void Vehicle::setAsUnFeasible()
+{
+	this->isFeasible = false;
+}
+
+bool Vehicle::getIsFeasible()
+{
+	return this->isFeasible;
+}
+
+short int Vehicle::getNotAddedCustomer()
+{
+	return this->notAddedCustomer;
+}
+
+void Vehicle::setNotAddedCustomer(short int customerId)
+{
+	this->notAddedCustomer = customerId;
+}
+
 // abstract methods
 void Vehicle::printFrogObj()
 {
@@ -105,12 +156,18 @@ void Vehicle::printFrogObj()
 	originId = this->ptrGraph->getDepotId(depotIndex);
 
 
-	printf("Vehicle Id: %d with number of customers assigned = %d and path cost \n", this->getId(), this->customers->getSize(), this->getPathCost());
-
+	if (this->getIsFeasible() == true)
+	{
+		printf("		Vehicle Id (feasible): %d with number of customers assigned = %d and path cost %d\n", this->getId(), this->customers->getSize(), this->getPathCost());
+	}
+	else 
+	{
+		printf("		Vehicle Id (NOT feasible): %d with number of customers assigned = %d, not added CustId %d and total demand is %d\n", this->getId(), this->customers->getSize(), this->getNotAddedCustomer(), this->getDemand());
+	}
 	
 	if (this->customers->getSize() > 0)
 	{
-		printf("List of customers Ids (depot and customers): ");
+		printf("		List of customers Ids (depot and customers): ");
 
 		for (short int i = 0; i < this->customers->getSize(); i++)
 		{
@@ -123,9 +180,12 @@ void Vehicle::printFrogObj()
 			originId = destinationId;
 		}
 
-		// add the last edgde from the last customer to the depot
-		destinationId = this->ptrGraph->getDepotId(depotIndex);
-		printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+		if(this->getIsFeasible() == true)
+		{
+			// add the last edgde from the last customer to the depot
+			destinationId = this->ptrGraph->getDepotId(depotIndex);
+			printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+		}
 	}
 }
 

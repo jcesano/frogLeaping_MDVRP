@@ -13,6 +13,8 @@ class FeasibleSolCol
 public:
 	FeasibleSolCol();
 
+	~FeasibleSolCol();
+
 	void AddFeasibleSol(FeasibleSolution * fs);
 
 	void printFeasSolCol();

@@ -25,6 +25,13 @@ DistVect::DistVect(short int v, short int v_origin)
 	countV = v;
 }
 
+DistVect::~DistVect()
+{
+	delete [] this->ptr;
+	delete[] this->ptrCustomers;
+	delete [] this->dv;	
+}
+
 void DistVect::setMinDist(int v, int dist)
 {
 	dv[v].setDistance(dist);
