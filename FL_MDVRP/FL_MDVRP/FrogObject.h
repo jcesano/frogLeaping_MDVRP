@@ -11,7 +11,7 @@ public:
 
 	FrogObject();
 
-	~FrogObject();
+	virtual ~FrogObject();
 
 	FrogObject(short int id_v);
 

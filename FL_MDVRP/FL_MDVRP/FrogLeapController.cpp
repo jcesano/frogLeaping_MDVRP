@@ -13,6 +13,8 @@ FrogLeapController::FrogLeapController()
 	this->successAttempts = 0;
 
 	this->timeSeedUsed = (unsigned)time(NULL);
+
+	this->minCostValue = 0;
 }
 
 FrogLeapController::~FrogLeapController()
@@ -27,6 +29,26 @@ int FrogLeapController::getFailAttempts()
 void FrogLeapController::incFailAttempts()
 {
 	this->failAttempts++;
+}
+
+int FrogLeapController::getMinCostValue()
+{
+	return this->minCostValue;
+}
+
+void FrogLeapController::setMinCostValue(int cost)
+{
+	this->minCostValue = cost;
+}
+
+void FrogLeapController::setBestDecodedFrogLeapSolution(DecodedFrogLeapSolution * ptrSolution)
+{
+	this->ptrBestSolution = ptrSolution;
+}
+
+DecodedFrogLeapSolution * FrogLeapController::getBestDecodedFrogLeapSolution()
+{
+	return this->ptrBestSolution;
 }
 
 void FrogLeapController::setRandomSeed()

@@ -104,6 +104,8 @@ int main()
 	dt->printDistanceTable(); 
 
 	g->setDistanceTable(dt);
+
+	dt = NULL;
 	
 
 	/* main test frogSolution */
@@ -129,7 +131,17 @@ int main()
 		{
 			controller->incSuccessAttempts();
 			evalSol = dfls_1->evalSolution();
-			printf("Evaluation of frogLeapingSolution is = %d   ", evalSol);			
+			printf("Evaluation of frogLeapingSolution is = %d   ", evalSol);
+
+			if(evalSol < controller->getMinCostValue())
+			{
+				controller->setBestDecodedFrogLeapSolution(dfls_1);
+				controller->setMinCostValue(evalSol);
+			}
+			else
+			{
+				delete dfls_1;
+			}
 		}
 		else
 		{
@@ -141,6 +153,8 @@ int main()
 	
 	controller->printCtrl();
 	
+	delete g;
+	delete fls;
 	return 0;
 }
 
