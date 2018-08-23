@@ -13,14 +13,45 @@ FrogObjectCol::FrogObjectCol()
 
 FrogObjectCol::~FrogObjectCol()
 {
-	FrogObjNode * temp = head;
+	
+	printf("Destroying FrogObjectCol:STARTED \n");
 
-	while(this->head != NULL)
+	destroy(this->head);
+	head = NULL;
+
+	//---------------------------
+	//FrogObjNode * temp;
+
+	//temp = head;
+
+	//while(this->head != NULL)
+	//{
+	//	temp = temp->getNextFrogObjNode();
+	//	delete head;
+	//	head = temp;
+	//}
+	//---------------------------
+
+	printf("Destroying FrogObjectCol:FINISHED \n");
+}
+
+void FrogObjectCol::destroy(FrogObjNode * itemNode)
+{
+	printf("Destroying FrogObjectCol: STARTED \n");
+
+	while(itemNode != NULL)
 	{
-		temp = temp->getNextFrogObjNode();
-		delete head;
-		head = temp;
+		FrogObjNode * old = itemNode;
+		itemNode = itemNode->getNextFrogObjNode();
+		delete old;
 	}
+	
+	//if(itemNode != NULL)
+	//{
+	//	delete itemNode;
+	//}
+
+	printf("Destroying FrogObjectCol: FINISHED \n");
 }
 
 void FrogObjectCol::addFrogObject(FrogObject * fs)

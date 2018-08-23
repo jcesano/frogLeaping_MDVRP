@@ -4,6 +4,7 @@
 #include "Pair.h"
 #include "Graph.h"
 #include "DistanceTable.h"
+#include "FrogObject.h"
 
 Vehicle::Vehicle(short int id):FrogObject(id)
 {
@@ -28,8 +29,12 @@ Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
 
 Vehicle::~Vehicle()
 {
-	delete this->customers;
-	delete this->ptrGraph;
+	if(this->customers != NULL)
+	{
+		delete this->customers;
+	}
+	
+	this->ptrGraph = NULL;
 }
 
 void Vehicle::addCustomerPair(Pair * customerPair)

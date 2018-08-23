@@ -13,6 +13,7 @@ Pair::Pair(PairType type)
 
 Pair::~Pair()
 {
+	printf("Destroying Pair \n");
 }
 
 PairType Pair::getType()

@@ -18,6 +18,8 @@ public:
 
 	~FrogObjectCol();
 
+	void destroy(FrogObjNode * itemNode);
+
 	void addFrogObject(FrogObject * fs);
 
 	void addFrogObjectOrdered(FrogObject * fs);

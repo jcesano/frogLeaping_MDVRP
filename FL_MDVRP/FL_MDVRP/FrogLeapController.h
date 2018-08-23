@@ -2,6 +2,7 @@
 #define FROGLEAPCONTROLLER_H_
 
 class DecodedFrogLeapSolution;
+class FrogObject;
 
 class FrogLeapController
 {

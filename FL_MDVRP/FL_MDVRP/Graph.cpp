@@ -39,11 +39,24 @@ Graph::Graph(short int vertexCount)
 
 Graph::~Graph()
 {
-	delete this->custormerList;
-	delete this->depotList;
+	if(this->custormerList != NULL)
+	{
+		delete this->custormerList;
+	}	
+	
+	if(this->depotList)
+	{
+		delete this->depotList;
+	}
+
+	if(this->distanceTable != NULL)
+	{
+		delete this->distanceTable;
+	}
+	
 	deleteArray(customerArray, this->getNumberOfCustomers());
-	deleteArray(depotArray, this->getNumberOfDepots());
-	delete this->distanceTable;
+
+	deleteArray(depotArray, this->getNumberOfDepots());	
 }
 
 void Graph::deleteArray(Pair ** arrayPtr, short int v_size) {

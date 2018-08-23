@@ -10,6 +10,7 @@ FrogObject::FrogObject()
 
 FrogObject::~FrogObject()
 {
+	printf("Destroying FrogObject:START AND END \n");
 }
 
 FrogObject::FrogObject(short int id_v)

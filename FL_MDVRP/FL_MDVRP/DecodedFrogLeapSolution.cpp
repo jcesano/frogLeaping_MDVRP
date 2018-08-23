@@ -23,8 +23,18 @@ DecodedFrogLeapSolution::DecodedFrogLeapSolution(Graph * g) :FrogObject()
 
 DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 {
-	delete this->vehicles;
-	delete this->ptrG;
+	printf("Destroying of DecodedFrogLeapSolution: Started \n");
+
+	if(this->vehicles != NULL)
+	{
+		delete this->vehicles;
+	}
+	
+	printf("Destroying of DecodedFrogLeapSolution: vehicles destroyed  \n");
+	
+	this->ptrG = NULL;	
+
+	printf("Destroying of DecodedFrogLeapSolution: FINISHED \n");
 }
 
 void DecodedFrogLeapSolution::addVehicle(Vehicle * v)
@@ -125,6 +135,16 @@ void DecodedFrogLeapSolution::printFrogObj()
 	short int numVehicles = this->vehicles->getSize();
 	Vehicle * vehPtr;
 
+	printf("\n Showing DecodedFrogLeapSolution data results: ");
+	if(this->isFeasibleSolution == true)
+	{
+		printf("Feasible \n");
+	}
+	else
+	{
+		printf("NOT FEASIBLE \n");
+	}
+	
 	printf("Cantidad de vehículos: %d \n", numVehicles);
 
 	for(short int i = 0; i < numVehicles; i++)
@@ -132,6 +152,8 @@ void DecodedFrogLeapSolution::printFrogObj()
 		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
 		vehPtr->printFrogObj();
 	}
+
+	printf("DecodedFrogLeapSolution FINISHED \n");
 }
 
 bool DecodedFrogLeapSolution::isTheSame(FrogObject * fs)

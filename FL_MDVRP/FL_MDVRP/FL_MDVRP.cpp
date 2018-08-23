@@ -117,7 +117,7 @@ int main()
 	FrogLeapController * controller = new FrogLeapController();
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	
-	const int TOPE = 10;
+	const int TOPE = 100;
 
 	for(int i=0; i < TOPE; i++)
 	{
@@ -140,15 +140,16 @@ int main()
 			}
 			else
 			{
+				dfls_1->printFrogObj();
 				delete dfls_1;
 			}
 		}
 		else
 		{
+			dfls_1->printFrogObj();
 			controller->incFailAttempts();
-		}
-
-		dfls_1->printFrogObj();
+			delete dfls_1;
+		}		
 	}
 	
 	controller->printCtrl();

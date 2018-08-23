@@ -4,7 +4,8 @@
 #include <math.h>       /* floor */
 #include <iostream>
 #include <time.h>
-
+#include "FrogObject.h"
+#include "DecodedFrogLeapSolution.h"
 
 FrogLeapController::FrogLeapController()
 {
@@ -14,7 +15,7 @@ FrogLeapController::FrogLeapController()
 
 	this->timeSeedUsed = (unsigned)time(NULL);
 
-	this->minCostValue = 0;
+	this->minCostValue = SHRT_MAX;
 }
 
 FrogLeapController::~FrogLeapController()
@@ -61,6 +62,9 @@ void FrogLeapController::printCtrl()
 	printf("Showing data of controller \n");
 	printf("	Number of success attempts: %d", this->successAttempts);
 	printf("	Number of fail attempts: %d", this->failAttempts);
+	printf("show data of the best found solution: \n");
+	printf("Evaluation of solution is: %d", this->getMinCostValue());
+	this->ptrBestSolution->printFrogObj();
 }
 
 void FrogLeapController::setFailAttempts(int vfailAttempts)

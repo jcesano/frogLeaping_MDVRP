@@ -1,7 +1,4 @@
-﻿  FrogLeapController.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(56): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  FL_MDVRP.cpp
+﻿  FL_MDVRP.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(66): warning C4101: 'fscol': unreferenced local variable
-  Generating Code...
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)
