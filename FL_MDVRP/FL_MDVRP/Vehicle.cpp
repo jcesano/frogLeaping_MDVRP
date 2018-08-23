@@ -5,6 +5,7 @@
 #include "Graph.h"
 #include "DistanceTable.h"
 #include "FrogObject.h"
+#include "FeasibleSolution.h"
 
 Vehicle::Vehicle(short int id):FrogObject(id)
 {
@@ -14,7 +15,7 @@ Vehicle::Vehicle(short int id):FrogObject(id)
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
-
+	localSearchApplied = false;
 }
 
 Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
@@ -25,6 +26,7 @@ Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
+	localSearchApplied = false;
 }
 
 Vehicle::~Vehicle()
@@ -55,6 +57,16 @@ void Vehicle::setDepotIndex(short int depot_v)
 short int Vehicle::getDepotIndex()
 {
 	return this->depotIndex;
+}
+
+void Vehicle::setDepotId(short int v_depotId)
+{
+	this->depotId = v_depotId;
+}
+
+short int Vehicle::getDepotId()
+{
+	return this->depotId;
 }
 
 int Vehicle::evalPath(Graph * g)
@@ -149,6 +161,99 @@ short int Vehicle::getNotAddedCustomer()
 void Vehicle::setNotAddedCustomer(short int customerId)
 {
 	this->notAddedCustomer = customerId;
+}
+
+void Vehicle::setupLocalSearch()
+{
+	//NOT FINISHED
+	short int n_customers = this->customers->getSize();
+
+	this->customerArray = new short int [n_customers];
+
+	for (int i = 0; i < n_customers; i++)
+	{
+		//obtaining the customerId in the graph, from customer index (position)
+		customerArray[i] = this->ObtainCustomerIdFromIndex(i);
+	}
+
+	//obtaining the depotId in the graph, from depot index (position)
+	this->setDepotId(this->ObtainDepotIdFromIndex());	
+}
+
+short int Vehicle::ObtainDepotIdFromIndex()
+{
+	// Aux variable
+	Pair * tmp = NULL;
+	short int depotId, depotIndex;
+	
+	depotIndex = this->getDepotIndex(); //obtaining Pair(CustomerIndex, flValue)	
+	depotId = this->ptrGraph->getDepotId(depotIndex); //obtaining the customerId in the graph
+
+	return depotId;
+}
+
+short int Vehicle::ObtainCustomerIdFromIndex(short int position)
+{
+	// Aux variable
+	Pair * tmp = NULL;
+	short int customerId, customerIndex;
+
+	tmp = (Pair *) this->customers->getFrogObject(position); //obtaining Pair(CustomerIndex, flValue)
+	customerIndex = tmp->get_i_IntValue();
+	customerId = this->ptrGraph->getCustomerId(customerIndex); //obtaining the customerId in the graph
+
+	return customerId;
+}
+
+//return the new cost found or the previous value instead
+int Vehicle::applyLocalSearch()
+{
+	bool exitLocalSearch = false;
+	bool improvementFound = false;
+	int nextPathCost;
+
+	if(this->localSearchApplied == false)
+	{
+		setupLocalSearch();		
+		this->localSearchApplied = true;
+	}
+
+	// until we do not find any better solution we continue applying local search to each improvement solution found.
+	while(!exitLocalSearch)
+	{
+		// we look for 100 local solutions. If we find an improvement then generateLocalSolutionsAndEvaluate = true to keep in the loop
+		// and execute a new local search for new solutions from the last solution found
+		improvementFound = generateLocalSolutionsAndEvaluate();
+		if (improvementFound == false)
+		{
+			exitLocalSearch = true;
+		}		
+	}
+
+	return this->pathCost;
+}
+
+bool Vehicle::generateLocalSolutionsAndEvaluate()
+{
+	FeasibleSolution * fs = new FeasibleSolution(this->customers->getSize(), this->customerArray);
+
+	// generate a one distance permutation solutions, evaluate each one and stop when there is an improvement 
+	// and update the best solution in the vehicle or stop when 100 different solutions where evaluated without any udpate.
+	bool improvement = fs->searchOneSwapFeasibleSolutionsAndEval(this);
+
+	delete fs;
+
+	return improvement;
+}
+
+void Vehicle::updateBestSolution(FeasibleSolution * fs, int cost)
+{
+	for(short int i=0; i < fs->getSize(); i++)
+	{
+		this->customerArray[i] = fs->getSolFactValue(i);
+	}
+
+	this->pathCost = cost;
 }
 
 // abstract methods

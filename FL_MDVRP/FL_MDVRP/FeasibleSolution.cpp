@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "FeasibleSolution.h"
 #include "FeasibleSolCol.h"
+#include "DistanceTable.h"
+#include "Graph.h"
+#include "Vehicle.h"
 
 FeasibleSolution::FeasibleSolution(short int n)
 {
@@ -9,10 +12,9 @@ FeasibleSolution::FeasibleSolution(short int n)
 	isFeasible = true;
 
 	// initialize random seed
-	timeSeedUsed = time(NULL);
+	//timeSeedUsed = time(NULL);
 
-	srand(timeSeedUsed);
-
+	//srand(timeSeedUsed);
 }
 
 FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
@@ -27,15 +29,33 @@ FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 	}
 
 	// initialize random seed
-	timeSeedUsed = time(NULL);
+	//timeSeedUsed = time(NULL);
 
-	srand(timeSeedUsed);
+	//srand(timeSeedUsed);
+}
 
+
+FeasibleSolution::FeasibleSolution(short int arr_size, short int * array)
+{
+	solVect = new short int[arr_size];
+	size = arr_size;
+
+	isFeasible = true;
+
+	for (short int i = 0; i<this->size; i++)
+	{
+		this->solVect[i] = array[i];
+	}
+
+	// initialize random seed
+	//timeSeedUsed = time(NULL);
+
+	//srand(timeSeedUsed);
 }
 
 FeasibleSolution::~FeasibleSolution()
 {
-	delete this->solVect;
+	delete [] solVect;
 }
 
 void FeasibleSolution::setSolFactValue(short int pos, short int val)
@@ -48,6 +68,11 @@ int FeasibleSolution::getSolFactValue(short int pos)
 	return this->solVect[pos];
 }
 
+short int FeasibleSolution::getSize()
+{
+	return this->size;
+}
+
 // Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
 FeasibleSolution * FeasibleSolution::swapItems(short int pos1, short int pos2)
 {
@@ -55,13 +80,30 @@ FeasibleSolution * FeasibleSolution::swapItems(short int pos1, short int pos2)
 
 	tempValue = this->getSolFactValue(pos1); //store value of position pos1
 
-											 // in position pos1, set element of position pos2
+	// in position pos1, set element of position pos2
 	this->setSolFactValue(pos1, this->getSolFactValue(pos2));
 
 	// in position pos2, set element of position pos1
 	this->setSolFactValue(pos2, tempValue);
 
 	return this;
+};
+
+// Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
+FeasibleSolution * FeasibleSolution::genSwappedItemsFs(short int pos1, short int pos2)
+{
+	FeasibleSolution * newFsInstance = new FeasibleSolution(this);
+	
+	//store value of position pos1
+	short int tempValue = newFsInstance->getSolFactValue(pos1);
+
+	// in position pos1, set element of position pos2
+	newFsInstance->setSolFactValue(pos1, newFsInstance->getSolFactValue(pos2));
+
+	// in position pos2, set element of position pos1
+	newFsInstance->setSolFactValue(pos2, tempValue);
+
+	return newFsInstance;
 };
 
 bool FeasibleSolution::isTheSame(FeasibleSolution * fs)
@@ -220,6 +262,8 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 	{
 		FeasibleSolution * colptr_i_j;
 		colptr = new FeasibleSolCol();
+		int TOPE = 100;
+		int cont = 0;
 
 		for (short int i = 0; i < this->size; i++)
 		{
@@ -237,6 +281,79 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 	return colptr;
 };
 
+
+bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh)
+{
+	FeasibleSolution * currentFsSolution = NULL;
+	bool improvement;
+	int currentCost = 0;
+	Graph * g = veh->getGraph(); 
+	short int depotId = veh->getDepotId(); 
+	int bestVehicleCost = veh->getPathCost();
+
+	if (this->size == 1)
+	{
+		return false;
+	}// end if
+
+	if (this->size == 2)
+	{
+		// swap first and second and generate a new FeasibleSolution
+		currentFsSolution = this->genSwappedItemsFs(0, 1);
+		currentCost = currentFsSolution->Evaluate(g, depotId);
+
+		if(currentCost < bestVehicleCost)
+		{
+			veh->updateBestSolution(currentFsSolution, currentCost);
+			delete currentFsSolution;
+			improvement = true;
+			return improvement;
+		}
+		else
+		{
+			delete currentFsSolution;
+			improvement = false;
+			return improvement;
+		}
+	}
+	else
+	{
+		FeasibleSolution * colptr_i_j;
+		int TOPE = 100;
+		int cont = 0;
+		improvement = false;
+
+		for (short int i = 0; i < this->size; i++)
+		{
+			for (short int j = i + 1; j < this->size; j++)
+			{
+				cont++;
+				colptr_i_j = new FeasibleSolution(this);
+				currentFsSolution = colptr_i_j->genSwappedItemsFs(i, j);
+				currentCost = currentFsSolution->Evaluate(g, depotId);
+				bestVehicleCost = veh->getPathCost();
+
+				if (currentCost < bestVehicleCost)
+				{
+					veh->updateBestSolution(currentFsSolution, currentCost);
+					delete currentFsSolution;
+					improvement = true;
+					return improvement;
+				}
+
+				if(cont == TOPE)
+				{
+					delete currentFsSolution;
+					return improvement; // At this point improvement == false
+				}
+
+			}//end for j
+		}//end for i
+	}// end else
+
+	delete currentFsSolution;
+	return improvement; //at this point improvement == false
+};
 
 void FeasibleSolution::setIndexesAsValues()
 {
@@ -282,6 +399,31 @@ int FeasibleSolution::factorial(short int n)
 	};
 
 	return result;
+}
+
+int FeasibleSolution::Evaluate(Graph * g, short int depotId)
+{
+	DistanceTable * dt = g->getDistanceTable();
+	short int originId, destinationId;
+
+	int result = 0;
+
+	originId = depotId;
+
+	for(short int i = 0; i < this->getSize(); i++)
+	{
+		destinationId = this->getSolFactValue(i);
+
+		result = result + dt->getEdge(originId, destinationId);
+
+		originId = destinationId;
+	}
+
+	destinationId = depotId;
+
+	result = result  + dt->getEdge(originId, destinationId);
+
+	return result;	
 }
 
 

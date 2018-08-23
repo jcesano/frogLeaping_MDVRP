@@ -109,7 +109,6 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 		this->setIsFeasibleSolution(false);
 		int customerId = this->ptrG->getCustomerId(customerIndex);
 		veh->setNotAddedCustomer(customerId);
-
 	}
 
 	return result;
@@ -179,4 +178,21 @@ void DecodedFrogLeapSolution::setIsFeasibleSolution(bool v_isFeasible)
 bool DecodedFrogLeapSolution::getIsFeasibleSolution()
 {
 	return this->isFeasibleSolution;
+}
+
+int DecodedFrogLeapSolution::applyLocalSearch()
+{
+	Vehicle * vehPtr = NULL;
+
+	int newLocalCostFound = 0;
+
+	this->localSearchApplied = true;
+
+	for (int i = 0; i < this->vehicles->getSize(); i++)
+	{
+		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
+		newLocalCostFound += vehPtr->applyLocalSearch();
+	}
+
+	return newLocalCostFound;
 }

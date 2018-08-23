@@ -5,6 +5,9 @@
 #include <time.h>
 
 class FeasibleSolCol;
+class Graph;
+class DistanceTable;
+class Vehicle;
 
 class FeasibleSolution
 {
@@ -21,15 +24,25 @@ public:
 
 	FeasibleSolution(FeasibleSolution * fs);
 
+	FeasibleSolution(short int arr_size, short int * array);
+
 	~FeasibleSolution();
 
 	void setSolFactValue(short int pos, short int val);
 
 	int getSolFactValue(short int pos);
 
-	FeasibleSolution * swapItems(short int pos1, short int pos2);
+	short int getSize();
+
+	//this method modifies the this instance
+	FeasibleSolution * swapItems(short int pos1, short int pos2); 
+
+	//this method makes a copy and creates a new instance
+	FeasibleSolution * genSwappedItemsFs(short int pos1, short int pos2); 
 
 	FeasibleSolCol * genOneSwapPermutations();
+
+	bool searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh);
 
 	FeasibleSolCol * genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol);
 
@@ -50,6 +63,8 @@ public:
 	short int popRandomValue();
 
 	int factorial(short int n);
+
+	int Evaluate(Graph * g, short int depotId);
 };
 
 #endif

@@ -41,6 +41,8 @@ class FrogLeapController
 
 		void setRandomSeed();
 
+		void applyLocalSearch();
+
 		void printCtrl();
 };
 #endif

@@ -68,7 +68,7 @@ int main()
 	fs = new FeasibleSolution(V);
 	
 
-	/* setting indexes as values in the FeasibleSolution	
+	/* setting indexes as values in the FeasibleSolution	*/
 	for(int i = 0; i<V;i++)
 	{
 		fs->setSolFactValue(i, i);
@@ -78,7 +78,7 @@ int main()
 	distance = 1;
 	fscol = fs->genPermutations(distance,NULL);
 	fscol->printFeasSolCol();
-	*/
+	
 
 	/* main to test random vector (FeasibleSolution) 
 	fs = new FeasibleSolution(V);
@@ -137,6 +137,8 @@ int main()
 			{
 				controller->setBestDecodedFrogLeapSolution(dfls_1);
 				controller->setMinCostValue(evalSol);
+				//apply local search
+				controller->applyLocalSearch();
 			}
 			else
 			{

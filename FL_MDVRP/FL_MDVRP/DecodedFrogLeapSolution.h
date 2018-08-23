@@ -15,6 +15,8 @@ class DecodedFrogLeapSolution : public FrogObject
 		Graph * ptrG;
 
 		bool isFeasibleSolution;
+
+		bool localSearchApplied;
 	
 	public:
 
@@ -41,6 +43,8 @@ class DecodedFrogLeapSolution : public FrogObject
 		void setIsFeasibleSolution(bool v_isFeasible);
 
 		bool getIsFeasibleSolution();
+
+		int applyLocalSearch();
 
 		// abstract methods
 		void printFrogObj();

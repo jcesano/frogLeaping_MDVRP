@@ -57,6 +57,12 @@ void FrogLeapController::setRandomSeed()
 	srand(this->timeSeedUsed);
 }
 
+void FrogLeapController::applyLocalSearch()
+{
+	int newCost = this->ptrBestSolution->applyLocalSearch();
+	this->setMinCostValue(newCost);
+}
+
 void FrogLeapController::printCtrl()
 {
 	printf("Showing data of controller \n");
