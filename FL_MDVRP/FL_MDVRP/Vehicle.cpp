@@ -6,6 +6,7 @@
 #include "DistanceTable.h"
 #include "FrogObject.h"
 #include "FeasibleSolution.h"
+#include "FrogLeapController.h"
 
 Vehicle::Vehicle(short int id):FrogObject(id)
 {
@@ -206,7 +207,7 @@ short int Vehicle::ObtainCustomerIdFromIndex(short int position)
 }
 
 //return the new cost found or the previous value instead
-int Vehicle::applyLocalSearch()
+int Vehicle::applyLocalSearch(FrogLeapController * controller)
 {
 	bool exitLocalSearch = false;
 	bool improvementFound = false;
@@ -223,7 +224,7 @@ int Vehicle::applyLocalSearch()
 	{
 		// we look for 100 local solutions. If we find an improvement then generateLocalSolutionsAndEvaluate = true to keep in the loop
 		// and execute a new local search for new solutions from the last solution found
-		improvementFound = generateLocalSolutionsAndEvaluate();
+		improvementFound = generateLocalSolutionsAndEvaluate(controller);
 		if (improvementFound == false)
 		{
 			exitLocalSearch = true;
@@ -233,13 +234,13 @@ int Vehicle::applyLocalSearch()
 	return this->pathCost;
 }
 
-bool Vehicle::generateLocalSolutionsAndEvaluate()
+bool Vehicle::generateLocalSolutionsAndEvaluate(FrogLeapController * controller)
 {
 	FeasibleSolution * fs = new FeasibleSolution(this->customers->getSize(), this->customerArray);
 
 	// generate a one distance permutation solutions, evaluate each one and stop when there is an improvement 
 	// and update the best solution in the vehicle or stop when 100 different solutions where evaluated without any udpate.
-	bool improvement = fs->searchOneSwapFeasibleSolutionsAndEval(this);
+	bool improvement = fs->searchOneSwapFeasibleSolutionsAndEval(this, controller);
 
 	delete fs;
 
@@ -259,43 +260,81 @@ void Vehicle::updateBestSolution(FeasibleSolution * fs, int cost)
 // abstract methods
 void Vehicle::printFrogObj()
 {
-	short int depotIndex = this->getDepotIndex(), depotId;
-	Pair * originPair, *destinationPair;
-	int originIndex, originId, destinationIndex, destinationId;
-	
-	originId = this->ptrGraph->getDepotId(depotIndex);
-
-
+	printf("\n SHOWING VEHICLE INFORMATION \n");
 	if (this->getIsFeasible() == true)
 	{
-		printf("		Vehicle Id (feasible): %d with number of customers assigned = %d and path cost %d\n", this->getId(), this->customers->getSize(), this->getPathCost());
+		printf(" Vehicle Id (feasible): %d with number of customers assigned = %d and path cost %d \n", this->getId(), this->customers->getSize(), this->getPathCost());
 	}
 	else 
 	{
-		printf("		Vehicle Id (NOT feasible): %d with number of customers assigned = %d, not added CustId %d and total demand is %d\n", this->getId(), this->customers->getSize(), this->getNotAddedCustomer(), this->getDemand());
+		printf(" Vehicle Id (NOT feasible): %d with number of customers assigned = %d, not added CustId %d and total demand is %d \n", this->getId(), this->customers->getSize(), this->getNotAddedCustomer(), this->getDemand());
 	}
 	
 	if (this->customers->getSize() > 0)
 	{
-		printf("		List of customers Ids (depot and customers): ");
-
-		for (short int i = 0; i < this->customers->getSize(); i++)
+		if(this->localSearchApplied == true)
 		{
-			Pair * customerPair = (Pair *) this->customers->getFrogObject(i);
-			short int customerIndex = customerPair->get_i_IntValue();
-			short int destinationId = this->ptrGraph->getCustomerId(customerIndex);
-
-			printf("(%d - %d) = %d  ", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
-
-			originId = destinationId;
+			printLocalSolution();
 		}
-
-		if(this->getIsFeasible() == true)
+		else
 		{
-			// add the last edgde from the last customer to the depot
-			destinationId = this->ptrGraph->getDepotId(depotIndex);
-			printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+			printGlobalSolution();
 		}
+	}
+}
+
+void Vehicle::printLocalSolution()
+{
+	short int depotIndex = this->getDepotIndex(), depotIddestinationId;
+	Pair * originPair, *destinationPair;
+	int originIndex, originId, destinationIndex, destinationId;
+
+	originId = this->ptrGraph->getDepotId(depotIndex);
+
+	printf("\n SHOWING LOCAL SOLUTION \n");
+	printf("		List of customers Ids (depot and customers): ");
+
+	for (short int i = 0; i < this->customers->getSize(); i++)
+	{
+		destinationId = this->customerArray[i];
+
+		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+
+		originId = destinationId;
+	}
+
+	// add the last edgde from the last customer to the depot
+	destinationId = this->ptrGraph->getDepotId(depotIndex);
+	printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));	
+}
+
+void Vehicle::printGlobalSolution()
+{
+	short int depotIndex = this->getDepotIndex(), depotId;
+	Pair * originPair, *destinationPair;
+	int originIndex, originId, destinationIndex, destinationId;
+
+	originId = this->ptrGraph->getDepotId(depotIndex);
+
+	printf("\n SHOWING GLOBAL SOLUTION \n");
+	printf("		List of customers Ids (depot and customers): ");
+
+	for (short int i = 0; i < this->customers->getSize(); i++)
+	{
+		Pair * customerPair = (Pair *) this->customers->getFrogObject(i);
+		short int customerIndex = customerPair->get_i_IntValue();
+		short int destinationId = this->ptrGraph->getCustomerId(customerIndex);
+
+		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+
+		originId = destinationId;
+	}
+
+	if (this->getIsFeasible() == true)
+	{
+		// add the last edgde from the last customer to the depot
+		destinationId = this->ptrGraph->getDepotId(depotIndex);
+		printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
 	}
 }
 

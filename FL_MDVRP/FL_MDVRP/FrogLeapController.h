@@ -10,6 +10,13 @@ class FrogLeapController
 
 		int successAttempts;
 		int failAttempts;
+		int localGeneratedSolutions;
+
+		int totalImprovements;
+		int localSearchImprovements;
+		int globalImprovements;
+
+
 
 		int minCostValue;
 
@@ -30,6 +37,20 @@ class FrogLeapController
 		void setFailAttempts(int vfailAttempts);
 		int getFailAttempts();
 		void incFailAttempts();
+
+		int getTotalImprovements();
+		void incTotalImprovements();
+
+		int getLocalSearchImprovements();
+		void incLocalSearchImprovements();
+
+		int getGlobalSearchImprovements();
+		void incGlobalSearchImprovements();
+
+		int getLocalGeneratedSolutions();
+		void incLocalGeneratedSolutions();
+		
+		int getTope();
 
 		int getMinCostValue();
 

@@ -4,6 +4,7 @@
 #include "DistanceTable.h"
 #include "Graph.h"
 #include "Vehicle.h"
+#include "FrogLeapController.h"
 
 FeasibleSolution::FeasibleSolution(short int n)
 {
@@ -196,11 +197,11 @@ void FeasibleSolution::setRandomSolution()
 	delete fsIndex;
 }
 
-FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol)
+FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller)
 {
 	if (distance == 1)
 	{
-		FeasibleSolCol * fscol = this->genOneSwapPermutations();
+		FeasibleSolCol * fscol = this->genOneSwapPermutations(controller);
 
 		if (sourceSolutionCol == NULL)
 		{
@@ -212,7 +213,7 @@ FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleS
 		}
 	}
 	else {
-		FeasibleSolCol * tempCol = this->genOneSwapPermutations(), *tempCol_i = NULL, *fullCol = new FeasibleSolCol();
+		FeasibleSolCol * tempCol = this->genOneSwapPermutations(controller), *tempCol_i = NULL, *fullCol = new FeasibleSolCol();
 		FeasibleSolution * fs_i;
 
 
@@ -229,7 +230,7 @@ FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleS
 
 			sourceSolutionCol->AddFeasibleSol(fs_i);
 
-			tempCol_i = fs_i->genPermutations(distance - 1, sourceSolutionCol);
+			tempCol_i = fs_i->genPermutations(distance - 1, sourceSolutionCol, controller);
 
 			fullCol->ConcatCol(tempCol_i);
 		}
@@ -242,7 +243,7 @@ FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleS
 	}
 }
 
-FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
+FeasibleSolCol * FeasibleSolution::genOneSwapPermutations(FrogLeapController * controller)
 {
 	FeasibleSolCol * colptr = NULL;
 
@@ -262,7 +263,7 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 	{
 		FeasibleSolution * colptr_i_j;
 		colptr = new FeasibleSolCol();
-		int TOPE = 100;
+		int TOPE = controller->getTope();
 		int cont = 0;
 
 		for (short int i = 0; i < this->size; i++)
@@ -282,7 +283,7 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations()
 };
 
 
-bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh)
+bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, FrogLeapController * controller)
 {
 	FeasibleSolution * currentFsSolution = NULL;
 	bool improvement;
@@ -302,8 +303,11 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh)
 		currentFsSolution = this->genSwappedItemsFs(0, 1);
 		currentCost = currentFsSolution->Evaluate(g, depotId);
 
+		controller->incLocalGeneratedSolutions();
+
 		if(currentCost < bestVehicleCost)
 		{
+			controller->incLocalSearchImprovements();
 			veh->updateBestSolution(currentFsSolution, currentCost);
 			delete currentFsSolution;
 			improvement = true;
@@ -318,8 +322,7 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh)
 	}
 	else
 	{
-		FeasibleSolution * colptr_i_j;
-		int TOPE = 100;
+		int TOPE = controller->getTope();
 		int cont = 0;
 		improvement = false;
 
@@ -328,13 +331,14 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh)
 			for (short int j = i + 1; j < this->size; j++)
 			{
 				cont++;
-				colptr_i_j = new FeasibleSolution(this);
-				currentFsSolution = colptr_i_j->genSwappedItemsFs(i, j);
+				controller->incLocalGeneratedSolutions();
+				currentFsSolution = this->genSwappedItemsFs(i, j);
 				currentCost = currentFsSolution->Evaluate(g, depotId);
 				bestVehicleCost = veh->getPathCost();
 
 				if (currentCost < bestVehicleCost)
 				{
+					controller->incLocalSearchImprovements();
 					veh->updateBestSolution(currentFsSolution, currentCost);
 					delete currentFsSolution;
 					improvement = true;

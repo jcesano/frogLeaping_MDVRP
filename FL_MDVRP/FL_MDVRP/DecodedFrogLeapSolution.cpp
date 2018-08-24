@@ -6,6 +6,7 @@
 #include <stdio.h>      /* printf */
 #include <math.h>       /* floor */
 #include "Graph.h"
+#include "FrogLeapController.h"
 
 DecodedFrogLeapSolution::DecodedFrogLeapSolution():FrogObject()
 {
@@ -180,7 +181,7 @@ bool DecodedFrogLeapSolution::getIsFeasibleSolution()
 	return this->isFeasibleSolution;
 }
 
-int DecodedFrogLeapSolution::applyLocalSearch()
+int DecodedFrogLeapSolution::applyLocalSearch(FrogLeapController * controller)
 {
 	Vehicle * vehPtr = NULL;
 
@@ -191,7 +192,7 @@ int DecodedFrogLeapSolution::applyLocalSearch()
 	for (int i = 0; i < this->vehicles->getSize(); i++)
 	{
 		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
-		newLocalCostFound += vehPtr->applyLocalSearch();
+		newLocalCostFound += vehPtr->applyLocalSearch(controller);
 	}
 
 	return newLocalCostFound;

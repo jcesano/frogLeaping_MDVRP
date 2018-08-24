@@ -13,12 +13,15 @@
 
 #include <iostream>
 #include <time.h>
+#include <chrono>
 
 using namespace std;
 
 int main()
 {
     
+	auto start_time = std::chrono::high_resolution_clock::now();
+
 	// create the graph given in above fugure
 	
 	short int V = 9;
@@ -59,16 +62,17 @@ int main()
 
 	DistVect * dv = g->dijkstra(0); 
 	
+	FrogLeapController * controller = new FrogLeapController();
 
-	/* Main to test all permutations of distance = 1 and distance = 2 */
+	/* Main to test all permutations of distance = 1 and distance = 2 
 
 	FeasibleSolution * fs;
 	FeasibleSolCol * fscol;
 
 	fs = new FeasibleSolution(V);
-	
+	*/
 
-	/* setting indexes as values in the FeasibleSolution	*/
+	/* setting indexes as values in the FeasibleSolution	
 	for(int i = 0; i<V;i++)
 	{
 		fs->setSolFactValue(i, i);
@@ -76,9 +80,9 @@ int main()
 		
 	int distance;
 	distance = 1;
-	fscol = fs->genPermutations(distance,NULL);
+	fscol = fs->genPermutations(distance,NULL, controller);
 	fscol->printFeasSolCol();
-	
+	*/
 
 	/* main to test random vector (FeasibleSolution) 
 	fs = new FeasibleSolution(V);
@@ -114,10 +118,9 @@ int main()
 
 	FrogLeapSolution * fls = new FrogLeapSolution(nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
 
-	FrogLeapController * controller = new FrogLeapController();
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	
-	const int TOPE = 100;
+	const int TOPE = controller->getTope();
 
 	for(int i=0; i < TOPE; i++)
 	{
@@ -135,6 +138,7 @@ int main()
 
 			if(evalSol < controller->getMinCostValue())
 			{
+				controller->incGlobalSearchImprovements();
 				controller->setBestDecodedFrogLeapSolution(dfls_1);
 				controller->setMinCostValue(evalSol);
 				//apply local search
@@ -158,6 +162,13 @@ int main()
 	
 	delete g;
 	delete fls;
+
+	auto end_time = std::chrono::high_resolution_clock::now();
+	auto time = end_time - start_time;
+
+	std::cout << "FrogLeaping took " <<
+		std::chrono::duration_cast<std::chrono::microseconds>(time).count() << " to run.\n";
+
 	return 0;
 }
 

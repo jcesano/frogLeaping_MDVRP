@@ -8,6 +8,7 @@ class FeasibleSolCol;
 class Graph;
 class DistanceTable;
 class Vehicle;
+class FrogLeapController;
 
 class FeasibleSolution
 {
@@ -40,11 +41,11 @@ public:
 	//this method makes a copy and creates a new instance
 	FeasibleSolution * genSwappedItemsFs(short int pos1, short int pos2); 
 
-	FeasibleSolCol * genOneSwapPermutations();
+	FeasibleSolCol * genOneSwapPermutations(FrogLeapController * controller);
 
-	bool searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh);
+	bool searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, FrogLeapController * controller);
 
-	FeasibleSolCol * genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol);
+	FeasibleSolCol * genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller);
 
 	bool isTheSame(FeasibleSolution * fs);
 

@@ -6,6 +6,7 @@
 class FrogObjectCol;
 class Vehicle;
 class Graph;
+class FrogLeapController;
 
 class DecodedFrogLeapSolution : public FrogObject
 {
@@ -44,7 +45,7 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool getIsFeasibleSolution();
 
-		int applyLocalSearch();
+		int applyLocalSearch(FrogLeapController * controller);
 
 		// abstract methods
 		void printFrogObj();

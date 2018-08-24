@@ -7,6 +7,7 @@ class FrogObjectCol;
 class Graph;
 class Pair;
 class FeasibleSolution;
+class FrogLeapController;
 
 const int VEHICLE_CAPACITY = 7;
 
@@ -73,15 +74,19 @@ class Vehicle : public FrogObject
 
 		void setupLocalSearch();
 
-		int applyLocalSearch();
+		int applyLocalSearch(FrogLeapController * controller);
 
 		short int ObtainCustomerIdFromIndex(short int position);
 
 		short int ObtainDepotIdFromIndex();
 
-		bool generateLocalSolutionsAndEvaluate();
+		bool generateLocalSolutionsAndEvaluate(FrogLeapController * controller);
 
 		void updateBestSolution(FeasibleSolution * fs, int cost);
+
+		void printLocalSolution();
+
+		void printGlobalSolution();
 
 		// abstract methods
 		void printFrogObj();

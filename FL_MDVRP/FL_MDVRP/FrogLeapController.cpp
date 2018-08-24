@@ -14,8 +14,13 @@ FrogLeapController::FrogLeapController()
 	this->successAttempts = 0;
 
 	this->timeSeedUsed = (unsigned)time(NULL);
+	srand(this->timeSeedUsed);
 
 	this->minCostValue = SHRT_MAX;
+
+	this->totalImprovements = 0;
+	this->localSearchImprovements = 0;
+	this->globalImprovements = 0;
 }
 
 FrogLeapController::~FrogLeapController()
@@ -30,6 +35,51 @@ int FrogLeapController::getFailAttempts()
 void FrogLeapController::incFailAttempts()
 {
 	this->failAttempts++;
+}
+
+int FrogLeapController::getTotalImprovements()
+{
+	return this->localSearchImprovements + this->globalImprovements;
+}
+
+void FrogLeapController::incTotalImprovements()
+{
+	this->totalImprovements++;
+}
+
+int FrogLeapController::getLocalSearchImprovements()
+{
+	return this->localSearchImprovements;
+}
+
+void FrogLeapController::incLocalSearchImprovements()
+{
+	this->localSearchImprovements;
+}
+
+int FrogLeapController::getGlobalSearchImprovements()
+{
+	return this->globalImprovements;
+}
+
+void FrogLeapController::incGlobalSearchImprovements()
+{
+	this->globalImprovements++;
+}
+
+int FrogLeapController::getLocalGeneratedSolutions()
+{
+	return this->localGeneratedSolutions;
+}
+
+void FrogLeapController::incLocalGeneratedSolutions()
+{
+	this->localGeneratedSolutions++;
+}
+
+int FrogLeapController::getTope()
+{
+	return 500;
 }
 
 int FrogLeapController::getMinCostValue()
@@ -59,18 +109,24 @@ void FrogLeapController::setRandomSeed()
 
 void FrogLeapController::applyLocalSearch()
 {
-	int newCost = this->ptrBestSolution->applyLocalSearch();
+	int newCost = this->ptrBestSolution->applyLocalSearch(this);
 	this->setMinCostValue(newCost);
 }
 
 void FrogLeapController::printCtrl()
 {
-	printf("Showing data of controller \n");
-	printf("	Number of success attempts: %d", this->successAttempts);
-	printf("	Number of fail attempts: %d", this->failAttempts);
-	printf("show data of the best found solution: \n");
-	printf("Evaluation of solution is: %d", this->getMinCostValue());
+	printf("\n \n SHOWING DATA OF FROGLEAPING CONTROLLER \n");
 	this->ptrBestSolution->printFrogObj();
+
+	printf("\n Summary of Best Found Solution \n");
+	printf("	Time Seed used %lld \n", (long long)this->timeSeedUsed);
+	printf("	Number of success attempts: %d \n", this->successAttempts);
+	printf("	Number of fail attempts: %d \n", this->failAttempts);
+	printf("	Number of TOTAL Improvements: %d \n", this->getTotalImprovements());
+	printf("	Number of Global Search Improvements: %d \n", this->globalImprovements);
+	printf("	Number of Local Search Improvements: %d \n", this->localSearchImprovements);
+	printf("	Evaluation of best found solution is: %d \n \n", this->getMinCostValue());
+
 }
 
 void FrogLeapController::setFailAttempts(int vfailAttempts)
