@@ -6,6 +6,9 @@
 #include <time.h>
 #include "FrogObject.h"
 #include "DecodedFrogLeapSolution.h"
+#include "TspLibEuc2D.h"
+
+const int LINE_MAX = 256;
 
 FrogLeapController::FrogLeapController()
 {
@@ -21,6 +24,8 @@ FrogLeapController::FrogLeapController()
 	this->totalImprovements = 0;
 	this->localSearchImprovements = 0;
 	this->globalImprovements = 0;
+
+	this->tspLibEud2DPtr = NULL;
 }
 
 FrogLeapController::~FrogLeapController()
@@ -128,6 +133,110 @@ void FrogLeapController::printCtrl()
 	printf("	Evaluation of best found solution is: %d \n \n", this->getMinCostValue());
 
 }
+
+void FrogLeapController::loadTSPEUC2D_Data(char * fileName)
+{
+	fileName = "casog01.vrp";
+	FILE * filePtr;
+
+	TspLibEuc2D * tspLibEuc2DPtrAux = new TspLibEuc2D();
+
+	// Opening file
+	if ((filePtr = fopen(fileName, "r")) != NULL)
+	{
+
+		this->readTSPSection(filePtr, "NAME", ":");
+
+		this->readTSPSection(filePtr, "COMMENT", ":");
+
+		this->readTSPSection(filePtr, "TYPE", ":");
+
+		this->readTSPSection(filePtr, "DIMENSION", ":");
+
+		this->readTSPSection(filePtr, "EDGE_WEIGHT_TYPE", ":");
+
+		this->readTSPSection(filePtr, "CAPACITY", ":");
+
+		//fscanf(filePtr, "%s", nameSection);
+		//fscanf(filePtr, "%s", ctrlChar);
+		//printf("Section: %s %s\n", nameSection, ctrlChar);
+	}
+	else
+	{
+		printf("Error found opening file");
+	}
+}
+
+void FrogLeapController::readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar)
+{
+	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
+
+	if (fgets(buf, sizeof buf, filePtr) != NULL)
+	{
+		sscanf(buf, "%s %s", sectionTag, separatorChar);
+		printf("Section: %s %s", sectionTag, separatorChar);
+
+		if (sectionTag != ctrlSectionTag || separatorChar != ctrlSeparatorChar)
+		{
+			printf("Error in file format \n");
+			return;
+		}
+
+		loadTSPSection(buf, sectionTag);
+	}
+	else
+	{
+		printf("Error buffering file content \n");
+	}
+}
+
+void FrogLeapController::loadTSPSection(char * buf, char * sectionTag)
+{
+	char * auxStrContent = new char[50];
+	short int auxShortInt;
+
+	if (sectionTag == "NAME")
+	{
+		sscanf(buf, "%s", auxStrContent);
+
+		this->tspLibEud2DPtr->setName(auxStrContent);
+		return;
+	}
+
+	if (sectionTag == "TYPE")
+	{
+		sscanf(buf, "%s", auxStrContent);
+		this->tspLibEud2DPtr->setType(auxStrContent);
+		return;
+	}
+
+	if (sectionTag == "DIMENSION")
+	{
+		sscanf(buf, "%hu", &auxShortInt);
+
+		this->tspLibEud2DPtr->setDimension(auxShortInt);
+		return;
+	}
+
+	if (sectionTag == "EDGE_WEIGHT_TYPE")
+	{
+		sscanf(buf, "%s", auxStrContent);
+		this->tspLibEud2DPtr->setEdgeWeightType(auxStrContent);
+		return;
+	}
+
+	if (sectionTag == "CAPACITY")
+	{
+		sscanf(buf, "%hu", &auxShortInt);
+		this->tspLibEud2DPtr->setCapacity(auxShortInt);
+		return;
+	}
+
+	printf("Error in file format: Section does not exist");
+
+	return;
+}
+
 
 void FrogLeapController::setFailAttempts(int vfailAttempts)
 {

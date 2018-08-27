@@ -27,8 +27,10 @@ int main()
 	short int V = 9;
 	short int nVehiclesPerDepot = 2;
 
-	Graph * g = new Graph (V);
+	FrogLeapController * controller = new FrogLeapController();
 
+	Graph * g = new Graph (V);
+		
 	//  making above shown graph
 	/* main to test Dijkstra algorithm */
 	g->setAsDepot(0, 0);
@@ -62,8 +64,6 @@ int main()
 
 	DistVect * dv = g->dijkstra(0); 
 	
-	FrogLeapController * controller = new FrogLeapController();
-
 	/* Main to test all permutations of distance = 1 and distance = 2 
 
 	FeasibleSolution * fs;

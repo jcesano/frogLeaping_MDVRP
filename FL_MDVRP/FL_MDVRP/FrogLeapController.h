@@ -3,6 +3,7 @@
 
 class DecodedFrogLeapSolution;
 class FrogObject;
+class TspLibEuc2D;
 
 class FrogLeapController
 {
@@ -16,13 +17,13 @@ class FrogLeapController
 		int localSearchImprovements;
 		int globalImprovements;
 
-
-
 		int minCostValue;
 
 		time_t timeSeedUsed;
 
 		DecodedFrogLeapSolution * ptrBestSolution;
+
+		TspLibEuc2D * tspLibEud2DPtr;
 
 	public:
 
@@ -65,5 +66,11 @@ class FrogLeapController
 		void applyLocalSearch();
 
 		void printCtrl();
+
+		void loadTSPEUC2D_Data(char * fileName);
+
+		void readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar);
+
+		void loadTSPSection(char * buf, char * sectionTag);
 };
 #endif
