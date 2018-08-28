@@ -4,9 +4,12 @@
 #include <math.h>       /* floor */
 #include <iostream>
 #include <time.h>
+#include <string>
 #include "FrogObject.h"
 #include "DecodedFrogLeapSolution.h"
 #include "TspLibEuc2D.h"
+
+using std::string;
 
 const int LINE_MAX = 256;
 
@@ -134,32 +137,154 @@ void FrogLeapController::printCtrl()
 
 }
 
-void FrogLeapController::loadTSPEUC2D_Data(char * fileName)
-{
-	fileName = "casog01.vrp";
-	FILE * filePtr;
-
+void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
+	
+	FILE * filePtr;	
+	
 	TspLibEuc2D * tspLibEuc2DPtrAux = new TspLibEuc2D();
 
+	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
+
+	string ctrlSectionTagStr, ctrlSeparatorCharStr, sectionTagStr, separatorCharStr;
+
+	ctrlSeparatorCharStr = string(":");
+	
 	// Opening file
 	if ((filePtr = fopen(fileName, "r")) != NULL)
 	{
+		
+		// Reading section tag NAME
+		char * name = new char[50];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, name);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, name);
 
-		this->readTSPSection(filePtr, "NAME", ":");
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
 
-		this->readTSPSection(filePtr, "COMMENT", ":");
+			ctrlSectionTagStr = string("NAME");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
 
-		this->readTSPSection(filePtr, "TYPE", ":");
+		// reading COMMENT
+		char * comment = new char[100];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, comment);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, comment);
 
-		this->readTSPSection(filePtr, "DIMENSION", ":");
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+			ctrlSectionTagStr = string("COMMENT");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
 
-		this->readTSPSection(filePtr, "EDGE_WEIGHT_TYPE", ":");
+		
+		// reading type
+		char * type = new char[50];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, type);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, type);
 
-		this->readTSPSection(filePtr, "CAPACITY", ":");
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
 
-		//fscanf(filePtr, "%s", nameSection);
-		//fscanf(filePtr, "%s", ctrlChar);
-		//printf("Section: %s %s\n", nameSection, ctrlChar);
+			ctrlSectionTagStr = string("TYPE");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading DIMENSION
+		int dimension;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %d", sectionTag, separatorChar, &dimension);
+			printf("Section: %s %s %d \n", sectionTag, separatorChar, dimension);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("DIMENSION");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+		
+		// reading EDGE_WEIGHT_TYPE
+		char * edge_weight_type = new char[50];;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, edge_weight_type);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, edge_weight_type);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("EDGE_WEIGHT_TYPE");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+		
+
+		// reading CAPACITY
+		int capacity;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %d", sectionTag, separatorChar, &capacity);
+			printf("Section: %s %s %d \n", sectionTag, separatorChar, capacity);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("CAPACITY");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
 	}
 	else
 	{
@@ -167,16 +292,21 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName)
 	}
 }
 
-void FrogLeapController::readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar)
+void FrogLeapController::readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar, int * off_set)
 {
 	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
+
+	string ctrlSectionTagStr = ctrlSectionTag, ctrlSeparatorCharStr = ctrlSeparatorChar;
 
 	if (fgets(buf, sizeof buf, filePtr) != NULL)
 	{
 		sscanf(buf, "%s %s", sectionTag, separatorChar);
 		printf("Section: %s %s", sectionTag, separatorChar);
 
-		if (sectionTag != ctrlSectionTag || separatorChar != ctrlSeparatorChar)
+		string sectionTagStr = sectionTag;
+		string separatorCharStr = separatorChar;
+
+		if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 		{
 			printf("Error in file format \n");
 			return;
@@ -192,25 +322,28 @@ void FrogLeapController::readTSPSection(FILE * filePtr, char * ctrlSectionTag, c
 
 void FrogLeapController::loadTSPSection(char * buf, char * sectionTag)
 {
-	char * auxStrContent = new char[50];
+	char * auxContentCharPtr = new char[50];
+	string auxContentStr, sectionTagStr;
 	short int auxShortInt;
 
-	if (sectionTag == "NAME")
-	{
-		sscanf(buf, "%s", auxStrContent);
+	sectionTagStr = sectionTag;
 
-		this->tspLibEud2DPtr->setName(auxStrContent);
+	if (sectionTagStr.compare("NAME") == 0)
+	{
+		sscanf(buf, "%s", auxContentCharPtr);
+
+		this->tspLibEud2DPtr->setName(auxContentCharPtr);
 		return;
 	}
 
-	if (sectionTag == "TYPE")
+	if (sectionTagStr.compare("TYPE") == 0)
 	{
-		sscanf(buf, "%s", auxStrContent);
-		this->tspLibEud2DPtr->setType(auxStrContent);
+		sscanf(buf, "%s", auxContentCharPtr);
+		this->tspLibEud2DPtr->setType(auxContentCharPtr);
 		return;
 	}
 
-	if (sectionTag == "DIMENSION")
+	if (sectionTagStr.compare("DIMENSION") == 0)
 	{
 		sscanf(buf, "%hu", &auxShortInt);
 
@@ -218,14 +351,14 @@ void FrogLeapController::loadTSPSection(char * buf, char * sectionTag)
 		return;
 	}
 
-	if (sectionTag == "EDGE_WEIGHT_TYPE")
+	if (sectionTagStr.compare("EDGE_WEIGHT_TYPE") == 0)
 	{
-		sscanf(buf, "%s", auxStrContent);
-		this->tspLibEud2DPtr->setEdgeWeightType(auxStrContent);
+		sscanf(buf, "%s", auxContentCharPtr);
+		this->tspLibEud2DPtr->setEdgeWeightType(auxContentCharPtr);
 		return;
 	}
 
-	if (sectionTag == "CAPACITY")
+	if (sectionTagStr.compare("CAPACITY") == 0)
 	{
 		sscanf(buf, "%hu", &auxShortInt);
 		this->tspLibEud2DPtr->setCapacity(auxShortInt);

@@ -69,7 +69,7 @@ class FrogLeapController
 
 		void loadTSPEUC2D_Data(char * fileName);
 
-		void readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar);
+		void readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar, int * off_set);
 
 		void loadTSPSection(char * buf, char * sectionTag);
 };

@@ -14,6 +14,9 @@
 #include <iostream>
 #include <time.h>
 #include <chrono>
+#include <string>
+
+using std::string;
 
 using namespace std;
 
@@ -28,6 +31,10 @@ int main()
 	short int nVehiclesPerDepot = 2;
 
 	FrogLeapController * controller = new FrogLeapController();
+
+	char * fileName = "casog01.vrp";
+
+	controller->loadTSPEUC2D_Data(fileName);
 
 	Graph * g = new Graph (V);
 		
