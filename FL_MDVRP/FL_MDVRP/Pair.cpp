@@ -11,6 +11,16 @@ Pair::Pair(PairType type)
 	j_float = -1;
 }
 
+Pair::Pair(PairType type, short int pairId):FrogObject(pairId)
+{
+	this->pairtype = type;
+	i_int = -1;
+	j_int = -1;
+
+	i_float = -1;
+	j_float = -1;
+}
+
 Pair::~Pair()
 {
 	printf("Destroying Pair \n");

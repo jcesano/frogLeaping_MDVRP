@@ -8,6 +8,7 @@
 #include "FrogObject.h"
 #include "DecodedFrogLeapSolution.h"
 #include "TspLibEuc2D.h"
+#include "Pair.h"
 
 using std::string;
 
@@ -169,6 +170,8 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setName(name);
 		}
 		else
 		{
@@ -190,6 +193,8 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setComment(comment);
 		}
 		else
 		{
@@ -213,6 +218,8 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setType(type);
 		}
 		else
 		{
@@ -235,6 +242,8 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setDimension(dimension);
 		}
 		else
 		{
@@ -257,6 +266,8 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setEdgeWeightType(edge_weight_type);
 		}
 		else
 		{
@@ -280,15 +291,163 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				printf("Error in file format \n");
 				return;
 			}
+
+			tspLibEuc2DPtrAux->setCapacity(capacity);
 		}
 		else
 		{
 			printf("Error reading file \n");
 		}
+
+		// reading Node Coord Section
+		char * nodeCoordSection = new char[50];;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s ", nodeCoordSection);
+			printf("Section: %s \n", nodeCoordSection);
+
+			sectionTagStr = nodeCoordSection;
+			
+			ctrlSectionTagStr = string("NODE_COORD_SECTION");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			// Loading coordinates
+			loadCoordinates(filePtr, buf);
+
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
 	}
 	else
 	{
 		printf("Error found opening file");
+	}
+}
+
+void FrogLeapController::loadCoordinates(FILE * filePtr, char * buf)
+{
+	bool stopLoop = false;
+	short int nodeId =  -1, x_coord = -1, y_coord = -1, dimension = this->tspLibEud2DPtr->getDimension();
+
+	for(short int i=0; i < dimension;i++)
+	{
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%hu %hu %hu", nodeId, x_coord, y_coord);
+			printf("Coordinate: %hu %hu %hu \n", nodeId, x_coord, y_coord);
+
+			Pair * currPair = new Pair(PairType::IntVsFloat, nodeId);
+
+			currPair->set_i_IntValue(x_coord);
+			currPair->set_j_IntValue(y_coord);
+
+			this->tspLibEud2DPtr->AddNodeCoordItem(currPair);			
+		}
+		else
+		{
+			printf("Error reading file: Section Node Coordinates \n");
+			return;
+		}
+	}
+}
+
+void FrogLeapController::loadDemand(FILE * filePtr, char * buf)
+{	
+	short int nodeId = -1, demand = 0;
+	char * demandSection = new char[50];
+
+	if (fgets(buf, sizeof buf, filePtr) != NULL)
+	{
+		sscanf(buf, "%s ", demandSection);
+		printf("Coordinate: %s \n", demandSection);
+	}
+
+	string sectionTagStr = demandSection;
+
+	string ctrlSectionTagStr = string("DEMAND_SECTION");
+
+	if (sectionTagStr.compare(ctrlSectionTagStr) != 0)
+	{
+		printf("Error in file format \n");
+		return;
+	}
+
+	short int dimension = this->tspLibEud2DPtr->getDimension();
+
+	for (short int i = 0; i < dimension; i++)
+	{
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%hu %hu", nodeId, demand);
+			printf("Demand: %hu %hu \n", nodeId, demand);
+
+	
+			Pair * currPair = new Pair(PairType::IntVsInt, nodeId);
+
+			currPair->set_i_IntValue(nodeId);
+			currPair->set_j_IntValue(demand);
+
+			this->tspLibEud2DPtr->AddDemandItem(currPair);
+		}
+		else
+		{
+			printf("Error reading file: Section Node Coordinates \n");
+			return;
+		}
+	}
+}
+
+void FrogLeapController::loadDepots(FILE * filePtr, char * buf)
+{
+	short int depotId = -2;
+	char * depotSection = new char[50];
+
+	if (fgets(buf, sizeof buf, filePtr) != NULL)
+	{
+		sscanf(buf, "%s ", depotSection);
+		printf("Coordinate: %s \n", depotSection);
+	}
+
+	string sectionTagStr = depotSection;
+
+	string ctrlSectionTagStr = string("DEPOT_SECTION");
+
+	if (sectionTagStr.compare(ctrlSectionTagStr) != 0)
+	{
+		printf("Error in file format \n");
+		return;
+	}
+	
+	bool stopLoop = false;
+
+	while(!stopLoop)	
+	{
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%hu ", depotId);
+			printf("DepotId %hu \n", depotId);
+
+			if(depotId != -1)
+			{
+				this->tspLibEud2DPtr->AddDepotItem(depotId);
+			}
+			else
+			{
+				stopLoop = true;
+			}
+		}
+		else
+		{
+			printf("Error reading file: Section Node Coordinates \n");
+			return;
+		}
 	}
 }
 

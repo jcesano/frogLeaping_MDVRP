@@ -20,6 +20,8 @@ class Pair : public FrogObject
 public:
 	Pair(PairType type);
 
+	Pair(PairType type, short int pairId);
+
 	~Pair();
 
 	PairType getType();
