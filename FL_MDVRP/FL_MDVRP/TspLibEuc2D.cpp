@@ -13,7 +13,7 @@ TspLibEuc2D::TspLibEuc2D():FrogObject()
 	this->comment = NULL;
 	this->edge_weight_type = NULL;
 	this->capacity = 0;
-	this->nodeCoordSection = NULL;
+	this->nodeCoordSection = new FrogObjectCol();
 	this->demand_section = new FrogObjectCol();
 	this->depot_section = new IndexList();	
 }

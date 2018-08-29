@@ -73,10 +73,10 @@ class FrogLeapController
 
 		void loadTSPSection(char * buf, char * sectionTag);
 
-		void loadCoordinates(FILE * filePtr, char * buf);
+		void loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
+		
+		void loadDemand(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 
-		void loadDemand(FILE * filePtr, char * buf);
-
-		void loadDepots(FILE * filePtr, char * buf);
+		void loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 };
 #endif

@@ -143,13 +143,13 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 	FILE * filePtr;	
 	
 	TspLibEuc2D * tspLibEuc2DPtrAux = new TspLibEuc2D();
-
+	
 	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
 
 	string ctrlSectionTagStr, ctrlSeparatorCharStr, sectionTagStr, separatorCharStr;
 
 	ctrlSeparatorCharStr = string(":");
-	
+		
 	// Opening file
 	if ((filePtr = fopen(fileName, "r")) != NULL)
 	{
@@ -316,14 +316,19 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 			}
 
 			// Loading coordinates
-			loadCoordinates(filePtr, buf);
+			this->loadCoordinates(filePtr, tspLibEuc2DPtrAux);
 
+			this->loadDemand(filePtr, tspLibEuc2DPtrAux);
+
+			this->loadDepots(filePtr, tspLibEuc2DPtrAux);
+
+			this->tspLibEud2DPtr = tspLibEuc2DPtrAux;
 		}
 		else
 		{
 			printf("Error reading file \n");
 		}
-
+		
 	}
 	else
 	{
@@ -331,24 +336,26 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 	}
 }
 
-void FrogLeapController::loadCoordinates(FILE * filePtr, char * buf)
+void FrogLeapController::loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr)
 {
 	bool stopLoop = false;
-	short int nodeId =  -1, x_coord = -1, y_coord = -1, dimension = this->tspLibEud2DPtr->getDimension();
+	int nodeId = 0, x_coord = 0, y_coord = 0, v_dimension = tspLibEuc2DPtr->getDimension();
+	char buf[LINE_MAX];
 
-	for(short int i=0; i < dimension;i++)
+	for(short int i=0; i < v_dimension;i++)
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
-			sscanf(buf, "%hu %hu %hu", nodeId, x_coord, y_coord);
-			printf("Coordinate: %hu %hu %hu \n", nodeId, x_coord, y_coord);
+			sscanf(buf, "%d %d %d", &nodeId, &x_coord, &y_coord);
+			printf("Coordinate: %d %d %d \n", nodeId, x_coord, y_coord);
 
 			Pair * currPair = new Pair(PairType::IntVsFloat, nodeId);
 
 			currPair->set_i_IntValue(x_coord);
 			currPair->set_j_IntValue(y_coord);
+			currPair->setValue(nodeId);
 
-			this->tspLibEud2DPtr->AddNodeCoordItem(currPair);			
+			tspLibEuc2DPtr->AddNodeCoordItem(currPair);
 		}
 		else
 		{
@@ -358,15 +365,16 @@ void FrogLeapController::loadCoordinates(FILE * filePtr, char * buf)
 	}
 }
 
-void FrogLeapController::loadDemand(FILE * filePtr, char * buf)
+void FrogLeapController::loadDemand(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr)
 {	
-	short int nodeId = -1, demand = 0;
+	int nodeId = -1, demand = 0;
 	char * demandSection = new char[50];
+	char buf [LINE_MAX];
 
 	if (fgets(buf, sizeof buf, filePtr) != NULL)
 	{
 		sscanf(buf, "%s ", demandSection);
-		printf("Coordinate: %s \n", demandSection);
+		printf("Section: %s \n", demandSection);
 	}
 
 	string sectionTagStr = demandSection;
@@ -379,22 +387,23 @@ void FrogLeapController::loadDemand(FILE * filePtr, char * buf)
 		return;
 	}
 
-	short int dimension = this->tspLibEud2DPtr->getDimension();
+	short int dimension = tspLibEuc2DPtr->getDimension();
 
 	for (short int i = 0; i < dimension; i++)
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
-			sscanf(buf, "%hu %hu", nodeId, demand);
-			printf("Demand: %hu %hu \n", nodeId, demand);
+			sscanf(buf, "%d %d", &nodeId, &demand);
+			printf("Demand: %d %d \n", nodeId, demand);
 
 	
 			Pair * currPair = new Pair(PairType::IntVsInt, nodeId);
 
 			currPair->set_i_IntValue(nodeId);
 			currPair->set_j_IntValue(demand);
+			currPair->setValue(nodeId);
 
-			this->tspLibEud2DPtr->AddDemandItem(currPair);
+			tspLibEuc2DPtr->AddDemandItem(currPair);
 		}
 		else
 		{
@@ -404,15 +413,16 @@ void FrogLeapController::loadDemand(FILE * filePtr, char * buf)
 	}
 }
 
-void FrogLeapController::loadDepots(FILE * filePtr, char * buf)
+void FrogLeapController::loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr)
 {
-	short int depotId = -2;
+	int depotId = -2;
 	char * depotSection = new char[50];
+	char buf[LINE_MAX];
 
 	if (fgets(buf, sizeof buf, filePtr) != NULL)
 	{
 		sscanf(buf, "%s ", depotSection);
-		printf("Coordinate: %s \n", depotSection);
+		printf("Section: %s \n", depotSection);
 	}
 
 	string sectionTagStr = depotSection;
@@ -431,12 +441,12 @@ void FrogLeapController::loadDepots(FILE * filePtr, char * buf)
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
-			sscanf(buf, "%hu ", depotId);
-			printf("DepotId %hu \n", depotId);
+			sscanf(buf, "%d ", &depotId);
+			printf("%d \n", depotId);
 
 			if(depotId != -1)
 			{
-				this->tspLibEud2DPtr->AddDepotItem(depotId);
+				tspLibEuc2DPtr->AddDepotItem(depotId);
 			}
 			else
 			{
