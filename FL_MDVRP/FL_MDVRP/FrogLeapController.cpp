@@ -9,6 +9,9 @@
 #include "DecodedFrogLeapSolution.h"
 #include "TspLibEuc2D.h"
 #include "Pair.h"
+#include "DistanceTable.h"
+#include "FloatDistanceTable.h"
+#include "Graph.h"
 
 using std::string;
 
@@ -30,6 +33,11 @@ FrogLeapController::FrogLeapController()
 	this->globalImprovements = 0;
 
 	this->tspLibEud2DPtr = NULL;
+
+	this->distTablePtr = NULL;
+	this->floatDistTablePtr = NULL;
+
+	this->graphPtr = NULL;
 }
 
 FrogLeapController::~FrogLeapController()
@@ -349,7 +357,7 @@ void FrogLeapController::loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc
 			sscanf(buf, "%d %d %d", &nodeId, &x_coord, &y_coord);
 			printf("Coordinate: %d %d %d \n", nodeId, x_coord, y_coord);
 
-			Pair * currPair = new Pair(PairType::IntVsFloat, nodeId);
+			Pair * currPair = new Pair(PairType::IntVsInt, nodeId);
 
 			currPair->set_i_IntValue(x_coord);
 			currPair->set_j_IntValue(y_coord);
@@ -459,6 +467,100 @@ void FrogLeapController::loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr
 			return;
 		}
 	}
+}
+
+FloatDistanceTable * FrogLeapController::loadFloatDistanceTable()
+{
+	short int dimension = this->tspLibEud2DPtr->getDimension();
+	float floatDistance;
+
+	FloatDistanceTable * fdt = new FloatDistanceTable(dimension);
+
+	for(short int i = 0; i < dimension; i++)
+	{
+		for(short int j = i + 1; j < dimension; j++)
+		{
+			floatDistance = this->tspLibEud2DPtr->getEucDistance(i, j);			
+
+			fdt->addEdge(i, j, floatDistance);			
+		}
+	}
+
+	this->floatDistTablePtr = fdt;
+}
+
+void FrogLeapController::setDistanceTable(DistanceTable * t)
+{
+	this->distTablePtr = t;
+}
+
+DistanceTable * FrogLeapController::getDistanceTable()
+{
+	return this->distTablePtr;
+}
+
+void FrogLeapController::setFloatDistanceTable(FloatDistanceTable * t)
+{
+	this->floatDistTablePtr = t;
+}
+
+FloatDistanceTable * FrogLeapController::getFloatDistanceTable()
+{
+	return this->floatDistTablePtr;
+}
+
+short int FrogLeapController::getNumberOfDepots()
+{
+	if(this->source_t == SourceType::Graph)
+	{
+		return this->graphPtr->getNumberOfDepots();
+	}
+	else
+	{
+		return this->tspLibEud2DPtr->getNumberOfDepots();
+	}	
+}
+
+short int FrogLeapController::getNumberOfCustomers()
+{
+	if (this->source_t == SourceType::Graph)
+	{
+		return this->graphPtr->getNumberOfCustomers();
+	}
+	else
+	{
+		return this->tspLibEud2DPtr->getNumberOfCustomers();
+	}
+}
+
+void FrogLeapController::setGraph(Graph * gPtr)
+{
+	this->graphPtr = gPtr;
+}
+
+Graph * FrogLeapController::getGraph()
+{
+	return this->graphPtr;
+}
+
+void FrogLeapController::setSourceType(SourceType source)
+{
+	this->source_t = source;
+}
+
+SourceType FrogLeapController::getSourceType()
+{
+	return this->source_t;
+}
+
+void FrogLeapController::setSolutionGenerationType(SolutionGenerationType v_sgt)
+{
+	this->sgt = v_sgt;
+}
+
+SolutionGenerationType FrogLeapController::getSolutionGenerationType()
+{
+	return this->sgt;
 }
 
 void FrogLeapController::readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar, int * off_set)

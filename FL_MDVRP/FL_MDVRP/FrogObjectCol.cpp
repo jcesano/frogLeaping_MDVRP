@@ -135,17 +135,17 @@ int FrogObjectCol::getSize()
 	return this->colSize;
 }
 
-FrogObject * FrogObjectCol::getFrogObject(short int i)
+FrogObject * FrogObjectCol::getFrogObject(short int position)
 {
 	// assign the first element
 	FrogObjNode * currentNode = head;
 	FrogObject * result = NULL;
 
-	if ((this->head != NULL) && (i < this->getSize()) && (i >= 0))
+	if ((this->head != NULL) && (position < this->getSize()) && (position >= 0))
 	{
 		// if i == 0 then for is not executed, otherwise we start from i = 1
 		// cause result is pointing to the first Node already (first node is in position = 0)
-		for (int j = 0; j < i; j++)
+		for (int j = 0; j < position; j++)
 		{			
 			currentNode = currentNode->getNextFrogObjNode();
 		}

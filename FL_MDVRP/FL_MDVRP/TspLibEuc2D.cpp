@@ -5,7 +5,7 @@
 #include "FrogObjectCol.h"
 #include "IndexList.h"
 #include "Pair.h"
-
+#include <math.h>
 
 TspLibEuc2D::TspLibEuc2D():FrogObject()
 {
@@ -96,6 +96,48 @@ void TspLibEuc2D::AddDemandItem(Pair * v_pair_demand)
 void TspLibEuc2D::AddDepotItem(short int depotId)
 {
 	this->depot_section->addIndex(depotId);
+}
+
+float TspLibEuc2D::getEucDistance(short int u, short int v)
+{
+	
+	float result = 0;
+	Pair * coordinateOrigin = NULL, * coordinateDestination = NULL;
+
+	coordinateOrigin		= (Pair *)nodeCoordSection->getFrogObject(u);
+	coordinateDestination	= (Pair *)nodeCoordSection->getFrogObject(v);
+
+	result = calcEuc2D(coordinateOrigin, coordinateDestination);
+
+	return result;
+}
+
+float TspLibEuc2D::calcEuc2D(Pair * origin, Pair * destination)
+{
+	float result = 0, a ,b;
+	short x , y, w, z;
+	x = origin->get_i_IntValue();
+	y = origin->get_j_IntValue();
+
+	w = destination->get_i_IntValue();
+	z = destination->get_j_IntValue();
+
+	a = pow((x - w), 2);
+	b = pow((y - z), 2);
+
+	result = sqrt(a + b);
+
+	return result;	
+}
+
+short int TspLibEuc2D::getNumberOfDepots()
+{
+	return this->depot_section->getSize();
+}
+
+short int TspLibEuc2D::getNumberOfCustomers()
+{
+	return this->getDimension();
 }
 
 void TspLibEuc2D::printFrogObj()

@@ -50,6 +50,14 @@ class TspLibEuc2D : public FrogObject
 
 		void AddDepotItem(short int depotId);	
 
+		float getEucDistance(short int u, short int v);
+
+		float calcEuc2D(Pair * origin, Pair * destination);
+
+		short int getNumberOfDepots();
+
+		short int getNumberOfCustomers();
+
 		// abstract methods
 		void printFrogObj();
 

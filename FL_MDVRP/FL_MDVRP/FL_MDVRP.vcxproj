@@ -151,6 +151,7 @@
     <ClInclude Include="FeasibleSolCol.h" />
     <ClInclude Include="FeasibleSolution.h" />
     <ClInclude Include="FeasSolNode.h" />
+    <ClInclude Include="FloatDistanceTable.h" />
     <ClInclude Include="FrogLeapController.h" />
     <ClInclude Include="FrogLeapSolution.h" />
     <ClInclude Include="FrogObject.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="FeasibleSolCol.cpp" />
     <ClCompile Include="FeasibleSolution.cpp" />
     <ClCompile Include="FeasSolNode.cpp" />
+    <ClCompile Include="FloatDistanceTable.cpp" />
     <ClCompile Include="FL_MDVRP.cpp" />
     <ClCompile Include="FrogLeapController.cpp" />
     <ClCompile Include="FrogLeapSolution.cpp" />

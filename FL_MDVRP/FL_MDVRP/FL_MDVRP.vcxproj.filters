@@ -78,6 +78,9 @@
     <ClInclude Include="TspLibEuc2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FloatDistanceTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DistanceTable.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TspLibEuc2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatDistanceTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

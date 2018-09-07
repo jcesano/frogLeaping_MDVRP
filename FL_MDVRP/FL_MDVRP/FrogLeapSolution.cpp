@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "FrogLeapSolution.h"
 #include "DecodedFrogLeapSolution.h"
+#include "FrogLeapController.h"
 #include "Vehicle.h"
 #include "Graph.h"
 #include <stdio.h>      /* printf */
@@ -8,11 +9,23 @@
 #include <iostream>
 #include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(short int size_v, short int n_vehicles_v, short int n_depots_v, short int id):FrogObject(id)
+FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, short int ncustomers, short int n_vehicles_v, short int n_depots_v, short int id):FrogObject(id)
 {
-	this->size = size_v;
+	this->sgt = v_sgt;
 	this->n_vehicles = n_vehicles_v;
 	this->n_depots = n_depots_v;
+
+	if(this->sgt == SolutionGenerationType::FrogLeaping)
+	{
+		this->size = ncustomers;
+		this->nElementsToSort = this->n_vehicles;
+	}
+	else
+	{
+		this->size = n_depots_v;
+		this->nElementsToSort = this->n_depots;
+	}
+	
 	this->values = new float[this->size];		
 }
 
@@ -54,7 +67,7 @@ void FrogLeapSolution::genRandomSolution()
 
 	for (int i = 0; i < this->size; i++)
 	{
-		u = this->genRandomFloatingNumber(0, this->n_vehicles);
+		u = this->genRandomFloatingNumber(0, this->nElementsToSort);
 		this->values[i] = u;
 	};
 }
@@ -76,6 +89,15 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
 	return decodedSolution;
 }
 
+void FrogLeapSolution::setSolutionGenerationType(SolutionGenerationType v_sgt)
+{
+	this->sgt = v_sgt;
+}
+
+SolutionGenerationType FrogLeapSolution::getSolutionGenerationType()
+{
+	return this->sgt;
+}
 
 // inherited methods
 void FrogLeapSolution::printFrogObj()

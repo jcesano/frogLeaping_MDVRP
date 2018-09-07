@@ -36,6 +36,8 @@ int main()
 
 	controller->loadTSPEUC2D_Data(fileName);
 
+	controller->setSourceType(SourceType::Graph);
+
 	Graph * g = new Graph (V);
 		
 	//  making above shown graph
@@ -116,14 +118,18 @@ int main()
 
 	g->setDistanceTable(dt);
 
+	controller->setGraph(g);
+
+	controller->setDistanceTable(dt);
+
 	dt = NULL;
 	
 
 	/* main test frogSolution */
-	short int nDepots = g->getNumberOfDepots();
-	short int nCustomers = g->getNumberOfCustomers();
+	short int nDepots = controller->getNumberOfDepots();
+	short int nCustomers = controller->getNumberOfCustomers();
 
-	FrogLeapSolution * fls = new FrogLeapSolution(nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	

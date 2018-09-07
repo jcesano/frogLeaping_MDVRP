@@ -17,13 +17,15 @@ class FrogLeapSolution: public FrogObject
 		short int size;			// number of customers
 		short int n_vehicles;	// number of vehicles
 		short int n_depots;		// number of depots
+		short int nElementsToSort;
 		//time_t timeSeedUsed;
+		SolutionGenerationType sgt;
 
 		float genRandomFloatingNumber(float a, float b);		
 
 	public:
 	
-		FrogLeapSolution(short int size_v, short int n_vehicles_v, short int n_depots_v, short int id);
+		FrogLeapSolution(SolutionGenerationType v_sgt, short int ncustomers, short int n_vehicles_v, short int n_depots_v, short int id);
 
 		~FrogLeapSolution();
 
@@ -36,6 +38,10 @@ class FrogLeapSolution: public FrogObject
 		void genRandomSolution();
 
 		DecodedFrogLeapSolution * decodeFrogLeapSolution(Graph * g);
+
+		void setSolutionGenerationType(SolutionGenerationType v_sgt);
+
+		SolutionGenerationType getSolutionGenerationType();
 
 		// abstract methods
 		void printFrogObj();

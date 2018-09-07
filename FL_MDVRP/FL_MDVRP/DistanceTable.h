@@ -6,8 +6,8 @@ class Graph;
 
 class DistanceTable
 {
-	short int V;    // No. of vertices
-	short int** a;
+	short int  V;    // No. of vertices
+	short int ** a;
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
 	

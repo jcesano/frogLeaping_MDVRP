@@ -4,6 +4,13 @@
 class DecodedFrogLeapSolution;
 class FrogObject;
 class TspLibEuc2D;
+class DistanceTable;
+class FloatDistanceTable;
+class Graph;
+
+enum class SourceType { Graph, Tsp2DEuc};
+
+enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 
 class FrogLeapController
 {
@@ -24,6 +31,15 @@ class FrogLeapController
 		DecodedFrogLeapSolution * ptrBestSolution;
 
 		TspLibEuc2D * tspLibEud2DPtr;
+
+		DistanceTable * distTablePtr;
+		FloatDistanceTable * floatDistTablePtr;
+
+		Graph * graphPtr;
+
+		SourceType source_t;
+
+		SolutionGenerationType sgt;
 
 	public:
 
@@ -78,5 +94,31 @@ class FrogLeapController
 		void loadDemand(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 
 		void loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
+
+		FloatDistanceTable * loadFloatDistanceTable();
+
+		void setDistanceTable(DistanceTable * t);
+
+		DistanceTable * getDistanceTable();
+
+		void setFloatDistanceTable(FloatDistanceTable * t);
+
+		FloatDistanceTable * getFloatDistanceTable();
+
+		short int getNumberOfDepots();
+
+		short int getNumberOfCustomers();
+
+		void setGraph(Graph * gPtr);
+
+		Graph * getGraph();
+
+		void setSourceType(SourceType sourc);
+
+		SourceType getSourceType();
+
+		void setSolutionGenerationType(SolutionGenerationType v_sgt);
+
+		SolutionGenerationType getSolutionGenerationType();
 };
 #endif
