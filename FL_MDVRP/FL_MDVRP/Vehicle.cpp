@@ -28,7 +28,7 @@ Vehicle::Vehicle(short int id, FrogLeapController * controller) :FrogObject(id)
 	this->capacity = VEHICLE_CAPACITY;
 	this->remaining_capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
-	localSearchApplied = false;
+	localSearchApplied = false;	
 }
 
 Vehicle::~Vehicle()

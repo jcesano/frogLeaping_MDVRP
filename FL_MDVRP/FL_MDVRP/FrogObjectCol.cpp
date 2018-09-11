@@ -291,9 +291,28 @@ FrogObject * FrogObjectCol::getFrogObjectById(short int objid)
 	return result;
 }
 
+FrogObject * FrogObjectCol::getMaxValueFrogObject()
+{
+	FrogObject * result = NULL, * currentFrogObject = NULL;
+
+	result = this->getFrogObject(0);
+	
+	for (short int i = 1; i < this->getSize(); i++)
+	{
+		currentFrogObject = this->getFrogObject(i);
+		if (currentFrogObject->getValue() > result->getValue())
+		{
+			result = currentFrogObject;
+		}
+	}
+
+	return result;
+}
+
 void FrogObjectCol::ConcatCol(FrogObjectCol * fs)
 {
 }
+
 
 
 

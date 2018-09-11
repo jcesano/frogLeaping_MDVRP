@@ -8,18 +8,32 @@
 #include "Graph.h"
 #include "FrogLeapController.h"
 
-DecodedFrogLeapSolution::DecodedFrogLeapSolution():FrogObject()
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots):FrogObject()
 {
-	this->vehicles = new FrogObjectCol();
+	this->vehicles = new FrogObjectCol * [n_depots];
+
+	for (short int i = 0; i < n_depots; i++) {
+		vehicles[i] = new FrogObjectCol();
+	};
+
 	this->ptrController = NULL;
 	this->isFeasibleSolution = true;
+	this->globalVehicleId = 0;
+	this->numDepots = n_depots;
 }
 
-DecodedFrogLeapSolution::DecodedFrogLeapSolution(FrogLeapController * controller) :FrogObject()
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots, FrogLeapController * controller) :FrogObject()
 {
-	this->vehicles = new FrogObjectCol();
+	this->vehicles = new FrogObjectCol *[n_depots];
+
+	for (short int i = 0; i < n_depots; i++) {
+		vehicles[i] = new FrogObjectCol();
+	};
+
 	this->ptrController = controller;
 	this->isFeasibleSolution = true;
+	this->globalVehicleId = 0;
+	this->numDepots = n_depots;
 }
 
 DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
@@ -38,11 +52,10 @@ DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 	printf("Destroying of DecodedFrogLeapSolution: FINISHED \n");
 }
 
-void DecodedFrogLeapSolution::addVehicle(Vehicle * v)
+void DecodedFrogLeapSolution::addVehicle(short int depotIndex, Vehicle * v)
 {
-	this->vehicles->addFrogObject(v);
+	this->vehicles[depotIndex]->addFrogObject(v);
 }
-
 
 /*
 void DecodedFrogLeapSolution::addVehicle(Vehicle * vehicle)
@@ -127,46 +140,74 @@ bool DecodedFrogLeapSolution::decodeFloatFixedFrogLeapItem(float fvalue, short i
 	return result;
 }
 
+short int DecodedFrogLeapSolution::getGlobalVehicleId()
+{
+	short int result = this->globalVehicleId;
+
+	this->globalVehicleId++;
+
+	return result;
+}
+
 bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots)
 {
 	bool result = true;
-
+	short int vehicleId;
 	short int depotIndex = this->decodeFrogLeapValue(fvalue, numberOfDepots);
 
 	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
-	int remainingCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
+	int remainingDepotCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
 
-	if(customerDemand > VEHICLE_CAPACITY || customerDemand > remainingCapacity)
+	if(customerDemand > VEHICLE_CAPACITY || customerDemand > remainingDepotCapacity)
 	{
 		result = false;
 		return result;
 	}
 
 	//assing vehicle to customer	
-	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getFrogObject(0); //get the first element
+	//get the element with maximum remaining capacity
+	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getMaxValueFrogObject(); 
 
 	if(veh == NULL)
 	{
-		vehicleId = this->getVehicleId();
+		vehicleId = this->getGlobalVehicleId();
 
 		veh = new Vehicle(vehicleId, this->ptrController);
-
-		if(c)
-		{
-
-		}
-
 		
-
+		veh->decRemainingCapacity(customerDemand);		
+		
 		//short int depotIndex = vehicleId / numberOfDepots;
 		veh->setDepotIndex(depotIndex);
+				
+		this->vehicles[depotIndex]->addFrogObject(veh);
+	}
+	else
+	{
+		int remainingVehicleCapacity = veh->getRemainingCapacity();
+		if(customerDemand <= remainingVehicleCapacity)
+		{
+			veh->decRemainingCapacity(customerDemand);
+		}
+		else
+		{
+			vehicleId = this->getGlobalVehicleId();
 
-		this->vehicles->addFrogObject(veh);
+			veh = new Vehicle(vehicleId, this->ptrController);
+
+			veh->decRemainingCapacity(customerDemand);
+
+			//short int depotIndex = vehicleId / numberOfDepots;
+			veh->setDepotIndex(depotIndex);
+
+			this->vehicles[depotIndex]->addFrogObject(veh);
+		}
 	}
 
 	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
 
-	if((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
+	//if((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
+	// assign customer to vehicle
+	if ((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
 	{
 		veh->incDemand(customerDemand);
 		
@@ -265,10 +306,13 @@ int DecodedFrogLeapSolution::applyLocalSearch(FrogLeapController * controller)
 
 	this->localSearchApplied = true;
 
-	for (int i = 0; i < this->vehicles->getSize(); i++)
+	for(short int i; i < this->numDepots; i++)
 	{
-		vehPtr = (Vehicle *)this->vehicles->getFrogObject(i);
-		newLocalCostFound += vehPtr->applyLocalSearch(controller);
+		for (int j = 0; j < this->vehicles[i]->getSize(); j++)
+		{
+			vehPtr = (Vehicle *)this->vehicles[i]->getFrogObject(j);
+			newLocalCostFound += vehPtr->applyLocalSearch(controller);
+		}
 	}
 
 	return newLocalCostFound;

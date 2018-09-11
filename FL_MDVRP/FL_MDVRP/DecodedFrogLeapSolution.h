@@ -11,23 +11,27 @@ class FrogLeapController;
 class DecodedFrogLeapSolution : public FrogObject
 {
 	private:
-		FrogObjectCol * vehicles;
+		FrogObjectCol * * vehicles;
 
 		FrogLeapController * ptrController;
 
 		bool isFeasibleSolution;
 
 		bool localSearchApplied;
+
+		short int globalVehicleId;
+
+		short int numDepots;
 	
 	public:
 
-		DecodedFrogLeapSolution();
+		DecodedFrogLeapSolution(short int n_depots);
 
-		DecodedFrogLeapSolution(FrogLeapController * controller);
+		DecodedFrogLeapSolution(short int n_depots, FrogLeapController * controller);
 
 		~DecodedFrogLeapSolution();
 
-		void addVehicle(Vehicle * v);
+		void addVehicle(short int depotIndex, Vehicle * v);
 
 		//Vehicle * getVehicle(short int pos);
 
@@ -51,6 +55,8 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		int applyLocalSearch(FrogLeapController * controller);
 
+		short int getGlobalVehicleId();
+		
 		// abstract methods
 		void printFrogObj();
 

@@ -32,6 +32,8 @@ public:
 
 	FrogObject * getFrogObjectById(short int objid);
 
+	FrogObject * getMaxValueFrogObject();
+
 	void removeFrogObjects(FrogObjectCol * sourceSolutionCol);
 
 	void removeFrogObject(FrogObject * fs);
