@@ -8,6 +8,9 @@
 class FeasibleSolution;
 class DecodedFrogLeapSolution;
 class Graph;
+class FrogLeapController;
+enum class SolutionGenerationType;
+enum class SourceType;
 
 class FrogLeapSolution: public FrogObject
 {
@@ -15,17 +18,18 @@ class FrogLeapSolution: public FrogObject
 	
 		float * values;
 		short int size;			// number of customers
-		short int n_vehicles;	// number of vehicles
+
 		short int n_depots;		// number of depots
 		short int nElementsToSort;
 		//time_t timeSeedUsed;
 		SolutionGenerationType sgt;
+		SourceType st;
 
 		float genRandomFloatingNumber(float a, float b);		
 
 	public:
 	
-		FrogLeapSolution(SolutionGenerationType v_sgt, short int ncustomers, short int n_vehicles_v, short int n_depots_v, short int id);
+		FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, short int ncustomers, short int n_depots_v, short int id);
 
 		~FrogLeapSolution();
 
@@ -37,7 +41,11 @@ class FrogLeapSolution: public FrogObject
 
 		void genRandomSolution();
 
-		DecodedFrogLeapSolution * decodeFrogLeapSolution(Graph * g);
+		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);
+
+		DecodedFrogLeapSolution * decodeFloatFixedFrogLeapSolution();
+
+		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller);
 
 		void setSolutionGenerationType(SolutionGenerationType v_sgt);
 

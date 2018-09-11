@@ -15,20 +15,9 @@ class Graph
 {
 	short int V;    // No. of vertices
 	short int** a;
+
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
-
-	FrogObjectCol * custormerList;
-
-	FrogObjectCol * depotList;
-
-	Pair * * customerArray;
-
-	Pair * * depotArray;
-
-	short int origin;
-
-	short int nVehiclesPerDepot;
 
 	DistanceTable * distanceTable;
 
@@ -48,40 +37,18 @@ public:
 
 	short int getEdgeValue(short int origin, short int destiny);
 
-	void setAsCustomer(short int customerIndex, int demand);
-
-	void setAsDepot(short int depotId, int capacity);
-
-	short int getNumberOfDepots();
-
-	void setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot);
-
-	short int getNumberOfVehiclesPerDepot();
-
 	short int getNumberOfVehicles();
 
 	void setUpCustomerList();
 
 	void setUpDepotList();
 
-	void setUpCustomerAndDepotLists();
-	
 	DistVect * dijkstra(short int src);
 
 	short int getNextClosestVertex(DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
 	
 	//short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr, short int src); // returns the next unmarked closest adjascent vertex to v	
-
-	short int getNumberOfCustomers();
-
-	short int getCustomerId(short int position);
-
-	int getCustomerDemandByIndex(short int position);
-
-	short int getDepotId(short int position);
-
-	int getDepotCapacityByIndex(short int position);
-
+	
 	FrogLeapSolution * genRandomFrogLeapSolution();
 
 	void setDistanceTable(DistanceTable * t);

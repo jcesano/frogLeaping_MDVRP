@@ -9,23 +9,15 @@
 #include <iostream>
 #include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, short int ncustomers, short int n_vehicles_v, short int n_depots_v, short int id):FrogObject(id)
+FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, short int ncustomers, short int n_depots_v, short int id):FrogObject(id)
 {
 	this->sgt = v_sgt;
-	this->n_vehicles = n_vehicles_v;
+	
 	this->n_depots = n_depots_v;
 
-	if(this->sgt == SolutionGenerationType::FrogLeaping)
-	{
-		this->size = ncustomers;
-		this->nElementsToSort = this->n_vehicles;
-	}
-	else
-	{
-		this->size = n_depots_v;
-		this->nElementsToSort = this->n_depots;
-	}
-	
+	this->size = ncustomers;
+	this->nElementsToSort = this->n_depots;
+		
 	this->values = new float[this->size];		
 }
 
@@ -72,10 +64,34 @@ void FrogLeapSolution::genRandomSolution()
 	};
 }
 
-//if generated instance of DecodedFrogLeapSolution is NULL then solution is not valid due to a vehicle capacity violation
-DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(Graph * g)
+
+DecodedFrogLeapSolution * FrogLeapSolution::decodeSolution(FrogLeapController * controller)
 {
-	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(g);
+	return this->decodeFrogLeapSolution(controller);
+}
+
+// This algorithm uses a float distance table and the fixed algorithm
+DecodedFrogLeapSolution * FrogLeapSolution::decodeFloatFixedFrogLeapSolution()
+{
+	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(NULL);
+
+	short int i = 0;
+	bool feasible = true;
+
+	do
+	{
+		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots, this->n_vehicles);
+		i++;
+	} while (i < this->getSize() && feasible == true);
+
+	return decodedSolution;
+}
+
+//if generated instance of DecodedFrogLeapSolution is NULL then solution is not valid due to a vehicle capacity violation
+// This algorithm uses an int distance table and the Graph instance
+DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapController * controller)
+{
+	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(controller);
 	
 	short int i = 0;
 	bool feasible = true;

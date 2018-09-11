@@ -44,7 +44,5 @@ public:
 	void printFrogObj();
 
 	bool isTheSame(FrogObject * fs);
-
-
 };
 #endif

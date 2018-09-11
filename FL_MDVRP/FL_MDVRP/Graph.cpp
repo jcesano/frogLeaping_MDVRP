@@ -85,78 +85,11 @@ void Graph::addEdge(short int u, short int v, short int w)
 	a[v][u] = w;
 }
 
-void Graph::setAsCustomer(short int customerId, int demand)
-{
-	Pair * customerPair = new Pair(PairType::IntVsInt);
-	customerPair->set_i_IntValue(customerId);
-	customerPair->set_j_IntValue(demand);
-	customerPair->setValue(customerId);
-	customerPair->setId(customerId);
-
-	this->custormerList->addFrogObjectOrdered(customerPair);
-}
-
-void Graph::setAsDepot(short int depotId, int capacity)
-{
-	
-	Pair * depotPair = new Pair(PairType::IntVsInt);
-	depotPair->set_i_IntValue(depotId);
-	depotPair->set_j_IntValue(capacity);
-	depotPair->setValue(depotId);
-	depotPair->setId(depotId);
-
-	this->depotList->addFrogObjectOrdered(depotPair);
-}
-
-short int Graph::getNumberOfDepots()
-{
-	return this->depotList->getSize();
-}
-
-void Graph::setNumberOfVehiclesPerDepot(short int nVehiclesPerDepot_v)
-{	
-	this->nVehiclesPerDepot = nVehiclesPerDepot_v;
-}
-
-short int Graph::getNumberOfVehiclesPerDepot()
-{
-	return this->nVehiclesPerDepot;
-}
-
 short int Graph::getNumberOfVehicles()
 {
 	return this->getNumberOfVehiclesPerDepot() * this->getNumberOfDepots();
 }
 
-void Graph::setUpCustomerList()
-{
-	short int n_customers = this->getNumberOfCustomers();
-
-	this->customerArray = new Pair *[n_customers];
-
-	for(int i = 0; i < n_customers; i++)
-	{
-		customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
-	}
-}
-
-void Graph::setUpDepotList()
-{
-	short int n_depots = this->getNumberOfDepots();
-	
-	this->depotArray = new Pair *[n_depots];
-
-	for (int i = 0; i < n_depots; i++)
-	{
-		depotArray[i] = (Pair *)this->depotList->getFrogObject(i);
-	}
-}
-
-void Graph::setUpCustomerAndDepotLists()
-{
-	setUpCustomerList();
-	setUpDepotList();
-}
 
 // Prints shortest paths from src to all other vertices
 DistVect * Graph::dijkstra(short int src)
@@ -282,38 +215,9 @@ short int Graph::getNextClosestVertex(DistVect* dvptr)
 //	}
 //}
 
-short int Graph::getNumberOfCustomers()
-{
-	return this->custormerList->getSize();
-}
 
-short int Graph::getCustomerId(short int position)
-{		
-	return this->customerArray[position]->get_i_IntValue();
-}
 
-int Graph::getCustomerDemandByIndex(short int position)
-{
-	return this->customerArray[position]->get_j_IntValue();
-}
 
-short int Graph::getDepotId(short int position)
-{	
-	return this->depotArray[position]->get_i_IntValue();
-}
-
-int  Graph:: getDepotCapacityByIndex(short int position)
-{
-	return this->depotArray[position]->get_j_IntValue();
-}
-
-FrogLeapSolution * Graph::genRandomFrogLeapSolution()
-{
-	FrogLeapSolution * result = new FrogLeapSolution(this->getNumberOfCustomers(),this->getNumberOfCustomers()*this->getNumberOfVehiclesPerDepot(), this->getNumberOfDepots(), 0);
-
-	result->genRandomSolution();
-	return result;
-}
 
 void Graph::setDistanceTable(DistanceTable * t)
 {

@@ -11,14 +11,14 @@
 DecodedFrogLeapSolution::DecodedFrogLeapSolution():FrogObject()
 {
 	this->vehicles = new FrogObjectCol();
-	this->ptrG = NULL;
+	this->ptrController = NULL;
 	this->isFeasibleSolution = true;
 }
 
-DecodedFrogLeapSolution::DecodedFrogLeapSolution(Graph * g) :FrogObject()
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(FrogLeapController * controller) :FrogObject()
 {
 	this->vehicles = new FrogObjectCol();
-	this->ptrG = g;
+	this->ptrController = controller;
 	this->isFeasibleSolution = true;
 }
 
@@ -33,7 +33,7 @@ DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 	
 	printf("Destroying of DecodedFrogLeapSolution: vehicles destroyed  \n");
 	
-	this->ptrG = NULL;	
+	this->ptrController = NULL;	
 
 	printf("Destroying of DecodedFrogLeapSolution: FINISHED \n");
 }
@@ -59,11 +59,11 @@ Vehicle * DecodedFrogLeapSolution::getVehicle(short int pos)
 }
 */
 
-short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int numberOfVehicles)
+short int DecodedFrogLeapSolution::decodeFixedFloatFrogLeapValue(float fvalue, short int numberOfDepots)
 {
 	short int result = floor(fvalue);
 
-	if (result == numberOfVehicles)
+	if (result == numberOfDepots)
 	{
 		result--;
 	};
@@ -71,7 +71,19 @@ short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int n
 	return result;
 }
 
-bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles)
+short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int numberOfDepots)
+{
+	short int result = floor(fvalue);
+
+	if (result == numberOfDepots)
+	{
+		result--;
+	};
+
+	return result;
+}
+
+bool DecodedFrogLeapSolution::decodeFloatFixedFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles)
 {
 	bool result = true;
 
@@ -79,7 +91,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 
 	Vehicle * veh = (Vehicle *)this->vehicles->getFrogObjectById(vehicleId);
 
-	if(veh == NULL)
+	if (veh == NULL)
 	{
 		veh = new Vehicle(vehicleId, this->getGraph());
 		short int depotIndex = vehicleId / numberOfDepots;
@@ -88,7 +100,71 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 		this->vehicles->addFrogObject(veh);
 	}
 
-	int customerDemand = this->ptrG->getCustomerDemandByIndex(customerIndex);
+	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
+
+	if ((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
+	{
+		veh->incDemand(customerDemand);
+
+		Pair * customerPair = new Pair(PairType::IntVsFloat);
+		customerPair->set_i_IntValue(customerIndex);
+		customerPair->set_j_FloatValue(fvalue);
+		customerPair->setValue(fvalue);
+		customerPair->setId(customerIndex);
+
+		veh->addCustomerPair(customerPair);
+	}
+	else
+	{
+		result = false;
+		veh->incDemand(customerDemand);
+		veh->setAsUnFeasible();
+		this->setIsFeasibleSolution(false);
+		int customerId = this->ptrController->getCustomerId(customerIndex);
+		veh->setNotAddedCustomer(customerId);
+	}
+
+	return result;
+}
+
+bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots)
+{
+	bool result = true;
+
+	short int depotIndex = this->decodeFrogLeapValue(fvalue, numberOfDepots);
+
+	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
+	int remainingCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
+
+	if(customerDemand > VEHICLE_CAPACITY || customerDemand > remainingCapacity)
+	{
+		result = false;
+		return result;
+	}
+
+	//assing vehicle to customer	
+	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getFrogObject(0); //get the first element
+
+	if(veh == NULL)
+	{
+		vehicleId = this->getVehicleId();
+
+		veh = new Vehicle(vehicleId, this->ptrController);
+
+		if(c)
+		{
+
+		}
+
+		
+
+		//short int depotIndex = vehicleId / numberOfDepots;
+		veh->setDepotIndex(depotIndex);
+
+		this->vehicles->addFrogObject(veh);
+	}
+
+	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
 
 	if((veh->getCapacity() >= veh->getDemand() + customerDemand) && (veh->getIsFeasible() == true))
 	{
@@ -108,7 +184,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 		veh->incDemand(customerDemand);
 		veh->setAsUnFeasible();
 		this->setIsFeasibleSolution(false);
-		int customerId = this->ptrG->getCustomerId(customerIndex);
+		int customerId = this->ptrController->getCustomerId(customerIndex);
 		veh->setNotAddedCustomer(customerId);
 	}
 
@@ -163,12 +239,12 @@ bool DecodedFrogLeapSolution::isTheSame(FrogObject * fs)
 
 void DecodedFrogLeapSolution::setGraph(Graph * g)
 {
-	this->ptrG = g;
+	this->ptrController = g;
 }
 
 Graph * DecodedFrogLeapSolution::getGraph()
 {
-	return this->ptrG;
+	return this->ptrController;
 }
 
 void DecodedFrogLeapSolution::setIsFeasibleSolution(bool v_isFeasible)

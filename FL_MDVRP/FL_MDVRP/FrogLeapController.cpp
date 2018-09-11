@@ -6,12 +6,14 @@
 #include <time.h>
 #include <string>
 #include "FrogObject.h"
+#include "FrogObjectCol.h"
 #include "DecodedFrogLeapSolution.h"
 #include "TspLibEuc2D.h"
 #include "Pair.h"
 #include "DistanceTable.h"
 #include "FloatDistanceTable.h"
 #include "Graph.h"
+#include "FrogLeapSolution.h"
 
 using std::string;
 
@@ -94,7 +96,7 @@ void FrogLeapController::incLocalGeneratedSolutions()
 	this->localGeneratedSolutions++;
 }
 
-int FrogLeapController::getTope()
+int FrogLeapController::getNumberOfIterations()
 {
 	return 500;
 }
@@ -513,12 +515,58 @@ short int FrogLeapController::getNumberOfDepots()
 {
 	if(this->source_t == SourceType::Graph)
 	{
-		return this->graphPtr->getNumberOfDepots();
+		return this->depotList->getSize();
 	}
 	else
 	{
 		return this->tspLibEud2DPtr->getNumberOfDepots();
 	}	
+}
+
+void FrogLeapController::setUpVehiclesPerDepot()
+{
+	short int numOfDepots = this->depotList->getSize();
+	Pair * depotPair = NULL;
+	short int depotDemand, depotId;
+
+	this->vehiclePairList = new FrogObjectCol();
+
+	for (short int i = 0; i < numOfDepots; i++)
+	{
+		depotPair = this->depotArray[i];
+		depotId = depotPair->get_i_IntValue();
+		depotDemand = depotPair->get_j_IntValue();
+
+		assignVehiclesToDepots(depotId, depotDemand);
+	}
+
+	setUpVehiclePairList();
+}
+
+void FrogLeapController::assignVehiclesToDepots(short int depotId, short int depotDemand)
+{
+	short int remainingDemand = depotDemand;
+	Pair * vehiclePair = NULL;
+	short int currentId = this->vehiclePairList->getSize();
+	
+	while (remainingDemand > 0)
+	{
+		vehiclePair = new Pair(PairType::IntVsInt);
+		vehiclePair->setId(currentId);		
+
+		vehiclePair->set_i_IntValue(VEHICLE_CAPACITY);
+		vehiclePair->set_j_IntValue(depotId);
+		this->vehiclePairList->addFrogObjectOrdered(vehiclePair);
+
+		if(remainingDemand >= VEHICLE_CAPACITY)
+		{
+			remainingDemand = remainingDemand - VEHICLE_CAPACITY;
+		}
+		else
+		{
+			remainingDemand = 0;
+		}
+	}
 }
 
 short int FrogLeapController::getNumberOfCustomers()
@@ -660,4 +708,122 @@ void FrogLeapController::incSuccessAttempts()
 void FrogLeapController::setSuccessAttempts(int vsucessAttempts)
 {
 	this->successAttempts = vsucessAttempts;
+}
+
+void FrogLeapController::setAsCustomer(short int customerId, int demand)
+{
+	Pair * customerPair = new Pair(PairType::IntVsInt);
+	customerPair->set_i_IntValue(customerId);
+	customerPair->set_j_IntValue(demand);
+	customerPair->setValue(customerId);
+	customerPair->setId(customerId);
+
+	this->custormerList->addFrogObjectOrdered(customerPair);
+}
+
+void FrogLeapController::setAsDepot(short int depotId, int capacity)
+{
+
+	Pair * depotPair = new Pair(PairType::IntVsInt);
+	depotPair->set_i_IntValue(capacity);
+	depotPair->set_j_IntValue(capacity);
+	depotPair->setValue(depotId);
+	depotPair->setId(depotId);
+
+	this->depotList->addFrogObjectOrdered(depotPair);
+}
+
+short int FrogLeapController::getNumberOfDepots()
+{
+	return this->depotList->getSize();
+}
+
+void FrogLeapController::setUpCustomerList()
+{
+	short int n_customers = this->getNumberOfCustomers();
+
+	this->customerArray = new Pair *[n_customers];
+
+	for (int i = 0; i < n_customers; i++)
+	{
+		customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
+	}
+}
+
+void FrogLeapController::setUpDepotList()
+{
+	short int n_depots = this->getNumberOfDepots();
+
+	this->depotArray = new Pair *[n_depots];
+
+	for (int i = 0; i < n_depots; i++)
+	{
+		depotArray[i] = (Pair *)this->depotList->getFrogObject(i);
+	}
+}
+
+void FrogLeapController::setUpCustomerAndDepotLists()
+{
+	setUpCustomerList();
+	setUpDepotList();
+}
+
+void FrogLeapController::setUpVehiclePairList()
+{
+	short int n_vehiclePairs = this->vehiclePairList->getSize();
+
+	this->vehiclePairArray = new Pair *[n_vehiclePairs];
+
+	for (int i = 0; i < n_vehiclePairs; i++)
+	{
+		vehiclePairArray[i] = (Pair *)this->vehiclePairList->getFrogObject(i);
+	}
+}
+
+short int FrogLeapController::getNumberOfVehicles()
+{
+	return this->vehiclePairList->getSize();
+}
+
+short int FrogLeapController::getCustomerId(short int position)
+{
+	return this->customerArray[position]->get_i_IntValue();
+}
+
+short int FrogLeapController::getNumberOfCustomers()
+{
+	return this->custormerList->getSize();
+}
+
+int FrogLeapController::getCustomerDemandByIndex(short int position)
+{
+	return this->customerArray[position]->get_j_IntValue();
+}
+
+short int FrogLeapController::getDepotId(short int position)
+{
+	return this->depotArray[position]->get_i_IntValue();
+}
+
+int  FrogLeapController::getDepotCapacityByIndex(short int position)
+{
+	return this->depotArray[position]->get_i_IntValue();
+}
+
+int  FrogLeapController::getDepotRemainingCapacityByIndex(short int position)
+{
+	return this->depotArray[position]->get_j_IntValue();
+}
+
+void  FrogLeapController::setDepotRemainingCapacityByIndex(short int position, int remaining_capacity)
+{
+	this->depotArray[position]->set_j_IntValue(remaining_capacity);
+}
+
+FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution()
+{
+	FrogLeapSolution * result = new FrogLeapSolution(this->sgt, this->source_t, this->getNumberOfCustomers(), this->getNumberOfDepots(), 0);
+
+	result->genRandomSolution();
+	return result;
 }

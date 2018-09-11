@@ -3,14 +3,18 @@
 
 class DecodedFrogLeapSolution;
 class FrogObject;
+class FrogObjectCol;
 class TspLibEuc2D;
 class DistanceTable;
 class FloatDistanceTable;
 class Graph;
+class FrogLeapSolution;
 
 enum class SourceType { Graph, Tsp2DEuc};
 
 enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
+
+const int VEHICLE_CAPACITY = 7;
 
 class FrogLeapController
 {
@@ -41,6 +45,22 @@ class FrogLeapController
 
 		SolutionGenerationType sgt;
 
+		FrogObjectCol * custormerList;
+
+		FrogObjectCol * depotList;
+
+		FrogObjectCol * vehiclePairList;
+
+		Pair * * vehiclePairArray;
+
+		Pair * * customerArray;
+
+		Pair * * depotArray;
+
+		short int origin;
+
+		short int nVehiclesPerDepot;
+
 	public:
 
 		FrogLeapController();
@@ -67,7 +87,7 @@ class FrogLeapController
 		int getLocalGeneratedSolutions();
 		void incLocalGeneratedSolutions();
 		
-		int getTope();
+		int getNumberOfIterations();
 
 		int getMinCostValue();
 
@@ -120,5 +140,41 @@ class FrogLeapController
 		void setSolutionGenerationType(SolutionGenerationType v_sgt);
 
 		SolutionGenerationType getSolutionGenerationType();
+
+		void setAsCustomer(short int customerId, int demand);
+
+		void setAsDepot(short int depotId, int capacity);
+
+		short int getNumberOfDepots();
+		
+		void setUpCustomerList();
+
+		void setUpDepotList();
+
+		void setUpCustomerAndDepotLists();
+
+		void setUpVehiclesPerDepot();
+
+		void assignVehiclesToDepots(short int depotId, short int depotDemand);
+
+		void setUpVehiclePairList();
+
+		short int getNumberOfVehicles();
+
+		short int getCustomerId(short int position);
+
+		short int getNumberOfCustomers();
+
+		int getCustomerDemandByIndex(short int position);
+
+		short int getDepotId(short int position);
+
+		int getDepotCapacityByIndex(short int position);
+
+		int getDepotRemainingCapacityByIndex(short int position);
+
+		void setDepotRemainingCapacityByIndex(short int position, int remaining_capacity);
+
+		FrogLeapSolution * genRandomFrogLeapSolution();
 };
 #endif

@@ -28,8 +28,7 @@ int main()
 	// create the graph given in above fugure
 	
 	short int V = 9;
-	short int nVehiclesPerDepot = 2;
-
+	
 	FrogLeapController * controller = new FrogLeapController();
 
 	char * fileName = "casog01.vrp";
@@ -39,21 +38,7 @@ int main()
 	controller->setSourceType(SourceType::Graph);
 
 	Graph * g = new Graph (V);
-		
-	//  making above shown graph
-	/* main to test Dijkstra algorithm */
-	g->setAsDepot(0, 0);
-	g->setAsDepot(6, 0);
 
-	g->setNumberOfVehiclesPerDepot(nVehiclesPerDepot);
-
-	g->setAsCustomer(1, 3);
-	g->setAsCustomer(2, 3);
-	g->setAsCustomer(3, 3);
-	g->setAsCustomer(4, 3);
-	g->setAsCustomer(7, 3);
-	g->setAsCustomer(8, 3);
-	
 	g->addEdge(0, 1, 4);
 	g->addEdge(0, 7, 8);
 	g->addEdge(1, 2, 8);
@@ -68,10 +53,23 @@ int main()
 	g->addEdge(6, 7, 1);
 	g->addEdge(6, 8, 6);
 	g->addEdge(7, 8, 7);
-	
-	g->setUpCustomerAndDepotLists();
 
-	DistVect * dv = g->dijkstra(0); 
+	DistVect * dv = g->dijkstra(0);
+
+	/* main to test Dijkstra algorithm */
+	controller->setAsDepot(0, 6);
+	controller->setAsDepot(6, 10);
+
+	controller->setAsCustomer(1, 3);
+	controller->setAsCustomer(2, 3);
+	controller->setAsCustomer(3, 3);
+	controller->setAsCustomer(4, 3);
+	controller->setAsCustomer(7, 3);
+	controller->setAsCustomer(8, 3);
+		
+	controller->setUpCustomerAndDepotLists();
+
+	controller->setUpVehiclesPerDepot();	
 	
 	/* Main to test all permutations of distance = 1 and distance = 2 
 
@@ -124,24 +122,24 @@ int main()
 
 	dt = NULL;
 	
-
+	
 	/* main test frogSolution */
 	short int nDepots = controller->getNumberOfDepots();
 	short int nCustomers = controller->getNumberOfCustomers();
 
-	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, nCustomers, nVehiclesPerDepot * nDepots, nDepots, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, SourceType::Graph, nCustomers, controller->getNumberOfVehicles(), nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	
-	const int TOPE = controller->getTope();
+	const int itNumber = controller->getNumberOfIterations();
 
-	for(int i=0; i < TOPE; i++)
+	for(int i=0; i < itNumber; i++)
 	{
 		fls->genRandomSolution();
 
 		fls->printFrogObj();
 
-		dfls_1 = fls->decodeFrogLeapSolution(g);
+		dfls_1 = fls->decodeSolution(g);
 
 		if (dfls_1->getIsFeasibleSolution() == true) 
 		{

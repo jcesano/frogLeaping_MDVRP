@@ -9,8 +9,6 @@ class Pair;
 class FeasibleSolution;
 class FrogLeapController;
 
-const int VEHICLE_CAPACITY = 7;
-
 class Vehicle : public FrogObject
 {
 	private:
@@ -19,20 +17,21 @@ class Vehicle : public FrogObject
 		short int depotIndex;
 		short int depotId;
 		int capacity;
+		int remaining_capacity;
 		int demand;
 		bool isFeasible;
 		short int notAddedCustomer;
 		bool localSearchApplied;
 		int pathCost;
 
-		Graph * ptrGraph;
+		FrogLeapController * ptrController;
 
 		short int * customerArray;
 
 	public:
 		Vehicle(short int id);
 
-		Vehicle(short int id, Graph * g);
+		Vehicle(short int id, FrogLeapController * controller);
 
 		~Vehicle();
 
@@ -57,6 +56,10 @@ class Vehicle : public FrogObject
 		int getPathCost();
 
 		int getCapacity();
+
+		int getRemainingCapacity();
+
+		void decRemainingCapacity(int capacity_to_dec);
 
 		int incDemand(int aditionalDemand);
 

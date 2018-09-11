@@ -11,7 +11,7 @@
 Vehicle::Vehicle(short int id):FrogObject(id)
 {
 	customers = NULL;
-	this->ptrGraph = NULL;
+	this->ptrController = NULL;
 	size = 0;
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
@@ -19,13 +19,14 @@ Vehicle::Vehicle(short int id):FrogObject(id)
 	localSearchApplied = false;
 }
 
-Vehicle::Vehicle(short int id, Graph * g) :FrogObject(id)
+Vehicle::Vehicle(short int id, FrogLeapController * controller) :FrogObject(id)
 {
 	customers = NULL;
-	this->ptrGraph = g;
+	this->ptrController = controller;
 	size = 0;
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
+	this->remaining_capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;
 }
@@ -127,6 +128,16 @@ int Vehicle::getPathCost()
 int Vehicle::getCapacity()
 {
 	return this->capacity;
+}
+
+int Vehicle::getRemainingCapacity()
+{
+	return this->remaining_capacity;
+}
+
+void Vehicle::decRemainingCapacity(int capacity_to_dec)
+{
+	this->remaining_capacity = this->remaining_capacity - capacity_to_dec;
 }
 
 int Vehicle::incDemand(int aditionalDemand)
