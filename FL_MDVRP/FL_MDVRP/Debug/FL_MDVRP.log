@@ -1,10 +1,21 @@
-﻿  FrogLeapController.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(25): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(117): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(357): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(405): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(465): error C2039: 'loadFloatDistanceTable': is not a member of 'FrogLeapController'
-  c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.h(9): note: see declaration of 'FrogLeapController'
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(467): error C2355: 'this': can only be referenced inside non-static member functions or non-static data member initializers
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(467): error C2227: left of '->tspLibEud2DPtr' must point to class/struct/union/generic type
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(467): error C2227: left of '->getDimension' must point to class/struct/union/generic type
+﻿  Vehicle.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(80): warning C4101: 'originIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(78): warning C4101: 'depotId': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(79): warning C4101: 'originPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(215): warning C4101: 'nextPathCost': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(291): warning C4101: 'originIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(290): warning C4101: 'destinationPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(289): warning C4101: 'depotIddestinationId': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(291): warning C4101: 'destinationIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(290): warning C4101: 'originPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(316): warning C4101: 'originIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(315): warning C4101: 'destinationPair': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(316): warning C4101: 'destinationIndex': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(314): warning C4101: 'depotId': unreferenced local variable
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(315): warning C4101: 'originPair': unreferenced local variable
+  DecodedFrogLeapSolution.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(77): warning C4244: 'initializing': conversion from 'double' to 'short', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(89): warning C4244: 'initializing': conversion from 'double' to 'short', possible loss of data
+  Generating Code...
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)

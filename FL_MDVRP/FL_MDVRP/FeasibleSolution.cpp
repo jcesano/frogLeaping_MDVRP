@@ -263,7 +263,7 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations(FrogLeapController * c
 	{
 		FeasibleSolution * colptr_i_j;
 		colptr = new FeasibleSolCol();
-		int TOPE = controller->getTope();
+		//int TOPE = controller->getTope();
 		int cont = 0;
 
 		for (short int i = 0; i < this->size; i++)
@@ -288,7 +288,7 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 	FeasibleSolution * currentFsSolution = NULL;
 	bool improvement;
 	int currentCost = 0;
-	Graph * g = veh->getGraph(); 
+	Graph * g = veh->getController()->getGraph(); 
 	short int depotId = veh->getDepotId(); 
 	int bestVehicleCost = veh->getPathCost();
 

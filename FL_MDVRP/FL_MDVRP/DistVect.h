@@ -6,6 +6,7 @@
 
 class Graph;
 class Vertex;
+class FrogLeapController;
 
 class DistVect
 {
@@ -57,7 +58,7 @@ public:
 
 	short int getCustomerCount();
 
-	void importCustomers(Graph * g);
+	void importCustomers(FrogLeapController * controller);
 };
 
 

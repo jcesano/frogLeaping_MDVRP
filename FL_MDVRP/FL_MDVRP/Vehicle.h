@@ -20,13 +20,13 @@ class Vehicle : public FrogObject
 		int remaining_capacity;
 		int demand;
 		bool isFeasible;
-		short int notAddedCustomer;
+		
 		bool localSearchApplied;
 		int pathCost;
 
 		FrogLeapController * ptrController;
 
-		short int * customerArray;
+		short int * vehicleCustomerArray;
 
 	public:
 		Vehicle(short int id);
@@ -45,11 +45,11 @@ class Vehicle : public FrogObject
 
 		short int getDepotId();
 
-		int evalPath(Graph * g);
+		int evalPath(FrogLeapController * controller);
 
-		void setGraph(Graph * g);
+		void setController(FrogLeapController * controller);
 
-		Graph * getGraph();
+		FrogLeapController * getController();
 
 		void setPathCost(int cost);
 
@@ -70,10 +70,6 @@ class Vehicle : public FrogObject
 		void setAsUnFeasible();
 
 		bool getIsFeasible();
-
-		short int getNotAddedCustomer();
-
-		void setNotAddedCustomer(short int customerId);
 
 		void setupLocalSearch();
 

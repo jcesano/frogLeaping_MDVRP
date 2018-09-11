@@ -9,12 +9,14 @@ class DistanceTable;
 class FloatDistanceTable;
 class Graph;
 class FrogLeapSolution;
+class Pair;
 
 enum class SourceType { Graph, Tsp2DEuc};
 
 enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 
 const int VEHICLE_CAPACITY = 7;
+const int TOPE_ITERATIONS = 100;
 
 class FrogLeapController
 {
@@ -66,6 +68,8 @@ class FrogLeapController
 		FrogLeapController();
 
 		~FrogLeapController();
+
+		void deleteArray(Pair ** arrayPtr, short int v_size);		
 
 		void setSuccessAttempts(int vsuccessAttempts);
 		int getSuccessAttempts();
@@ -144,9 +148,7 @@ class FrogLeapController
 		void setAsCustomer(short int customerId, int demand);
 
 		void setAsDepot(short int depotId, int capacity);
-
-		short int getNumberOfDepots();
-		
+				
 		void setUpCustomerList();
 
 		void setUpDepotList();
@@ -162,9 +164,7 @@ class FrogLeapController
 		short int getNumberOfVehicles();
 
 		short int getCustomerId(short int position);
-
-		short int getNumberOfCustomers();
-
+		
 		int getCustomerDemandByIndex(short int position);
 
 		short int getDepotId(short int position);
@@ -173,8 +173,12 @@ class FrogLeapController
 
 		int getDepotRemainingCapacityByIndex(short int position);
 
+		void decRemainingDepotCapacity(short int position, int capacity_to_dec);
+
 		void setDepotRemainingCapacityByIndex(short int position, int remaining_capacity);
 
 		FrogLeapSolution * genRandomFrogLeapSolution();
+
+		short int getTope();
 };
 #endif

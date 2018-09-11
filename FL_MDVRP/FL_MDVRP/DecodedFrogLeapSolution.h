@@ -17,6 +17,8 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool isFeasibleSolution;
 
+		short int notAddedCustomer;
+
 		bool localSearchApplied;
 
 		short int globalVehicleId;
@@ -45,9 +47,9 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		int evalSolution();
 
-		void setGraph(Graph * g);
+		void setController(FrogLeapController * controller);
 
-		Graph * getGraph();
+		FrogLeapController * getController();
 
 		void setIsFeasibleSolution(bool v_isFeasible);
 
@@ -57,6 +59,10 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		short int getGlobalVehicleId();
 		
+		short int getNotAddedCustomer();
+
+		void setNotAddedCustomer(short int customerId);
+
 		// abstract methods
 		void printFrogObj();
 

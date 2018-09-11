@@ -30,45 +30,17 @@ Graph::Graph(short int vertexCount)
 		}
 	}
 
-	this->custormerList = new FrogObjectCol();
-
-	this->depotList = new FrogObjectCol();
-
 	this->origin = -1;
 }
 
 Graph::~Graph()
 {
-	if(this->custormerList != NULL)
-	{
-		delete this->custormerList;
-	}	
-	
-	if(this->depotList)
-	{
-		delete this->depotList;
-	}
-
 	if(this->distanceTable != NULL)
 	{
 		delete this->distanceTable;
-	}
-	
-	deleteArray(customerArray, this->getNumberOfCustomers());
-
-	deleteArray(depotArray, this->getNumberOfDepots());	
+	}	
 }
 
-void Graph::deleteArray(Pair ** arrayPtr, short int v_size) {
-	short int size = v_size;
-
-	for (short int i = 0; i < size; i++)
-	{
-		delete arrayPtr[i];
-	}
-
-	delete[] arrayPtr;
-}
 void Graph::setOrigin(short int v)
 {
 	this->origin = v;
@@ -84,12 +56,6 @@ void Graph::addEdge(short int u, short int v, short int w)
 	a[u][v] = w;
 	a[v][u] = w;
 }
-
-short int Graph::getNumberOfVehicles()
-{
-	return this->getNumberOfVehiclesPerDepot() * this->getNumberOfDepots();
-}
-
 
 // Prints shortest paths from src to all other vertices
 DistVect * Graph::dijkstra(short int src)

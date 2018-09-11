@@ -16,6 +16,8 @@ class Graph
 	short int V;    // No. of vertices
 	short int** a;
 
+	short int origin;
+
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
 
@@ -37,12 +39,6 @@ public:
 
 	short int getEdgeValue(short int origin, short int destiny);
 
-	short int getNumberOfVehicles();
-
-	void setUpCustomerList();
-
-	void setUpDepotList();
-
 	DistVect * dijkstra(short int src);
 
 	short int getNextClosestVertex(DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
@@ -53,9 +49,7 @@ public:
 
 	void setDistanceTable(DistanceTable * t);
 
-	DistanceTable * getDistanceTable();
-
-	void deleteArray(Pair ** arrayPtr, short int v_size);	
+	DistanceTable * getDistanceTable();	
 };
 
 #endif

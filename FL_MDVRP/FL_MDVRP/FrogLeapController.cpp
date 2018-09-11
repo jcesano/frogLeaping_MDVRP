@@ -14,6 +14,7 @@
 #include "FloatDistanceTable.h"
 #include "Graph.h"
 #include "FrogLeapSolution.h"
+#include "Pair.h"
 
 using std::string;
 
@@ -489,6 +490,8 @@ FloatDistanceTable * FrogLeapController::loadFloatDistanceTable()
 	}
 
 	this->floatDistTablePtr = fdt;
+
+	return fdt;
 }
 
 void FrogLeapController::setDistanceTable(DistanceTable * t)
@@ -573,7 +576,7 @@ short int FrogLeapController::getNumberOfCustomers()
 {
 	if (this->source_t == SourceType::Graph)
 	{
-		return this->graphPtr->getNumberOfCustomers();
+		return this->custormerList->getSize();
 	}
 	else
 	{
@@ -733,11 +736,6 @@ void FrogLeapController::setAsDepot(short int depotId, int capacity)
 	this->depotList->addFrogObjectOrdered(depotPair);
 }
 
-short int FrogLeapController::getNumberOfDepots()
-{
-	return this->depotList->getSize();
-}
-
 void FrogLeapController::setUpCustomerList()
 {
 	short int n_customers = this->getNumberOfCustomers();
@@ -746,7 +744,7 @@ void FrogLeapController::setUpCustomerList()
 
 	for (int i = 0; i < n_customers; i++)
 	{
-		customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
+		this->customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
 	}
 }
 
@@ -790,10 +788,6 @@ short int FrogLeapController::getCustomerId(short int position)
 	return this->customerArray[position]->get_i_IntValue();
 }
 
-short int FrogLeapController::getNumberOfCustomers()
-{
-	return this->custormerList->getSize();
-}
 
 int FrogLeapController::getCustomerDemandByIndex(short int position)
 {
@@ -815,6 +809,12 @@ int  FrogLeapController::getDepotRemainingCapacityByIndex(short int position)
 	return this->depotArray[position]->get_j_IntValue();
 }
 
+void FrogLeapController::decRemainingDepotCapacity(short int position, int capacity_to_dec)
+{
+	short int oldValue = this->depotArray[position]->get_j_IntValue();
+	this->depotArray[position]->set_j_IntValue(oldValue - capacity_to_dec);
+}
+
 void  FrogLeapController::setDepotRemainingCapacityByIndex(short int position, int remaining_capacity)
 {
 	this->depotArray[position]->set_j_IntValue(remaining_capacity);
@@ -826,4 +826,20 @@ FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution()
 
 	result->genRandomSolution();
 	return result;
+}
+
+short int FrogLeapController::getTope()
+{
+	return TOPE_ITERATIONS;
+}
+
+void FrogLeapController::deleteArray(Pair ** arrayPtr, short int v_size) {
+	short int size = v_size;
+
+	for (short int i = 0; i < size; i++)
+	{
+		delete arrayPtr[i];
+	}
+
+	delete[] arrayPtr;
 }

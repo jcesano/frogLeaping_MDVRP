@@ -127,7 +127,7 @@ int main()
 	short int nDepots = controller->getNumberOfDepots();
 	short int nCustomers = controller->getNumberOfCustomers();
 
-	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, SourceType::Graph, nCustomers, controller->getNumberOfVehicles(), nDepots, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, SourceType::Graph, nCustomers, nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	
@@ -139,7 +139,7 @@ int main()
 
 		fls->printFrogObj();
 
-		dfls_1 = fls->decodeSolution(g);
+		dfls_1 = fls->decodeSolution(controller);
 
 		if (dfls_1->getIsFeasibleSolution() == true) 
 		{

@@ -2,6 +2,7 @@
 #include "DistVect.h"
 #include "Vertex.h"
 #include "Graph.h"
+#include "FrogLeapController.h"
 
 DistVect::DistVect(short int v, short int v_origin)
 {
@@ -177,13 +178,13 @@ short int DistVect::getCustomerCount()
 	return custCnt;
 }
 
-void DistVect::importCustomers(Graph * g)
+void DistVect::importCustomers(FrogLeapController * controller)
 {
 	short int custId;
 
-	for (short int i = 0; i < g->getNumberOfCustomers(); i++)
+	for (short int i = 0; i < controller->getNumberOfCustomers(); i++)
 	{
-		custId = g->getCustomerId(i);
+		custId = controller->getCustomerId(i);
 		this->dv[custId].setVertexType(VertexType::Customer);
 	}
 }

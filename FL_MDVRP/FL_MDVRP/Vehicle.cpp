@@ -38,7 +38,7 @@ Vehicle::~Vehicle()
 		delete this->customers;
 	}
 	
-	this->ptrGraph = NULL;
+	this->ptrController = NULL;
 }
 
 void Vehicle::addCustomerPair(Pair * customerPair)
@@ -71,16 +71,16 @@ short int Vehicle::getDepotId()
 	return this->depotId;
 }
 
-int Vehicle::evalPath(Graph * g)
+int Vehicle::evalPath(FrogLeapController * controller)
 {
 	int vehiclePathResult = 0;
 
 	short int depotIndex = this->getDepotIndex(), depotId;
 	Pair * originPair, * destinationPair;
 	int originIndex, originId, destinationIndex, destinationId;
-	DistanceTable * dt = this->getGraph()->getDistanceTable();
+	DistanceTable * dt = this->ptrController->getDistanceTable();
 
-	originId = this->getGraph()->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotId(depotIndex);
 
 	if(this->customers->getSize() > 0)
 	{
@@ -88,7 +88,7 @@ int Vehicle::evalPath(Graph * g)
 		{
 			destinationPair = (Pair *) this->customers->getFrogObject(i);
 			destinationIndex = destinationPair->get_i_IntValue();
-			destinationId = this->getGraph()->getCustomerId(destinationIndex);
+			destinationId = this->ptrController->getCustomerId(destinationIndex);
 
 			vehiclePathResult = vehiclePathResult + dt->getEdge(originId, destinationId);
 
@@ -96,7 +96,7 @@ int Vehicle::evalPath(Graph * g)
 		}
 
 		// add the last edgde from the last customer to the depot
-		destinationId = this->getGraph()->getDepotId(depotIndex);
+		destinationId = this->ptrController->getDepotId(depotIndex);
 		vehiclePathResult = vehiclePathResult + dt ->getEdge(originId, destinationId);
 	}
 
@@ -105,14 +105,14 @@ int Vehicle::evalPath(Graph * g)
 	return vehiclePathResult;
 }
 
-void Vehicle::setGraph(Graph * g)
+void Vehicle::setController(FrogLeapController * controller)
 {
-	this->ptrGraph = g;
+	this->ptrController = controller;
 }
 
-Graph * Vehicle::getGraph()
+FrogLeapController * Vehicle::getController()
 {
-	return this->ptrGraph;
+	return this->ptrController;
 }
 
 void Vehicle::setPathCost(int cost)
@@ -165,27 +165,17 @@ bool Vehicle::getIsFeasible()
 	return this->isFeasible;
 }
 
-short int Vehicle::getNotAddedCustomer()
-{
-	return this->notAddedCustomer;
-}
-
-void Vehicle::setNotAddedCustomer(short int customerId)
-{
-	this->notAddedCustomer = customerId;
-}
-
 void Vehicle::setupLocalSearch()
 {
 	//NOT FINISHED
 	short int n_customers = this->customers->getSize();
 
-	this->customerArray = new short int [n_customers];
+	this->vehicleCustomerArray = new short int [n_customers];
 
 	for (int i = 0; i < n_customers; i++)
 	{
 		//obtaining the customerId in the graph, from customer index (position)
-		customerArray[i] = this->ObtainCustomerIdFromIndex(i);
+		vehicleCustomerArray[i] = this->ObtainCustomerIdFromIndex(i);
 	}
 
 	//obtaining the depotId in the graph, from depot index (position)
@@ -199,7 +189,7 @@ short int Vehicle::ObtainDepotIdFromIndex()
 	short int depotId, depotIndex;
 	
 	depotIndex = this->getDepotIndex(); //obtaining Pair(CustomerIndex, flValue)	
-	depotId = this->ptrGraph->getDepotId(depotIndex); //obtaining the customerId in the graph
+	depotId = this->ptrController->getDepotId(depotIndex); //obtaining the customerId in the graph
 
 	return depotId;
 }
@@ -212,7 +202,7 @@ short int Vehicle::ObtainCustomerIdFromIndex(short int position)
 
 	tmp = (Pair *) this->customers->getFrogObject(position); //obtaining Pair(CustomerIndex, flValue)
 	customerIndex = tmp->get_i_IntValue();
-	customerId = this->ptrGraph->getCustomerId(customerIndex); //obtaining the customerId in the graph
+	customerId = this->ptrController->getCustomerId(customerIndex); //obtaining the customerId in the graph
 
 	return customerId;
 }
@@ -247,7 +237,7 @@ int Vehicle::applyLocalSearch(FrogLeapController * controller)
 
 bool Vehicle::generateLocalSolutionsAndEvaluate(FrogLeapController * controller)
 {
-	FeasibleSolution * fs = new FeasibleSolution(this->customers->getSize(), this->customerArray);
+	FeasibleSolution * fs = new FeasibleSolution(this->customers->getSize(), this->vehicleCustomerArray);
 
 	// generate a one distance permutation solutions, evaluate each one and stop when there is an improvement 
 	// and update the best solution in the vehicle or stop when 100 different solutions where evaluated without any udpate.
@@ -262,7 +252,7 @@ void Vehicle::updateBestSolution(FeasibleSolution * fs, int cost)
 {
 	for(short int i=0; i < fs->getSize(); i++)
 	{
-		this->customerArray[i] = fs->getSolFactValue(i);
+		this->vehicleCustomerArray[i] = fs->getSolFactValue(i);
 	}
 
 	this->pathCost = cost;
@@ -278,7 +268,7 @@ void Vehicle::printFrogObj()
 	}
 	else 
 	{
-		printf(" Vehicle Id (NOT feasible): %d with number of customers assigned = %d, not added CustId %d and total demand is %d \n", this->getId(), this->customers->getSize(), this->getNotAddedCustomer(), this->getDemand());
+		printf(" Vehicle Id (NOT feasible): %d with number of customers assigned = %d \n", this->getId(), this->customers->getSize());
 	}
 	
 	if (this->customers->getSize() > 0)
@@ -300,23 +290,23 @@ void Vehicle::printLocalSolution()
 	Pair * originPair, *destinationPair;
 	int originIndex, originId, destinationIndex, destinationId;
 
-	originId = this->ptrGraph->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotId(depotIndex);
 
 	printf("\n SHOWING LOCAL SOLUTION \n");
 	printf("		List of customers Ids (depot and customers): ");
 
 	for (short int i = 0; i < this->customers->getSize(); i++)
 	{
-		destinationId = this->customerArray[i];
+		destinationId = this->vehicleCustomerArray[i];
 
-		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
 		originId = destinationId;
 	}
 
 	// add the last edgde from the last customer to the depot
-	destinationId = this->ptrGraph->getDepotId(depotIndex);
-	printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));	
+	destinationId = this->ptrController->getDepotId(depotIndex);
+	printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
 }
 
 void Vehicle::printGlobalSolution()
@@ -325,7 +315,7 @@ void Vehicle::printGlobalSolution()
 	Pair * originPair, *destinationPair;
 	int originIndex, originId, destinationIndex, destinationId;
 
-	originId = this->ptrGraph->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotId(depotIndex);
 
 	printf("\n SHOWING GLOBAL SOLUTION \n");
 	printf("		List of customers Ids (depot and customers): ");
@@ -334,9 +324,9 @@ void Vehicle::printGlobalSolution()
 	{
 		Pair * customerPair = (Pair *) this->customers->getFrogObject(i);
 		short int customerIndex = customerPair->get_i_IntValue();
-		short int destinationId = this->ptrGraph->getCustomerId(customerIndex);
+		short int destinationId = this->ptrController->getCustomerId(customerIndex);
 
-		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
 		originId = destinationId;
 	}
@@ -344,8 +334,8 @@ void Vehicle::printGlobalSolution()
 	if (this->getIsFeasible() == true)
 	{
 		// add the last edgde from the last customer to the depot
-		destinationId = this->ptrGraph->getDepotId(depotIndex);
-		printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrGraph->getDistanceTable()->getEdge(originId, destinationId));
+		destinationId = this->ptrController->getDepotId(depotIndex);
+		printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 	}
 }
 
