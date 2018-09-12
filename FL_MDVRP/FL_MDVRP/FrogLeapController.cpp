@@ -41,10 +41,21 @@ FrogLeapController::FrogLeapController()
 	this->floatDistTablePtr = NULL;
 
 	this->graphPtr = NULL;
+
+	this->customerList = new FrogObjectCol();
+	this->depotList = new FrogObjectCol();
+	this->vehiclePairList = new FrogObjectCol();
 }
 
 FrogLeapController::~FrogLeapController()
 {
+	this->deleteArray(this->customerArray, this->getNumberOfCustomers());
+
+	this->deleteArray(this->depotArray, this->getNumberOfDepots());
+
+	delete this->depotList;
+	delete this->customerList;
+	delete this->vehiclePairList;
 }
 
 int FrogLeapController::getFailAttempts()
@@ -99,7 +110,7 @@ void FrogLeapController::incLocalGeneratedSolutions()
 
 int FrogLeapController::getNumberOfIterations()
 {
-	return 500;
+	return 50;
 }
 
 int FrogLeapController::getMinCostValue()
@@ -576,7 +587,7 @@ short int FrogLeapController::getNumberOfCustomers()
 {
 	if (this->source_t == SourceType::Graph)
 	{
-		return this->custormerList->getSize();
+		return this->customerList->getSize();
 	}
 	else
 	{
@@ -721,7 +732,7 @@ void FrogLeapController::setAsCustomer(short int customerId, int demand)
 	customerPair->setValue(customerId);
 	customerPair->setId(customerId);
 
-	this->custormerList->addFrogObjectOrdered(customerPair);
+	this->customerList->addFrogObjectOrdered(customerPair);
 }
 
 void FrogLeapController::setAsDepot(short int depotId, int capacity)
@@ -744,7 +755,7 @@ void FrogLeapController::setUpCustomerList()
 
 	for (int i = 0; i < n_customers; i++)
 	{
-		this->customerArray[i] = (Pair *) this->custormerList->getFrogObject(i);
+		this->customerArray[i] = (Pair *) this->customerList->getFrogObject(i);
 	}
 }
 
@@ -796,7 +807,7 @@ int FrogLeapController::getCustomerDemandByIndex(short int position)
 
 short int FrogLeapController::getDepotId(short int position)
 {
-	return this->depotArray[position]->get_i_IntValue();
+	return this->depotArray[position]->getId();
 }
 
 int  FrogLeapController::getDepotCapacityByIndex(short int position)
@@ -831,6 +842,15 @@ FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution()
 short int FrogLeapController::getTope()
 {
 	return TOPE_ITERATIONS;
+}
+
+void FrogLeapController::resetDepotRemainingCapacities()
+{
+	for (short int i = 0; i < this->getNumberOfDepots(); i++)
+	{
+		short int depotCap = this->depotArray[i]->get_i_IntValue();
+		this->depotArray[i]->set_j_IntValue(depotCap);
+	}
 }
 
 void FrogLeapController::deleteArray(Pair ** arrayPtr, short int v_size) {

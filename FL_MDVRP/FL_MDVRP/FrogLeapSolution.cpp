@@ -68,6 +68,7 @@ void FrogLeapSolution::genRandomSolution()
 
 DecodedFrogLeapSolution * FrogLeapSolution::decodeSolution(FrogLeapController * controller)
 {
+	controller->resetDepotRemainingCapacities();
 	return this->decodeFrogLeapSolution(controller);
 }
 

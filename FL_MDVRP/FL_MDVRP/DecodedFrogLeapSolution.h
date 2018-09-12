@@ -33,6 +33,8 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		~DecodedFrogLeapSolution();
 
+		void deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, short int v_size);
+
 		void addVehicle(short int depotIndex, Vehicle * v);
 
 		//Vehicle * getVehicle(short int pos);

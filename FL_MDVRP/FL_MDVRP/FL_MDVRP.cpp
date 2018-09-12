@@ -69,7 +69,7 @@ int main()
 		
 	controller->setUpCustomerAndDepotLists();
 
-	controller->setUpVehiclesPerDepot();	
+	//controller->setUpVehiclesPerDepot();	
 	
 	/* Main to test all permutations of distance = 1 and distance = 2 
 
@@ -173,6 +173,7 @@ int main()
 	
 	delete g;
 	delete fls;
+	delete controller;
 
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto time = end_time - start_time;

@@ -36,13 +36,14 @@ DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots, FrogLeapCon
 	this->numDepots = n_depots;
 }
 
+
 DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 {
 	printf("Destroying of DecodedFrogLeapSolution: Started \n");
 
 	if(this->vehicles != NULL)
 	{
-		delete this->vehicles;
+		this->deleteArrayOfFrogObjectCols(this->vehicles, this->ptrController->getNumberOfDepots());		
 	}
 	
 	printf("Destroying of DecodedFrogLeapSolution: vehicles destroyed  \n");
@@ -51,6 +52,24 @@ DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 
 	printf("Destroying of DecodedFrogLeapSolution: FINISHED \n");
 }
+
+void DecodedFrogLeapSolution::deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, short int v_size)
+{
+	short int size = v_size;
+
+	for (short int i = 0; i < size; i++)
+	{
+		delete arrayPtr[i];
+	}
+
+	delete[] arrayPtr;
+}
+
+
+
+
+
+
 
 void DecodedFrogLeapSolution::addVehicle(short int depotIndex, Vehicle * v)
 {
@@ -219,7 +238,7 @@ void DecodedFrogLeapSolution::printFrogObj()
 	}
 	
 	printf("Vehículos por depósito\n");
-	for(short int i=0; i <= this->numDepots; i++)
+	for(short int i=0; i < this->numDepots; i++)
 	{
 		printf("Depósito: %d \n", i);
 

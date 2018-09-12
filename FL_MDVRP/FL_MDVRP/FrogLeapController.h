@@ -47,7 +47,7 @@ class FrogLeapController
 
 		SolutionGenerationType sgt;
 
-		FrogObjectCol * custormerList;
+		FrogObjectCol * customerList;
 
 		FrogObjectCol * depotList;
 
@@ -180,5 +180,7 @@ class FrogLeapController
 		FrogLeapSolution * genRandomFrogLeapSolution();
 
 		short int getTope();
+
+		void resetDepotRemainingCapacities();
 };
 #endif
