@@ -288,7 +288,7 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 	FeasibleSolution * currentFsSolution = NULL;
 	bool improvement;
 	int currentCost = 0;
-	Graph * g = veh->getController()->getGraph(); 
+	
 	short int depotId = veh->getDepotId(); 
 	int bestVehicleCost = veh->getPathCost();
 
@@ -301,7 +301,7 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 	{
 		// swap first and second and generate a new FeasibleSolution
 		currentFsSolution = this->genSwappedItemsFs(0, 1);
-		currentCost = currentFsSolution->Evaluate(g, depotId);
+		currentCost = currentFsSolution->Evaluate(controller, depotId);
 
 		controller->incLocalGeneratedSolutions();
 
@@ -333,7 +333,7 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 				cont++;
 				controller->incLocalGeneratedSolutions();
 				currentFsSolution = this->genSwappedItemsFs(i, j);
-				currentCost = currentFsSolution->Evaluate(g, depotId);
+				currentCost = currentFsSolution->Evaluate(controller, depotId);
 				bestVehicleCost = veh->getPathCost();
 
 				if (currentCost < bestVehicleCost)
@@ -405,9 +405,9 @@ int FeasibleSolution::factorial(short int n)
 	return result;
 }
 
-int FeasibleSolution::Evaluate(Graph * g, short int depotId)
+int FeasibleSolution::Evaluate(FrogLeapController * controller, short int depotId)
 {
-	DistanceTable * dt = g->getDistanceTable();
+	DistanceTable * dt = controller->getDistanceTable();
 	short int originId, destinationId;
 
 	int result = 0;

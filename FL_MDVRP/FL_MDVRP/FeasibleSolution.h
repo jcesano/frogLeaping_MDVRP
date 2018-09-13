@@ -65,7 +65,7 @@ public:
 
 	int factorial(short int n);
 
-	int Evaluate(Graph * g, short int depotId);
+	int Evaluate(FrogLeapController * controller, short int depotId);
 };
 
 #endif

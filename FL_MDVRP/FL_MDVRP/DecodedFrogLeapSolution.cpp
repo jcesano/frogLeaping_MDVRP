@@ -144,9 +144,9 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 
 	this->ptrController->decRemainingDepotCapacity(depotIndex, customerDemand);
 
-	//assing vehicle to customer	
+	//assign vehicle to customer	
 	//get the element with maximum remaining capacity
-	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getMaxValueFrogObject(); 
+	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getFirstUpperValueFrogObject(customerDemand); 
 
 	if(veh == NULL)
 	{
@@ -154,34 +154,17 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 
 		veh = new Vehicle(vehicleId, this->ptrController);
 		
-		veh->decRemainingCapacity(customerDemand);		
-		
+		veh->decRemainingCapacity(customerDemand);				
+
 		//short int depotIndex = vehicleId / numberOfDepots;
 		veh->setDepotIndex(depotIndex);
 				
-		this->vehicles[depotIndex]->addFrogObject(veh);
+		this->vehicles[depotIndex]->addFrogObjectOrdered(veh);
 	}
 	else
 	{
-		int remainingVehicleCapacity = veh->getRemainingCapacity();
-
-		if(customerDemand <= remainingVehicleCapacity)
-		{
-			veh->decRemainingCapacity(customerDemand);
-		}
-		else
-		{
-			vehicleId = this->getGlobalVehicleId();
-
-			veh = new Vehicle(vehicleId, this->ptrController);
-
-			veh->decRemainingCapacity(customerDemand);
-
-			//short int depotIndex = vehicleId / numberOfDepots;
-			veh->setDepotIndex(depotIndex);
-
-			this->vehicles[depotIndex]->addFrogObject(veh);
-		}
+		veh->decRemainingCapacity(customerDemand);
+		this->vehicles[depotIndex]->reorderFrogObject(veh);
 	}
 
 	Pair * customerPair = new Pair(PairType::IntVsFloat);
@@ -190,17 +173,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	customerPair->setValue(fvalue);
 	customerPair->setId(customerIndex);
 
-	veh->addCustomerPair(customerPair);
-	
-	//else
-	//{
-	//	result = false;
-	//	veh->incDemand(customerDemand);
-	//	veh->setAsUnFeasible();
-	//	this->setIsFeasibleSolution(false);
-	//	int customerId = this->ptrController->getCustomerId(customerIndex);
-	
-	//}
+	veh->addCustomerPair(customerPair);	
 
 	return result;
 }
@@ -210,11 +183,11 @@ int DecodedFrogLeapSolution::evalSolution()
 	Vehicle * vehPtr = NULL;
 	int result = 0;
 
-	for(short int i=0; i <= this->numDepots; i++)
+	for(short int i = 0; i < this->numDepots; i++)
 	{
 		for (int j = 0; j < this->vehicles[i]->getSize(); j++)
 		{
-			vehPtr = (Vehicle *)this->vehicles[j]->getFrogObject(j);
+			vehPtr = (Vehicle *)this->vehicles[i]->getFrogObject(j);
 			result = result + vehPtr->evalPath(this->ptrController);
 		}
 	}

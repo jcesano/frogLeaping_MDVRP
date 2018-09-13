@@ -57,8 +57,8 @@ int main()
 	DistVect * dv = g->dijkstra(0);
 
 	/* main to test Dijkstra algorithm */
-	controller->setAsDepot(0, 6);
-	controller->setAsDepot(6, 10);
+	controller->setAsDepot(0, 12);
+	controller->setAsDepot(6, 14);
 
 	controller->setAsCustomer(1, 3);
 	controller->setAsCustomer(2, 3);
@@ -135,6 +135,12 @@ int main()
 
 	for(int i=0; i < itNumber; i++)
 	{
+		printf("ITERATION NUMBER %d", i);
+
+		if (i == 49) {
+			printf("\n STOP BUG HERE \n");
+
+		}
 		fls->genRandomSolution();
 
 		fls->printFrogObj();

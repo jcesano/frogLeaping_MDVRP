@@ -45,17 +45,20 @@ FrogLeapController::FrogLeapController()
 	this->customerList = new FrogObjectCol();
 	this->depotList = new FrogObjectCol();
 	this->vehiclePairList = new FrogObjectCol();
+	this->ptrBestSolution = NULL;
 }
 
 FrogLeapController::~FrogLeapController()
 {
+
+	delete this->vehiclePairList;
+	delete this->depotList;
+	delete this->customerList;
+
 	this->deleteArray(this->customerArray, this->getNumberOfCustomers());
 
 	this->deleteArray(this->depotArray, this->getNumberOfDepots());
 
-	delete this->depotList;
-	delete this->customerList;
-	delete this->vehiclePairList;
 }
 
 int FrogLeapController::getFailAttempts()
@@ -147,8 +150,15 @@ void FrogLeapController::applyLocalSearch()
 void FrogLeapController::printCtrl()
 {
 	printf("\n \n SHOWING DATA OF FROGLEAPING CONTROLLER \n");
-	this->ptrBestSolution->printFrogObj();
-
+	if(this->ptrBestSolution != NULL)
+	{
+		this->ptrBestSolution->printFrogObj();
+	}
+	else
+	{
+		printf("\n NO FEASIBLE SOLUTION FOUND: ptrBestSolution IS NULL \n");
+	}
+	
 	printf("\n Summary of Best Found Solution \n");
 	printf("	Time Seed used %lld \n", (long long)this->timeSeedUsed);
 	printf("	Number of success attempts: %d \n", this->successAttempts);
@@ -858,7 +868,8 @@ void FrogLeapController::deleteArray(Pair ** arrayPtr, short int v_size) {
 
 	for (short int i = 0; i < size; i++)
 	{
-		delete arrayPtr[i];
+		//delete arrayPtr[i];
+		arrayPtr[i] = NULL;
 	}
 
 	delete[] arrayPtr;

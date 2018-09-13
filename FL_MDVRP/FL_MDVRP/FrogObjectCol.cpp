@@ -183,7 +183,7 @@ void FrogObjectCol::removeFrogObject(FrogObject * fs)
 		{
 			if (nodePtr->getFrogItem() != NULL)
 			{
-				if (nodePtr->getFrogItem()->isTheSame(fs) == 1)
+				if (nodePtr->getFrogItem()->isTheSame(fs))
 				{
 
 					// if the element is located at the begining of the list
@@ -192,15 +192,14 @@ void FrogObjectCol::removeFrogObject(FrogObject * fs)
 						nodePtrTemp = head;
 						head = head->getNextFrogObjNode();
 						nodePtr = head;
-						// add a delete nodePtrTemp
+						
 						this->colSize--;
 					}
 					else 
 					{
 						nodePtrTemp = nodePtr;
 						nodePtrPrev->setNextFrogObjNode(nodePtr->getNextFrogObjNode());
-						nodePtr = nodePtrTemp->getNextFrogObjNode();
-						// add a delete nodePtrTemp
+						nodePtr = nodePtrTemp->getNextFrogObjNode();						
 						this->colSize--;
 					}
 				}
@@ -211,6 +210,12 @@ void FrogObjectCol::removeFrogObject(FrogObject * fs)
 			} // end if (nodePtr->getFrogItem() != NULL)
 		} // end while (nodePtr != NULL)
 	} // end if(fs != NULL)
+}
+
+void FrogObjectCol::reorderFrogObject(FrogObject * fs)
+{
+	this->removeFrogObject(fs);
+	this->addFrogObjectOrdered(fs);
 }
 
 FrogObjectCol * FrogObjectCol::removeRepetedItems()
@@ -303,6 +308,23 @@ FrogObject * FrogObjectCol::getMaxValueFrogObject()
 		if (currentFrogObject->getValue() > result->getValue())
 		{
 			result = currentFrogObject;
+		}
+	}
+
+	return result;
+}
+
+FrogObject * FrogObjectCol::getFirstUpperValueFrogObject(float searchedValue)
+{
+	FrogObject * result = NULL, *currentFrogObject = NULL;
+
+	for (short int i = 0; i < this->getSize(); i++)
+	{
+		currentFrogObject = this->getFrogObject(i);
+		if (currentFrogObject->getValue() >= searchedValue)
+		{
+			result = currentFrogObject;
+			return result;
 		}
 	}
 

@@ -47,6 +47,10 @@ public:
 	int frogObjectExists(short int id);
 
 	void ConcatCol(FrogObjectCol * fs);
+
+	FrogObject * getFirstUpperValueFrogObject(float searchedValue);
+
+	void reorderFrogObject(FrogObject * fs);
 };
 
 

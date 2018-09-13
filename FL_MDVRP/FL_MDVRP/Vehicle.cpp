@@ -15,6 +15,7 @@ Vehicle::Vehicle(short int id):FrogObject(id)
 	size = 0;
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
+	this->setValue(this->capacity);
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;
 }
@@ -26,6 +27,7 @@ Vehicle::Vehicle(short int id, FrogLeapController * controller) :FrogObject(id)
 	size = 0;
 	this->pathCost = 0;
 	this->capacity = VEHICLE_CAPACITY;
+	this->setValue(this->capacity);
 	this->remaining_capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;	
@@ -138,6 +140,7 @@ int Vehicle::getRemainingCapacity()
 void Vehicle::decRemainingCapacity(int capacity_to_dec)
 {
 	this->remaining_capacity = this->remaining_capacity - capacity_to_dec;
+	this->setValue(this->remaining_capacity);
 }
 
 int Vehicle::incDemand(int aditionalDemand)
@@ -341,5 +344,5 @@ void Vehicle::printGlobalSolution()
 
 bool Vehicle::isTheSame(FrogObject * fs)
 {
-	return false;
+	return (this == fs);
 }

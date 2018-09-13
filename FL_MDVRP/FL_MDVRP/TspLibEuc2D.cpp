@@ -147,7 +147,7 @@ void TspLibEuc2D::printFrogObj()
 
 bool TspLibEuc2D::isTheSame(FrogObject * fs)
 {
-	return true;
+	return (this == fs);
 }
 
 
