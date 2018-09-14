@@ -10,10 +10,10 @@ DistanceTable::DistanceTable(short int vertexCount)
 
 	this->V = vertexCount;
 
-	a = new short int*[V];	
+	a = new float *[V];	
 
 	for (i = 0; i < V; i++) {
-		a[i] = new short int[V];
+		a[i] = new float[V];
 	};
 
 	for (i = 0; i < V; i++) {
@@ -51,7 +51,7 @@ void DistanceTable::addDiagEdge(short int u, short int w)
 	a[u][u] = w;
 }
 
-short int DistanceTable::getEdge(short int u, short int v)
+float DistanceTable::getEdge(short int u, short int v)
 {
 	return this->a[u][v];
 }

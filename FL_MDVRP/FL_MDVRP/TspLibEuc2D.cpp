@@ -137,7 +137,22 @@ short int TspLibEuc2D::getNumberOfDepots()
 
 short int TspLibEuc2D::getNumberOfCustomers()
 {
-	return this->getDimension();
+	return (this->getDimension() - this->getDepotSection()->getSize());
+}
+
+FrogObjectCol * TspLibEuc2D::getNodeCoordSection()
+{
+	return this->nodeCoordSection;
+}
+
+FrogObjectCol * TspLibEuc2D::getDemandSection()
+{
+	return this->demand_section;
+}
+
+IndexList * TspLibEuc2D::getDepotSection()
+{
+	return this->depot_section;
 }
 
 void TspLibEuc2D::printFrogObj()

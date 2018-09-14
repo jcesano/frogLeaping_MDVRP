@@ -25,6 +25,8 @@ class IndexList
 		short int getSize();
 
 		short int getItem(short int position);
+
+		short int getItemById(short int itemId);
 };
 
 #endif

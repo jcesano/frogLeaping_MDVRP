@@ -58,6 +58,11 @@ class TspLibEuc2D : public FrogObject
 
 		short int getNumberOfCustomers();
 
+		FrogObjectCol * getNodeCoordSection();
+
+		FrogObjectCol * getDemandSection();
+		IndexList * getDepotSection();
+
 		// abstract methods
 		void printFrogObj();
 

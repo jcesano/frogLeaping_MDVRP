@@ -16,6 +16,7 @@
 Graph::Graph(short int vertexCount)
 {
 	this->V = vertexCount;
+	this->vertexCol = new FrogObjectCol();
 
 	a = new short int*[V];
 
@@ -43,7 +44,12 @@ Graph::~Graph()
 
 void Graph::setOrigin(short int v)
 {
-	this->origin = v;
+	short int v_index = this->vertexCol->getFrogObjectPositionById(v);
+
+	if(v_index != -1)
+	{
+		this->origin = v_index;
+	}	
 }
 
 short int Graph::getOrigin()
@@ -51,10 +57,48 @@ short int Graph::getOrigin()
 	return this->origin;
 }
 
+short int Graph::getPositionVertexById(short int vertexId)
+{
+	return this->vertexCol->getFrogObjectPositionById(vertexId);
+}
+
+short int Graph::getVertexIdByPosition(short int internalId)
+{
+	Pair * v_pair = (Pair *) this->vertexCol->getFrogObject(internalId);
+
+	return v_pair->get_j_IntValue();
+}
+
+short int Graph::getPositionOrAddVertexById(short int vertexId)
+{
+	short int u_vertexIndex = this->vertexCol->getFrogObjectPositionById(vertexId);
+	Pair * u_vertexPair;
+
+	if (u_vertexIndex == -1)
+	{
+		u_vertexPair = new Pair(PairType::IntVsInt);
+		u_vertexPair->setId(vertexId);
+		u_vertexPair->setValue(vertexId);
+		short int lastPosition = this->vertexCol->getSize();
+		u_vertexPair->set_i_IntValue(lastPosition);
+		u_vertexPair->set_j_IntValue(vertexId);
+		this->vertexCol->AddLastFrogObject(u_vertexPair);
+		return lastPosition;
+	}
+	else
+	{
+		return u_vertexIndex;
+	}	
+}
+
 void Graph::addEdge(short int u, short int v, short int w)
 {
-	a[u][v] = w;
-	a[v][u] = w;
+	short int u_index, v_index;
+
+	u_index = this->getPositionOrAddVertexById(u);
+	v_index = this->getPositionOrAddVertexById(v);
+	a[u_index][v_index] = w;
+	a[v_index][u_index] = w;
 }
 
 // Prints shortest paths from src to all other vertices
@@ -181,9 +225,10 @@ short int Graph::getNextClosestVertex(DistVect* dvptr)
 //	}
 //}
 
-
-
-
+FrogLeapSolution * Graph::genRandomFrogLeapSolution()
+{
+	return nullptr;
+}
 
 void Graph::setDistanceTable(DistanceTable * t)
 {

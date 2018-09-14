@@ -65,6 +65,70 @@ void FrogObjectCol::addFrogObject(FrogObject * fs)
 	this->colSize++;
 }
 
+short int FrogObjectCol::getFrogObjectPositionById(short int id)
+{
+	short int result = -1, i;
+
+	bool found = false;
+	
+	FrogObjNode * nodePtr;
+	FrogObject * solPtr;
+
+	i = 0;
+
+	nodePtr = this->head;
+
+	while (found == false && i < this->getSize() && nodePtr != NULL)
+	{
+		solPtr = nodePtr->getFrogItem();
+
+		found = (solPtr->getId() == id);
+
+		if (found == false) 
+		{
+			nodePtr = nodePtr->getNextFrogObjNode();
+			i++;
+		}
+		else
+		{
+			result = i;
+		}			
+	}
+
+	return result;
+}
+
+void FrogObjectCol::AddLastFrogObject(FrogObject * fs) 
+{
+	FrogObjNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
+	bool stopLoop = false;
+
+	if (fs != NULL)
+	{
+		if (head == NULL)
+		{
+			head = new FrogObjNode(fs, NULL);
+			this->colSize++;
+		}
+		else
+		{			
+			do
+			{
+				nodePtrPrev = nodePtr;
+				nodePtr = nodePtr->getNextFrogObjNode();
+			} while (nodePtr != NULL);
+
+			//if I am in the end of the list
+			if (nodePtr == NULL)
+			{
+				nodePtr = new FrogObjNode(fs, NULL);
+				nodePtrPrev->setNextFrogObjNode(nodePtr);
+				this->colSize++;
+			}
+		}//end else (head == NULL)
+	}// end if(fs != NULL)
+}
+
 void FrogObjectCol::addFrogObjectOrdered(FrogObject * fs)
 {
 	FrogObjNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
@@ -235,7 +299,8 @@ int FrogObjectCol::frogObjectExists(FrogObject * fs)
 
 int FrogObjectCol::frogObjectExists(short int objid)
 {
-	bool found = false, i;
+	bool found = false;
+	short int i;
 
 	if (this != NULL)
 	{
@@ -258,12 +323,12 @@ int FrogObjectCol::frogObjectExists(short int objid)
 	}
 
 	return found;
-
 }
 
 FrogObject * FrogObjectCol::getFrogObjectById(short int objid)
 {
-	bool found = false, i;
+	bool found = false;
+	short int i;
 	FrogObject * result = NULL;
 
 	if (this != NULL)

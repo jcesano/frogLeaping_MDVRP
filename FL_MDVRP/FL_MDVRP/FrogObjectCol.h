@@ -20,10 +20,14 @@ public:
 
 	void destroy(FrogObjNode * itemNode);
 
+	short int getFrogObjectPositionById(short int id);
+
 	void addFrogObject(FrogObject * fs);
 
-	void addFrogObjectOrdered(FrogObject * fs);
+	void AddLastFrogObject(FrogObject * fs);
 
+	void addFrogObjectOrdered(FrogObject * fs);
+	
 	void printFrogObjCol();
 
 	int getSize();

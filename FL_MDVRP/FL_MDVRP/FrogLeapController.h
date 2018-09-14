@@ -10,12 +10,13 @@ class FloatDistanceTable;
 class Graph;
 class FrogLeapSolution;
 class Pair;
+class IndexList;
 
 enum class SourceType { Graph, Tsp2DEuc};
 
 enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 
-const int VEHICLE_CAPACITY = 7;
+const int VEHICLE_CAPACITY = 500;
 const int TOPE_ITERATIONS = 100;
 
 class FrogLeapController
@@ -119,7 +120,7 @@ class FrogLeapController
 
 		void loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 
-		FloatDistanceTable * loadFloatDistanceTable();
+		DistanceTable * loadDistanceTable();
 
 		void setDistanceTable(DistanceTable * t);
 
@@ -182,5 +183,11 @@ class FrogLeapController
 		short int getTope();
 
 		void resetDepotRemainingCapacities();
+
+		void loadCustomerList();
+
+		void loadDepotList();
+
+		short int getLabel(short int internalId);
 };
 #endif

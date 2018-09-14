@@ -15,6 +15,7 @@
 #include "Graph.h"
 #include "FrogLeapSolution.h"
 #include "Pair.h"
+#include "IndexList.h"
 
 using std::string;
 
@@ -113,7 +114,7 @@ void FrogLeapController::incLocalGeneratedSolutions()
 
 int FrogLeapController::getNumberOfIterations()
 {
-	return 50;
+	return 150;
 }
 
 int FrogLeapController::getMinCostValue()
@@ -493,12 +494,12 @@ void FrogLeapController::loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr
 	}
 }
 
-FloatDistanceTable * FrogLeapController::loadFloatDistanceTable()
+DistanceTable * FrogLeapController::loadDistanceTable()
 {
 	short int dimension = this->tspLibEud2DPtr->getDimension();
 	float floatDistance;
 
-	FloatDistanceTable * fdt = new FloatDistanceTable(dimension);
+	DistanceTable * fdt = new DistanceTable(dimension);
 
 	for(short int i = 0; i < dimension; i++)
 	{
@@ -510,7 +511,12 @@ FloatDistanceTable * FrogLeapController::loadFloatDistanceTable()
 		}
 	}
 
-	this->floatDistTablePtr = fdt;
+	for (short int k = 0; k < dimension; k++)
+	{
+		fdt->addDiagEdge(k, 0);
+	}
+
+	this->distTablePtr = fdt;
 
 	return fdt;
 }
@@ -781,8 +787,63 @@ void FrogLeapController::setUpDepotList()
 	}
 }
 
+void FrogLeapController::loadCustomerList()
+{
+	short int size = this->tspLibEud2DPtr->getDimension();
+
+	IndexList * depotListSection = this->tspLibEud2DPtr->getDepotSection();
+
+	for (short int i = 0; i < size; i++)
+	{
+		Pair * nodeCoord = (Pair *) this->tspLibEud2DPtr->getNodeCoordSection()->getFrogObject(i);
+
+		short int nodeId = nodeCoord->getId();
+
+		//if does not exist then it is a customer
+		if (depotListSection->getItemById(nodeId) == -1)
+		{
+			Pair * customerDemandPair = (Pair *) this->tspLibEud2DPtr->getDemandSection()->getFrogObjectById(nodeId);
+
+			short int customerDemand = customerDemandPair->get_j_IntValue();
+
+			this->setAsCustomer(nodeId, customerDemand);
+		}
+	}
+}
+
+void FrogLeapController::loadDepotList()
+{
+	short int size = this->tspLibEud2DPtr->getDepotSection()->getSize();
+
+	for (short int i = 0; i < size; i++)
+	{
+		short int  depotId = this->tspLibEud2DPtr->getDepotSection()->getItem(i);
+
+		Pair * depotCapacityPair = (Pair *) this->tspLibEud2DPtr->getDemandSection()->getFrogObjectById(depotId);
+
+		short int depotDemand = depotCapacityPair->get_j_IntValue();
+
+		this->setAsDepot(depotId, depotDemand);
+	}
+}
+
+short int FrogLeapController::getLabel(short int internalId)
+{
+	if(this->source_t == SourceType::Graph)
+	{
+		this->graphPtr->getVertexIdByPosition(internalId);
+	}
+	return 0;
+}
+
 void FrogLeapController::setUpCustomerAndDepotLists()
 {
+	if(this->getSourceType() == SourceType::Tsp2DEuc)
+	{
+		loadCustomerList();
+		loadDepotList();
+	}
+
 	setUpCustomerList();
 	setUpDepotList();
 }
@@ -817,6 +878,7 @@ int FrogLeapController::getCustomerDemandByIndex(short int position)
 
 short int FrogLeapController::getDepotId(short int position)
 {
+	
 	return this->depotArray[position]->getId();
 }
 

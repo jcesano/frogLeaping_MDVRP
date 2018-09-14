@@ -7,7 +7,7 @@ class Graph;
 class DistanceTable
 {
 	short int  V;    // No. of vertices
-	short int ** a;
+	float ** a;
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
 	
@@ -23,7 +23,7 @@ public:
 
 	void addDiagEdge(short int u, short int w);
 
-	short int getEdge(short int u, short int v);
+	float getEdge(short int u, short int v);
 	
 	void loadMinDistanceTable(DistVect * dv); // load the table with the minimum distance among all vertexes
 

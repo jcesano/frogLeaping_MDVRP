@@ -291,9 +291,10 @@ void Vehicle::printLocalSolution()
 {
 	short int depotIndex = this->getDepotIndex(), depotIddestinationId;
 	Pair * originPair, *destinationPair;
-	int originIndex, originId, destinationIndex, destinationId;
+	int originIndex, originId, destinationIndex, destinationId, originLabelId, destinationLabelId;
 
 	originId = this->ptrController->getDepotId(depotIndex);
+	originLabelId = this->ptrController->getLabel(originId);
 
 	printf("\n SHOWING LOCAL SOLUTION \n");
 	printf("		List of customers Ids (depot and customers): ");
@@ -301,24 +302,28 @@ void Vehicle::printLocalSolution()
 	for (short int i = 0; i < this->customers->getSize(); i++)
 	{
 		destinationId = this->vehicleCustomerArray[i];
+		destinationLabelId = this->ptrController->getLabel(destinationId);
 
-		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
+		printf("(%d - %d) = %d  ", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
 		originId = destinationId;
+		originLabelId = this->ptrController->getLabel(originId);
 	}
 
 	// add the last edgde from the last customer to the depot
 	destinationId = this->ptrController->getDepotId(depotIndex);
-	printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
+	destinationLabelId = this->ptrController->getLabel(destinationId);
+	printf("(%d - %d) = %d  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
 }
 
 void Vehicle::printGlobalSolution()
 {
 	short int depotIndex = this->getDepotIndex(), depotId;
 	Pair * originPair, *destinationPair;
-	int originIndex, originId, destinationIndex, destinationId;
+	int originIndex, originId, destinationIndex, destinationId, originLabelId, destinationLabelId;
 
 	originId = this->ptrController->getDepotId(depotIndex);
+	originLabelId = this->ptrController->getLabel(originId);
 
 	printf("\n SHOWING GLOBAL SOLUTION \n");
 	printf("		List of customers Ids (depot and customers): ");
@@ -327,18 +332,20 @@ void Vehicle::printGlobalSolution()
 	{
 		Pair * customerPair = (Pair *) this->customers->getFrogObject(i);
 		short int customerIndex = customerPair->get_i_IntValue();
-		short int destinationId = this->ptrController->getCustomerId(customerIndex);
-
-		printf("(%d - %d) = %d  ", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
+		destinationId = this->ptrController->getCustomerId(customerIndex);
+		destinationLabelId = this->ptrController->getLabel(destinationId);
+		printf("(%d - %d) = %d  ", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
 		originId = destinationId;
+		originLabelId = this->ptrController->getLabel(originId);
 	}
 
 	if (this->getIsFeasible() == true)
 	{
 		// add the last edgde from the last customer to the depot
 		destinationId = this->ptrController->getDepotId(depotIndex);
-		printf("(%d - %d) = %d  \n", originId, destinationId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
+		destinationLabelId = this->ptrController->getLabel(destinationId);
+		printf("(%d - %d) = %d  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 	}
 }
 

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-
 #include "FrogLeapSolution.h"
 #include "FrogLeapController.h"
 #include "DecodedFrogLeapSolution.h"
@@ -20,6 +19,27 @@ using std::string;
 
 using namespace std;
 
+void setDepot(FrogLeapController *controller, Graph * g, short int vertId, short int capacity)
+{
+	short int vertexIndex = g->getPositionVertexById(vertId);
+
+	if (vertexIndex != -1)
+	{
+		controller->setAsDepot(vertexIndex, capacity);
+	}
+}
+
+void setCustomer(FrogLeapController *controller, Graph * g, short int vertId, short int capacity)
+{
+	short int vertexIndex = g->getPositionVertexById(vertId);
+
+	if (vertexIndex != -1)
+	{
+		controller->setAsCustomer(vertexIndex, capacity);
+	}
+}
+
+
 int main()
 {
     
@@ -33,40 +53,68 @@ int main()
 
 	char * fileName = "casog01.vrp";
 
-	controller->loadTSPEUC2D_Data(fileName);
-
 	controller->setSourceType(SourceType::Graph);
 
-	Graph * g = new Graph (V);
+	if(controller->getSourceType() == SourceType::Graph)
+	{
+		Graph * g = new Graph(V);
 
-	g->addEdge(0, 1, 4);
-	g->addEdge(0, 7, 8);
-	g->addEdge(1, 2, 8);
-	g->addEdge(1, 7, 11);
-	g->addEdge(2, 3, 7);
-	g->addEdge(2, 8, 2);
-	g->addEdge(2, 5, 4);
-	g->addEdge(3, 4, 9);
-	g->addEdge(3, 5, 14);
-	g->addEdge(4, 5, 10);
-	g->addEdge(5, 6, 2);
-	g->addEdge(6, 7, 1);
-	g->addEdge(6, 8, 6);
-	g->addEdge(7, 8, 7);
+		g->addEdge(0, 1, 4);
+		g->addEdge(0, 7, 8);
+		g->addEdge(1, 2, 8);
+		g->addEdge(1, 7, 11);
+		g->addEdge(2, 3, 7);
+		g->addEdge(2, 8, 2);
+		g->addEdge(2, 5, 4);
+		g->addEdge(3, 4, 9);
+		g->addEdge(3, 5, 14);
+		g->addEdge(4, 5, 10);
+		g->addEdge(5, 6, 2);
+		g->addEdge(6, 7, 1);
+		g->addEdge(6, 8, 6);
+		g->addEdge(7, 8, 7);
 
-	DistVect * dv = g->dijkstra(0);
+		short int vertexIndex = g->getPositionVertexById(0);
+		DistVect * dv = NULL;
 
-	/* main to test Dijkstra algorithm */
-	controller->setAsDepot(0, 12);
-	controller->setAsDepot(6, 14);
-
-	controller->setAsCustomer(1, 3);
-	controller->setAsCustomer(2, 3);
-	controller->setAsCustomer(3, 3);
-	controller->setAsCustomer(4, 3);
-	controller->setAsCustomer(7, 3);
-	controller->setAsCustomer(8, 3);
+		if(vertexIndex != -1)
+		{
+			dv = g->dijkstra(0);
+		}		
 		
+		/* main to test Dijkstra algorithm */
+		
+		setDepot(controller, g, 0, 12);
+		setDepot(controller, g, 6, 14);
+
+		setCustomer(controller, g, 1, 3);
+		setCustomer(controller, g, 2, 3);
+		setCustomer(controller, g, 3, 3);
+		setCustomer(controller, g, 4, 3);
+		setCustomer(controller, g, 7, 3);
+		setCustomer(controller, g, 8, 3);
+
+		/* main to fill the Distance Table */
+		DistanceTable * dt = new DistanceTable(V);
+
+		dt->fillDistanceTable(dv, g);
+
+		dt->printDistanceTable();
+
+		g->setDistanceTable(dt);
+
+		controller->setGraph(g);
+
+		controller->setDistanceTable(dt);
+
+		dt = NULL;
+	}
+	else
+	{
+		controller->loadTSPEUC2D_Data(fileName);
+		controller->loadDistanceTable();
+	}
+	
 	controller->setUpCustomerAndDepotLists();
 
 	//controller->setUpVehiclesPerDepot();	
@@ -107,27 +155,13 @@ int main()
 	fscol->printFeasSolCol(); 
 	*/
 
-	/* main to fill the Distance Table */
-	DistanceTable * dt = new DistanceTable(V);
-
-	dt->fillDistanceTable(dv, g);
-
-	dt->printDistanceTable(); 
-
-	g->setDistanceTable(dt);
-
-	controller->setGraph(g);
-
-	controller->setDistanceTable(dt);
-
-	dt = NULL;
 	
 	
 	/* main test frogSolution */
 	short int nDepots = controller->getNumberOfDepots();
 	short int nCustomers = controller->getNumberOfCustomers();
 
-	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, SourceType::Graph, nCustomers, nDepots, 0);
+	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, controller->getSourceType(), nCustomers, nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	int evalSol;	
@@ -177,7 +211,7 @@ int main()
 	
 	controller->printCtrl();
 	
-	delete g;
+	//delete g;
 	delete fls;
 	delete controller;
 
@@ -190,3 +224,4 @@ int main()
 	return 0;
 }
 
+ 

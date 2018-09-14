@@ -18,9 +18,10 @@ class Graph
 
 	short int origin;
 
+	FrogObjectCol * vertexCol;
+
 	// In a weighted graph, we need to store vertex
 	// and weight pair for every edge
-
 	DistanceTable * distanceTable;
 
 public:
@@ -45,6 +46,12 @@ public:
 	
 	//short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr, short int src); // returns the next unmarked closest adjascent vertex to v	
 	
+	short int getPositionVertexById(short int vertexId);
+
+	short int getVertexIdByPosition(short int internalId);
+
+	short int getPositionOrAddVertexById(short int vertexId);
+
 	FrogLeapSolution * genRandomFrogLeapSolution();
 
 	void setDistanceTable(DistanceTable * t);

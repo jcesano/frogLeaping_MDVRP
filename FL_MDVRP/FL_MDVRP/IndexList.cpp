@@ -88,3 +88,39 @@ short int IndexList::getItem(short int position)
 
 	return -1;
 }
+
+short int IndexList::getItemById(short int itemId)
+{
+	short int result = -1, i;
+
+	bool found = false;
+	
+	if (this != NULL)
+	{
+		IndexListNode * nodePtr;
+		short int solPtr;
+
+		i = 1;
+
+		nodePtr = this->head;
+
+		while (found == false && i <= this->getSize() && nodePtr != NULL)
+		{
+			solPtr = nodePtr->getIndex();
+
+			found = (solPtr == itemId);
+
+			if (found == true)
+			{
+				result = solPtr;
+			}
+			else
+			{
+				nodePtr = nodePtr->getNextPtr();
+				i = i + 1;
+			}
+		}
+	}
+
+	return result;
+}
