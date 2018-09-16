@@ -118,7 +118,7 @@ DistVect * Graph::dijkstra(short int src)
 	// Distance of source vertex from itself is always 0
 	//dist[src] = 0;
 
-	short int currentPathVertex = src, prevPathVertex = -1;
+	short int currentPathVertex = src;
 
 	// Find shortest path for all vertices
 	for (short int count = 0; count < V; count++)
@@ -130,8 +130,7 @@ DistVect * Graph::dijkstra(short int src)
 
 		// Mark the picked vertex as processed
 		//sptSet[u] = true;
-		dvptr->markVert(currentPathVertex);
-		dvptr->setPrevPathIndex(currentPathVertex, prevPathVertex);
+		dvptr->markVert(currentPathVertex);		
 
 		short int curr_closestVertDistance = INT_MAX; // is the closest distance to u from all adj vertexes
 		short int curr_closestVert = -1;              // is the closest index to u from all adj vertexes

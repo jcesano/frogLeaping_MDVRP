@@ -831,7 +831,7 @@ short int FrogLeapController::getLabel(short int internalId)
 {
 	if(this->source_t == SourceType::Graph)
 	{
-		this->graphPtr->getVertexIdByPosition(internalId);
+		return this->graphPtr->getVertexIdByPosition(internalId);
 	}
 	return 0;
 }

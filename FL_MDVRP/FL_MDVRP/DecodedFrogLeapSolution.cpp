@@ -152,7 +152,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	{
 		vehicleId = this->getGlobalVehicleId();
 
-		veh = new Vehicle(vehicleId, this->ptrController);
+ 		veh = new Vehicle(vehicleId, this->ptrController);
 		
 		veh->decRemainingCapacity(customerDemand);				
 

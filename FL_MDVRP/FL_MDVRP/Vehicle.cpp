@@ -177,7 +177,7 @@ void Vehicle::setupLocalSearch()
 
 	for (int i = 0; i < n_customers; i++)
 	{
-		//obtaining the customerId in the graph, from customer index (position)
+		//obtaining the customerId (internal id) in the graph, from customer index (position) in customerList
 		vehicleCustomerArray[i] = this->ObtainCustomerIdFromIndex(i);
 	}
 
@@ -304,7 +304,7 @@ void Vehicle::printLocalSolution()
 		destinationId = this->vehicleCustomerArray[i];
 		destinationLabelId = this->ptrController->getLabel(destinationId);
 
-		printf("(%d - %d) = %d  ", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
+		printf("(%d - %d) = %f  ", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
 		originId = destinationId;
 		originLabelId = this->ptrController->getLabel(originId);
@@ -313,7 +313,7 @@ void Vehicle::printLocalSolution()
 	// add the last edgde from the last customer to the depot
 	destinationId = this->ptrController->getDepotId(depotIndex);
 	destinationLabelId = this->ptrController->getLabel(destinationId);
-	printf("(%d - %d) = %d  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
+	printf("(%d - %d) = %f  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
 }
 
 void Vehicle::printGlobalSolution()

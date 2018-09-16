@@ -79,7 +79,7 @@ int main()
 
 		if(vertexIndex != -1)
 		{
-			dv = g->dijkstra(0);
+			dv = g->dijkstra(vertexIndex);
 		}		
 		
 		/* main to test Dijkstra algorithm */
