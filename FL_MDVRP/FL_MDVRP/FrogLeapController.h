@@ -184,9 +184,7 @@ class FrogLeapController
 
 		void resetDepotRemainingCapacities();
 
-		void loadCustomerList();
-
-		void loadDepotList();
+		void loadCustomerAndDepotList();
 
 		short int getLabel(short int internalId);
 };

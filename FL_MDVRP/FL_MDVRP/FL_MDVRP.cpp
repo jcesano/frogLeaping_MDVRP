@@ -19,9 +19,9 @@ using std::string;
 
 using namespace std;
 
-void setDepot(FrogLeapController *controller, Graph * g, short int vertId, short int capacity)
+void setDepot(FrogLeapController *controller, Graph * g, short int vertIdLabel, short int capacity)
 {
-	short int vertexIndex = g->getPositionVertexById(vertId);
+	short int vertexIndex = g->getPositionVertexById(vertIdLabel);
 
 	if (vertexIndex != -1)
 	{
@@ -29,9 +29,9 @@ void setDepot(FrogLeapController *controller, Graph * g, short int vertId, short
 	}
 }
 
-void setCustomer(FrogLeapController *controller, Graph * g, short int vertId, short int capacity)
+void setCustomer(FrogLeapController *controller, Graph * g, short int vertIdLabel, short int capacity)
 {
-	short int vertexIndex = g->getPositionVertexById(vertId);
+	short int vertexIndex = g->getPositionVertexById(vertIdLabel);
 
 	if (vertexIndex != -1)
 	{
@@ -53,7 +53,7 @@ int main()
 
 	char * fileName = "casog01.vrp";
 
-	controller->setSourceType(SourceType::Graph);
+	controller->setSourceType(SourceType::Tsp2DEuc);
 
 	if(controller->getSourceType() == SourceType::Graph)
 	{
@@ -108,14 +108,15 @@ int main()
 		controller->setDistanceTable(dt);
 
 		dt = NULL;
-	}
+
+		controller->setUpCustomerAndDepotLists();
+	} 
 	else
 	{
 		controller->loadTSPEUC2D_Data(fileName);
+		controller->setUpCustomerAndDepotLists();
 		controller->loadDistanceTable();
 	}
-	
-	controller->setUpCustomerAndDepotLists();
 
 	//controller->setUpVehiclesPerDepot();	
 	
