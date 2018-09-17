@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "IndexListNode.h"
 
-IndexListNode::IndexListNode(short int v_index, IndexListNode * nextPtr)
+IndexListNode::IndexListNode(int v_index, IndexListNode * nextPtr)
 {
 	this->index = v_index;
 	this->next = nextPtr;
@@ -11,7 +11,7 @@ IndexListNode::~IndexListNode()
 {
 }
 
-short int IndexListNode::getIndex()
+int IndexListNode::getIndex()
 {
 	return this->index;
 }
@@ -21,7 +21,7 @@ IndexListNode * IndexListNode::getNextPtr()
 	return this->next;
 }
 
-void IndexListNode::setIndex(short int v_index)
+void IndexListNode::setIndex(int v_index)
 {
 	this->index = v_index;
 }

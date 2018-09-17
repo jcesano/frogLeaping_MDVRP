@@ -19,9 +19,9 @@ using std::string;
 
 using namespace std;
 
-void setDepot(FrogLeapController *controller, Graph * g, short int vertIdLabel, short int capacity)
+void setDepot(FrogLeapController *controller, Graph * g, int vertIdLabel, int capacity)
 {
-	short int vertexIndex = g->getPositionVertexById(vertIdLabel);
+	int vertexIndex = g->getPositionVertexById(vertIdLabel);
 
 	if (vertexIndex != -1)
 	{
@@ -29,9 +29,9 @@ void setDepot(FrogLeapController *controller, Graph * g, short int vertIdLabel, 
 	}
 }
 
-void setCustomer(FrogLeapController *controller, Graph * g, short int vertIdLabel, short int capacity)
+void setCustomer(FrogLeapController *controller, Graph * g, int vertIdLabel, int capacity)
 {
-	short int vertexIndex = g->getPositionVertexById(vertIdLabel);
+	int vertexIndex = g->getPositionVertexById(vertIdLabel);
 
 	if (vertexIndex != -1)
 	{
@@ -45,15 +45,15 @@ int main()
     
 	auto start_time = std::chrono::high_resolution_clock::now();
 
-	// create the graph given in above fugure
+	// create the graph given in above fugure 
 	
-	short int V = 9;
+	int V = 9;
 	
 	FrogLeapController * controller = new FrogLeapController();
 
 	char * fileName = "casog01.vrp";
 
-	controller->setSourceType(SourceType::Tsp2DEuc);
+	controller->setSourceType(SourceType::Graph);
 
 	if(controller->getSourceType() == SourceType::Graph)
 	{
@@ -74,7 +74,7 @@ int main()
 		g->addEdge(6, 8, 6);
 		g->addEdge(7, 8, 7);
 
-		short int vertexIndex = g->getPositionVertexById(0);
+		int vertexIndex = g->getPositionVertexById(0);
 		DistVect * dv = NULL;
 
 		if(vertexIndex != -1)
@@ -159,23 +159,26 @@ int main()
 	
 	
 	/* main test frogSolution */
-	short int nDepots = controller->getNumberOfDepots();
-	short int nCustomers = controller->getNumberOfCustomers();
+	int nDepots = controller->getNumberOfDepots();
+	int nCustomers = controller->getNumberOfCustomers();
 
 	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, controller->getSourceType(), nCustomers, nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
-	int evalSol;	
-	const int itNumber = controller->getNumberOfIterations();
+	float evalSol;	
+	const long int itNumber = controller->getNumberOfIterations();
+	long int i = 0;
+	long long int timeBound, execTime;
+	timeBound = 60000;
 
-	for(int i=0; i < itNumber; i++)
+	auto end_time = std::chrono::high_resolution_clock::now();
+	auto time = end_time - start_time;
+	execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+
+	while(i < itNumber && execTime <= timeBound)
 	{
 		printf("ITERATION NUMBER %d", i);
 
-		if (i == 49) {
-			printf("\n STOP BUG HERE \n");
-
-		}
 		fls->genRandomSolution();
 
 		fls->printFrogObj();
@@ -208,6 +211,11 @@ int main()
 			controller->incFailAttempts();
 			delete dfls_1;
 		}		
+
+		end_time = std::chrono::high_resolution_clock::now();
+		time = end_time - start_time;
+		execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+		i++;
 	}
 	
 	controller->printCtrl();
@@ -216,12 +224,11 @@ int main()
 	delete fls;
 	delete controller;
 
-	auto end_time = std::chrono::high_resolution_clock::now();
-	auto time = end_time - start_time;
+	end_time = std::chrono::high_resolution_clock::now();
+	time = end_time - start_time;
 
 	std::cout << "FrogLeaping took " <<
-		std::chrono::duration_cast<std::chrono::microseconds>(time).count() << " to run.\n";
-
+		std::chrono::duration_cast<std::chrono::milliseconds>(time).count() << " to run.\n";
 	return 0;
 }
 

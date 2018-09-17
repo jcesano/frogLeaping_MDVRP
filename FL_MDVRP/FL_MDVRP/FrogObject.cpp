@@ -13,7 +13,7 @@ FrogObject::~FrogObject()
 	printf("Destroying FrogObject:START AND END \n");
 }
 
-FrogObject::FrogObject(short int id_v)
+FrogObject::FrogObject(int id_v)
 {
 	this->id = id_v;
 	this->value = 0;
@@ -23,12 +23,12 @@ float FrogObject::getValue()
 {
 	return this->value;
 }
-short int FrogObject::getId()
+int FrogObject::getId()
 {
 	return this->id;
 }
 
-void FrogObject::setId(short int id_v)
+void FrogObject::setId(int id_v)
 {
 	this->id = id_v;
 }
@@ -38,7 +38,7 @@ void FrogObject::setValue(float valueV)
 	this->value = valueV;
 }
 
-bool FrogObject::isTheSame(short int objid)
+bool FrogObject::isTheSame(int objid)
 {
 	return (this->id == objid);
 }

@@ -20,7 +20,7 @@ public:
 
 	void destroy(FrogObjNode * itemNode);
 
-	short int getFrogObjectPositionById(short int id);
+	int getFrogObjectPositionById(int id);
 
 	void addFrogObject(FrogObject * fs);
 
@@ -32,9 +32,9 @@ public:
 
 	int getSize();
 
-	FrogObject * getFrogObject(short int i);
+	FrogObject * getFrogObject(int i);
 
-	FrogObject * getFrogObjectById(short int objid);
+	FrogObject * getFrogObjectById(int objid);
 
 	FrogObject * getMaxValueFrogObject();
 
@@ -48,7 +48,7 @@ public:
 
 	int frogObjectExists(FrogObject * fs);
 
-	int frogObjectExists(short int id);
+	int frogObjectExists(int id);
 
 	void ConcatCol(FrogObjectCol * fs);
 

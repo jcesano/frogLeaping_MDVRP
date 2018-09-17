@@ -9,7 +9,7 @@ class IndexList
 
 		IndexListNode * head;
 
-		short int size;
+		int size;
 
 	public:
 
@@ -18,15 +18,15 @@ class IndexList
 		~IndexList();
 
 
-		void addIndex(short int index);
+		void addIndex(int index);
 
-		void removeIndex(short int index);
+		void removeIndex(int index);
 
-		short int getSize();
+		int getSize();
 
-		short int getItem(short int position);
+		int getItem(int position);
 
-		short int getItemById(short int itemId);
+		int getItemById(int itemId);
 };
 
 #endif

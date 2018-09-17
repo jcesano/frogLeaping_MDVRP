@@ -53,12 +53,12 @@ char * TspLibEuc2D::getType()
 	return this->type;
 }
 
-void TspLibEuc2D::setDimension(short int v_dimension)
+void TspLibEuc2D::setDimension(int v_dimension)
 {
 	this->dimension = v_dimension;
 }
 
-short int TspLibEuc2D::getDimension()
+int TspLibEuc2D::getDimension()
 {
 	return this->dimension;
 }
@@ -73,12 +73,12 @@ char * TspLibEuc2D::getEdgeWeightType()
 	return this->edge_weight_type;
 }
 
-void TspLibEuc2D::setCapacity(short int v_capacity)
+void TspLibEuc2D::setCapacity(int v_capacity)
 {
 	this->capacity = v_capacity;
 }
 
-short int TspLibEuc2D::getCapacity()
+int TspLibEuc2D::getCapacity()
 {
 	return this->capacity;
 }
@@ -93,12 +93,12 @@ void TspLibEuc2D::AddDemandItem(Pair * v_pair_demand)
 	this->demand_section->addFrogObjectOrdered(v_pair_demand);
 }
 
-void TspLibEuc2D::AddDepotItem(short int depotId)
+void TspLibEuc2D::AddDepotItem(int depotId)
 {
 	this->depot_section->addIndex(depotId);
 }
 
-float TspLibEuc2D::getEucDistance(short int u, short int v)
+float TspLibEuc2D::getEucDistance(int u, int v)
 {
 	
 	float result = 0;
@@ -130,12 +130,12 @@ float TspLibEuc2D::calcEuc2D(Pair * origin, Pair * destination)
 	return result;	
 }
 
-short int TspLibEuc2D::getNumberOfDepots()
+int TspLibEuc2D::getNumberOfDepots()
 {
 	return this->depot_section->getSize();
 }
 
-short int TspLibEuc2D::getNumberOfCustomers()
+int TspLibEuc2D::getNumberOfCustomers()
 {
 	return (this->getDimension() - this->getDepotSection()->getSize());
 }

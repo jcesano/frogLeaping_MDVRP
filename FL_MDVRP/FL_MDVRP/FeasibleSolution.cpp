@@ -6,9 +6,9 @@
 #include "Vehicle.h"
 #include "FrogLeapController.h"
 
-FeasibleSolution::FeasibleSolution(short int n)
+FeasibleSolution::FeasibleSolution(int n)
 {
-	solVect = new short int[n];
+	solVect = new int[n];
 	size = n;
 	isFeasible = true;
 
@@ -20,11 +20,11 @@ FeasibleSolution::FeasibleSolution(short int n)
 
 FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 {
-	solVect = new short int[fs->size];
+	solVect = new int[fs->size];
 	size = fs->size;
 	isFeasible = true;
 
-	for (short int i = 0; i<this->size; i++)
+	for (int i = 0; i<this->size; i++)
 	{
 		this->solVect[i] = fs->getSolFactValue(i);
 	}
@@ -36,14 +36,14 @@ FeasibleSolution::FeasibleSolution(FeasibleSolution * fs)
 }
 
 
-FeasibleSolution::FeasibleSolution(short int arr_size, short int * array)
+FeasibleSolution::FeasibleSolution(int arr_size, int * array)
 {
-	solVect = new short int[arr_size];
+	solVect = new int[arr_size];
 	size = arr_size;
 
 	isFeasible = true;
 
-	for (short int i = 0; i<this->size; i++)
+	for (int i = 0; i<this->size; i++)
 	{
 		this->solVect[i] = array[i];
 	}
@@ -59,25 +59,25 @@ FeasibleSolution::~FeasibleSolution()
 	delete [] solVect;
 }
 
-void FeasibleSolution::setSolFactValue(short int pos, short int val)
+void FeasibleSolution::setSolFactValue(int pos, int val)
 {
 	solVect[pos] = val;
 };
 
-int FeasibleSolution::getSolFactValue(short int pos)
+int FeasibleSolution::getSolFactValue(int pos)
 {
 	return this->solVect[pos];
 }
 
-short int FeasibleSolution::getSize()
+int FeasibleSolution::getSize()
 {
 	return this->size;
 }
 
 // Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
-FeasibleSolution * FeasibleSolution::swapItems(short int pos1, short int pos2)
+FeasibleSolution * FeasibleSolution::swapItems(int pos1, int pos2)
 {
-	short int tempValue;
+	int tempValue;
 
 	tempValue = this->getSolFactValue(pos1); //store value of position pos1
 
@@ -91,12 +91,12 @@ FeasibleSolution * FeasibleSolution::swapItems(short int pos1, short int pos2)
 };
 
 // Swap elements i and j: return a new FeasibleSolution containing in position i, the element of position j and viceversa
-FeasibleSolution * FeasibleSolution::genSwappedItemsFs(short int pos1, short int pos2)
+FeasibleSolution * FeasibleSolution::genSwappedItemsFs(int pos1, int pos2)
 {
 	FeasibleSolution * newFsInstance = new FeasibleSolution(this);
 	
 	//store value of position pos1
-	short int tempValue = newFsInstance->getSolFactValue(pos1);
+	int tempValue = newFsInstance->getSolFactValue(pos1);
 
 	// in position pos1, set element of position pos2
 	newFsInstance->setSolFactValue(pos1, newFsInstance->getSolFactValue(pos2));
@@ -110,7 +110,7 @@ FeasibleSolution * FeasibleSolution::genSwappedItemsFs(short int pos1, short int
 bool FeasibleSolution::isTheSame(FeasibleSolution * fs)
 {
 	bool result = true;
-	short int i = 0;
+	int i = 0;
 
 	if (this->size != fs->size)
 	{
@@ -132,7 +132,7 @@ bool FeasibleSolution::isTheSame(FeasibleSolution * fs)
 
 void FeasibleSolution::printFeasibleSolution()
 {
-	for (short int i = 0; i < this->size; i++)
+	for (int i = 0; i < this->size; i++)
 	{
 		printf("%d ", this->solVect[i]);
 	}
@@ -140,9 +140,9 @@ void FeasibleSolution::printFeasibleSolution()
 	printf("\n");
 }
 
-FeasibleSolution * FeasibleSolution::genRandomSwapSolution(short int bottom, short int top)
+FeasibleSolution * FeasibleSolution::genRandomSwapSolution(int bottom, int top)
 {
-	short int randomValue;
+	int randomValue;
 
 	FeasibleSolution * randomFs = new FeasibleSolution(this);
 
@@ -171,7 +171,7 @@ FeasibleSolCol * FeasibleSolution::genRandomFeasibleSolCol()
 	randomFsCol->AddFeasibleSol(this);
 
 	fs = this;
-	for (short int i = 0; i < this->size - 1; i++)
+	for (int i = 0; i < this->size - 1; i++)
 	{
 		fs = fs->genRandomSwapSolution(i, this->size - 1);
 
@@ -187,9 +187,9 @@ void FeasibleSolution::setRandomSolution()
 
 	fsIndex->setIndexesAsValues();
 
-	for (short int i = 0; i <= this->size - 1; i++)
+	for (int i = 0; i <= this->size - 1; i++)
 	{
-		short int randValue = fsIndex->popRandomValue();
+		int randValue = fsIndex->popRandomValue();
 
 		this->setSolFactValue(i, randValue);
 	}
@@ -197,7 +197,7 @@ void FeasibleSolution::setRandomSolution()
 	delete fsIndex;
 }
 
-FeasibleSolCol * FeasibleSolution::genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller)
+FeasibleSolCol * FeasibleSolution::genPermutations(int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller)
 {
 	if (distance == 1)
 	{
@@ -266,9 +266,9 @@ FeasibleSolCol * FeasibleSolution::genOneSwapPermutations(FrogLeapController * c
 		//int TOPE = controller->getTope();
 		int cont = 0;
 
-		for (short int i = 0; i < this->size; i++)
+		for (int i = 0; i < this->size; i++)
 		{
-			for (short int j = i + 1; j < this->size; j++)
+			for (int j = i + 1; j < this->size; j++)
 			{
 				colptr_i_j = new FeasibleSolution(this);
 
@@ -287,10 +287,10 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 {
 	FeasibleSolution * currentFsSolution = NULL;
 	bool improvement;
-	int currentCost = 0;
+	float currentCost = 0;
 	
-	short int depotId = veh->getDepotId(); 
-	int bestVehicleCost = veh->getPathCost();
+	int depotId = veh->getDepotId(); 
+	float bestVehicleCost = veh->getPathCost();
 
 	if (this->size == 1)
 	{
@@ -326,9 +326,9 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 		int cont = 0;
 		improvement = false;
 
-		for (short int i = 0; i < this->size; i++)
+		for (int i = 0; i < this->size; i++)
 		{
-			for (short int j = i + 1; j < this->size; j++)
+			for (int j = i + 1; j < this->size; j++)
 			{
 				cont++;
 				controller->incLocalGeneratedSolutions();
@@ -361,13 +361,13 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 
 void FeasibleSolution::setIndexesAsValues()
 {
-	for (short int i = 0; i < this->size; i++)
+	for (int i = 0; i < this->size; i++)
 	{
 		this->setSolFactValue(i, i);
 	};
 }
 
-void FeasibleSolution::removeValue(short int position)
+void FeasibleSolution::removeValue(int position)
 {
 	for (int i = position; i < this->size - 1; i++)
 	{
@@ -377,18 +377,18 @@ void FeasibleSolution::removeValue(short int position)
 	this->size--;
 }
 
-short int FeasibleSolution::popRandomValue()
+int FeasibleSolution::popRandomValue()
 {
-	short int randomIndex = rand() % (this->size); // random number between 0 and size-1
+	int randomIndex = rand() % (this->size); // random number between 0 and size-1
 
-	short int randomValue = this->getSolFactValue(randomIndex);
+	int randomValue = this->getSolFactValue(randomIndex);
 
 	this->removeValue(randomIndex);
 
 	return randomValue;
 }
 
-int FeasibleSolution::factorial(short int n)
+int FeasibleSolution::factorial(int n)
 {
 	long int result = 1;
 
@@ -405,16 +405,16 @@ int FeasibleSolution::factorial(short int n)
 	return result;
 }
 
-int FeasibleSolution::Evaluate(FrogLeapController * controller, short int depotId)
+float FeasibleSolution::Evaluate(FrogLeapController * controller, int depotId)
 {
 	DistanceTable * dt = controller->getDistanceTable();
-	short int originId, destinationId;
+	int originId, destinationId;
 
-	int result = 0;
+	float result = 0;
 
 	originId = depotId;
 
-	for(short int i = 0; i < this->getSize(); i++)
+	for(int i = 0; i < this->getSize(); i++)
 	{
 		destinationId = this->getSolFactValue(i);
 

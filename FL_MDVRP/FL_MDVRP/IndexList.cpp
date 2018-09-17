@@ -21,7 +21,7 @@ IndexList::~IndexList()
 	}
 }
 
-void IndexList::addIndex(short int index)
+void IndexList::addIndex(int index)
 {
 	IndexListNode * node = new IndexListNode(index, head);
 
@@ -30,7 +30,7 @@ void IndexList::addIndex(short int index)
 	this->size++;
 }
 
-void IndexList::removeIndex(short int index)
+void IndexList::removeIndex(int index)
 {
 	IndexListNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
 
@@ -65,12 +65,12 @@ void IndexList::removeIndex(short int index)
 	} // end while (nodePtr != NULL)
 }
 
-short int IndexList::getSize()
+int IndexList::getSize()
 {
 	return this->size;
 }
 
-short int IndexList::getItem(short int position)
+int IndexList::getItem(int position)
 {
 	IndexListNode * currPtr;
 
@@ -89,16 +89,16 @@ short int IndexList::getItem(short int position)
 	return -1;
 }
 
-short int IndexList::getItemById(short int itemId)
+int IndexList::getItemById(int itemId)
 {
-	short int result = -1, i;
+	int result = -1, i;
 
 	bool found = false;
 	
 	if (this != NULL)
 	{
 		IndexListNode * nodePtr;
-		short int solPtr;
+		int solPtr;
 
 		i = 1;
 

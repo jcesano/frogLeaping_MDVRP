@@ -17,21 +17,21 @@ enum class SourceType { Graph, Tsp2DEuc};
 enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 
 const int VEHICLE_CAPACITY = 500;
-const int TOPE_ITERATIONS = 100;
+const long int TOPE_ITERATIONS = 100;
 
 class FrogLeapController
 {
 	private:
 
-		int successAttempts;
-		int failAttempts;
-		int localGeneratedSolutions;
+		long int successAttempts;
+		long int failAttempts;
+		long int localGeneratedSolutions;
 
-		int totalImprovements;
-		int localSearchImprovements;
-		int globalImprovements;
+		long int totalImprovements;
+		long int localSearchImprovements;
+		long int globalImprovements;
 
-		int minCostValue;
+		float minCostValue;
 
 		time_t timeSeedUsed;
 
@@ -60,9 +60,9 @@ class FrogLeapController
 
 		Pair * * depotArray;
 
-		short int origin;
+		int origin;
 
-		short int nVehiclesPerDepot;
+		int nVehiclesPerDepot;
 
 	public:
 
@@ -70,7 +70,7 @@ class FrogLeapController
 
 		~FrogLeapController();
 
-		void deleteArray(Pair ** arrayPtr, short int v_size);		
+		void deleteArray(Pair ** arrayPtr, int v_size);		
 
 		void setSuccessAttempts(int vsuccessAttempts);
 		int getSuccessAttempts();
@@ -92,11 +92,11 @@ class FrogLeapController
 		int getLocalGeneratedSolutions();
 		void incLocalGeneratedSolutions();
 		
-		int getNumberOfIterations();
+		long int getNumberOfIterations();
 
-		int getMinCostValue();
+		float getMinCostValue();
 
-		void setMinCostValue(int cost);
+		void setMinCostValue(float cost);
 
 		void setBestDecodedFrogLeapSolution(DecodedFrogLeapSolution * ptrSolution);
 
@@ -130,9 +130,9 @@ class FrogLeapController
 
 		FloatDistanceTable * getFloatDistanceTable();
 
-		short int getNumberOfDepots();
+		int getNumberOfDepots();
 
-		short int getNumberOfCustomers();
+		int getNumberOfCustomers();
 
 		void setGraph(Graph * gPtr);
 
@@ -146,9 +146,9 @@ class FrogLeapController
 
 		SolutionGenerationType getSolutionGenerationType();
 
-		void setAsCustomer(short int customerId, int demand);
+		void setAsCustomer(int customerId, int demand);
 
-		void setAsDepot(short int depotId, int capacity);
+		void setAsDepot(int depotId, int capacity);
 				
 		void setUpCustomerList();
 
@@ -158,34 +158,34 @@ class FrogLeapController
 
 		void setUpVehiclesPerDepot();
 
-		void assignVehiclesToDepots(short int depotId, short int depotDemand);
+		void assignVehiclesToDepots(int depotId, int depotDemand);
 
 		void setUpVehiclePairList();
 
-		short int getNumberOfVehicles();
+		int getNumberOfVehicles();
 
-		short int getCustomerId(short int position);
+		int getCustomerId(int position);
 		
-		int getCustomerDemandByIndex(short int position);
+		int getCustomerDemandByIndex(int position);
 
-		short int getDepotId(short int position);
+		int getDepotId(int position);
 
-		int getDepotCapacityByIndex(short int position);
+		int getDepotCapacityByIndex(int position);
 
-		int getDepotRemainingCapacityByIndex(short int position);
+		int getDepotRemainingCapacityByIndex(int position);
 
-		void decRemainingDepotCapacity(short int position, int capacity_to_dec);
+		void decRemainingDepotCapacity(int position, int capacity_to_dec);
 
-		void setDepotRemainingCapacityByIndex(short int position, int remaining_capacity);
+		void setDepotRemainingCapacityByIndex(int position, int remaining_capacity);
 
 		FrogLeapSolution * genRandomFrogLeapSolution();
 
-		short int getTope();
+		long int getTope();
 
 		void resetDepotRemainingCapacities();
 
 		void loadCustomerAndDepotList();
 
-		short int getLabel(short int internalId);
+		int getLabel(int internalId);
 };
 #endif

@@ -4,14 +4,14 @@
 #include "Graph.h"
 #include "FrogLeapController.h"
 
-DistVect::DistVect(short int v, short int v_origin)
+DistVect::DistVect(int v, int v_origin)
 {
 	dv = new Vertex[v];
 	ptr = new Vertex*[v];
 
 	this->lastMarked = -1;
 
-	for (short int i = 0; i < v; i++) {
+	for (int i = 0; i < v; i++) {
 		dv[i].setDistance(infVal);
 		dv[i].setId(i);
 		dv[i].setPrevIndex(-1);
@@ -128,9 +128,9 @@ void DistVect::printSolution()
 	}
 }
 
-short int DistVect::getDistanceBtwn(short int i, short int j)
+int DistVect::getDistanceBtwn(int i, int j)
 {
-	short int v_origin, v_end;
+	int v_origin, v_end;
 
 	if (i < j)
 	{
@@ -143,13 +143,13 @@ short int DistVect::getDistanceBtwn(short int i, short int j)
 		v_end = i;
 	};
 
-	short int prevDistance, currentDistance, currentDiffDistance;
+	int prevDistance, currentDistance, currentDiffDistance;
 
 	prevDistance = 0;
 	currentDistance = ptr[v_origin]->getDistance();
 	currentDiffDistance = 0;
 
-	for (short int w = v_origin + 1; w <= v_end; w++)
+	for (int w = v_origin + 1; w <= v_end; w++)
 	{
 		prevDistance = currentDistance;
 		currentDistance = ptr[w]->getDistance();
@@ -159,9 +159,9 @@ short int DistVect::getDistanceBtwn(short int i, short int j)
 	return currentDiffDistance;
 }
 
-short int DistVect::getCustomerCount()
+int DistVect::getCustomerCount()
 {
-	short int custCnt = 0;
+	int custCnt = 0;
 
 	for (int i = 0; i< this->countV; i++)
 	{
@@ -180,9 +180,9 @@ short int DistVect::getCustomerCount()
 
 void DistVect::importCustomers(FrogLeapController * controller)
 {
-	short int custId;
+	int custId;
 
-	for (short int i = 0; i < controller->getNumberOfCustomers(); i++)
+	for (int i = 0; i < controller->getNumberOfCustomers(); i++)
 	{
 		custId = controller->getCustomerId(i);
 		this->dv[custId].setVertexType(VertexType::Customer);
@@ -191,7 +191,7 @@ void DistVect::importCustomers(FrogLeapController * controller)
 
 void DistVect::pointCustomers()
 {
-	short int customerCount = 0;
+	int customerCount = 0;
 
 	customerCount = this->getCustomerCount();
 
@@ -213,12 +213,12 @@ void DistVect::pointCustomers()
 }
 
 
-short int DistVect::getLastMarkedVertex()
+int DistVect::getLastMarkedVertex()
 {
 	return this->lastMarked;
 }
 
-void DistVect::setLastMarkedVertex(short int v)
+void DistVect::setLastMarkedVertex(int v)
 {
 	this->lastMarked = v;
 }

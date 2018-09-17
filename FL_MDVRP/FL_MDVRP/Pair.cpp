@@ -11,7 +11,7 @@ Pair::Pair(PairType type)
 	j_float = -1;
 }
 
-Pair::Pair(PairType type, short int pairId):FrogObject(pairId)
+Pair::Pair(PairType type, int pairId):FrogObject(pairId)
 {
 	this->pairtype = type;
 	i_int = -1;
@@ -36,22 +36,22 @@ void Pair::setType(PairType typeValue)
 	this->pairtype = typeValue;
 }
 
-short int Pair::get_i_IntValue()
+int Pair::get_i_IntValue()
 {
 	return this->i_int;
 }
 
-void Pair::set_i_IntValue(short int intValue)
+void Pair::set_i_IntValue(int intValue)
 {
 	this->i_int = intValue;
 }
 
-short int Pair::get_j_IntValue()
+int Pair::get_j_IntValue()
 {
 	return this->j_int;
 }
 
-void Pair::set_j_IntValue(short int intValue)
+void Pair::set_j_IntValue(int intValue)
 {
 	this->j_int = intValue;
 }

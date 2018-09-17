@@ -15,12 +15,12 @@ class DistVect
 	Vertex* dv;
 	Vertex** ptr;
 	Vertex** ptrCustomers;
-	short int origin; // Index of the closest unmarked verted	
+	int origin; // Index of the closest unmarked verted	
 
-	short int lastMarked;
+	int lastMarked;
 
 public:
-	DistVect(short int v, short int v_origin); //Constructor
+	DistVect(int v, int v_origin); //Constructor
 
 	~DistVect();
 
@@ -30,9 +30,9 @@ public:
 
 	void unmarkVert(int v);
 
-	short int getLastMarkedVertex();
+	int getLastMarkedVertex();
 
-	void setLastMarkedVertex(short int v);
+	void setLastMarkedVertex(int v);
 
 	int getMinDist(int v);
 
@@ -52,11 +52,11 @@ public:
 
 	void printSolution();
 
-	short int getDistanceBtwn(short int i, short int j);
+	int getDistanceBtwn(int i, int j);
 
 	void pointCustomers();
 
-	short int getCustomerCount();
+	int getCustomerCount();
 
 	void importCustomers(FrogLeapController * controller);
 };

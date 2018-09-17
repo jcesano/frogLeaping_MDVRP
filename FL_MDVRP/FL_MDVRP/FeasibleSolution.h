@@ -12,46 +12,46 @@ class FrogLeapController;
 
 class FeasibleSolution
 {
-	short int * solVect;
+	int * solVect;
 
-	short int size;
+	int size;
 
 	bool isFeasible;
 
 	time_t timeSeedUsed;
 
 public:
-	FeasibleSolution(short int n);
+	FeasibleSolution(int n);
 
 	FeasibleSolution(FeasibleSolution * fs);
 
-	FeasibleSolution(short int arr_size, short int * array);
+	FeasibleSolution(int arr_size, int * array);
 
 	~FeasibleSolution();
 
-	void setSolFactValue(short int pos, short int val);
+	void setSolFactValue(int pos, int val);
 
-	int getSolFactValue(short int pos);
+	int getSolFactValue(int pos);
 
-	short int getSize();
+	int getSize();
 
 	//this method modifies the this instance
-	FeasibleSolution * swapItems(short int pos1, short int pos2); 
+	FeasibleSolution * swapItems(int pos1, int pos2); 
 
 	//this method makes a copy and creates a new instance
-	FeasibleSolution * genSwappedItemsFs(short int pos1, short int pos2); 
+	FeasibleSolution * genSwappedItemsFs(int pos1, int pos2); 
 
 	FeasibleSolCol * genOneSwapPermutations(FrogLeapController * controller);
 
 	bool searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, FrogLeapController * controller);
 
-	FeasibleSolCol * genPermutations(short int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller);
+	FeasibleSolCol * genPermutations(int distance, FeasibleSolCol * sourceSolutionCol, FrogLeapController * controller);
 
 	bool isTheSame(FeasibleSolution * fs);
 
 	void printFeasibleSolution();
 
-	FeasibleSolution * genRandomSwapSolution(short int bottom, short int top);
+	FeasibleSolution * genRandomSwapSolution(int bottom, int top);
 
 	FeasibleSolCol * genRandomFeasibleSolCol();
 
@@ -59,13 +59,13 @@ public:
 
 	void setIndexesAsValues();
 
-	void removeValue(short int position);
+	void removeValue(int position);
 
-	short int popRandomValue();
+	int popRandomValue();
 
-	int factorial(short int n);
+	int factorial(int n);
 
-	int Evaluate(FrogLeapController * controller, short int depotId);
+	float Evaluate(FrogLeapController * controller, int depotId);
 };
 
 #endif

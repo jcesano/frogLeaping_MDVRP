@@ -8,11 +8,11 @@
 #include "Graph.h"
 #include "FrogLeapController.h"
 
-DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots):FrogObject()
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(int n_depots):FrogObject()
 {
 	this->vehicles = new FrogObjectCol * [n_depots];
 
-	for (short int i = 0; i < n_depots; i++) {
+	for (int i = 0; i < n_depots; i++) {
 		vehicles[i] = new FrogObjectCol();
 	};
 
@@ -22,11 +22,11 @@ DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots):FrogObject(
 	this->numDepots = n_depots;
 }
 
-DecodedFrogLeapSolution::DecodedFrogLeapSolution(short int n_depots, FrogLeapController * controller) :FrogObject()
+DecodedFrogLeapSolution::DecodedFrogLeapSolution(int n_depots, FrogLeapController * controller) :FrogObject()
 {
 	this->vehicles = new FrogObjectCol *[n_depots];
 
-	for (short int i = 0; i < n_depots; i++) {
+	for (int i = 0; i < n_depots; i++) {
 		vehicles[i] = new FrogObjectCol();
 	};
 
@@ -53,11 +53,11 @@ DecodedFrogLeapSolution::~DecodedFrogLeapSolution()
 	printf("Destroying of DecodedFrogLeapSolution: FINISHED \n");
 }
 
-void DecodedFrogLeapSolution::deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, short int v_size)
+void DecodedFrogLeapSolution::deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, int v_size)
 {
-	short int size = v_size;
+	int size = v_size;
 
-	for (short int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		delete arrayPtr[i];
 	}
@@ -71,7 +71,7 @@ void DecodedFrogLeapSolution::deleteArrayOfFrogObjectCols(FrogObjectCol ** array
 
 
 
-void DecodedFrogLeapSolution::addVehicle(short int depotIndex, Vehicle * v)
+void DecodedFrogLeapSolution::addVehicle(int depotIndex, Vehicle * v)
 {
 	this->vehicles[depotIndex]->addFrogObject(v);
 }
@@ -83,7 +83,7 @@ void DecodedFrogLeapSolution::addVehicle(Vehicle * vehicle)
 }
 
 
-Vehicle * DecodedFrogLeapSolution::getVehicle(short int pos)
+Vehicle * DecodedFrogLeapSolution::getVehicle(int pos)
 {
 	return NULL;
 
@@ -91,9 +91,9 @@ Vehicle * DecodedFrogLeapSolution::getVehicle(short int pos)
 }
 */
 
-short int DecodedFrogLeapSolution::decodeFixedFloatFrogLeapValue(float fvalue, short int numberOfDepots)
+int DecodedFrogLeapSolution::decodeFixedFloatFrogLeapValue(float fvalue, int numberOfDepots)
 {
-	short int result = floor(fvalue);
+	int result = floor(fvalue);
 
 	if (result == numberOfDepots)
 	{
@@ -103,9 +103,9 @@ short int DecodedFrogLeapSolution::decodeFixedFloatFrogLeapValue(float fvalue, s
 	return result;
 }
 
-short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int numberOfDepots)
+int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, int numberOfDepots)
 {
-	short int result = floor(fvalue);
+	int result = floor(fvalue);
 
 	if (result == numberOfDepots)
 	{
@@ -115,24 +115,24 @@ short int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, short int n
 	return result;
 }
 
-short int DecodedFrogLeapSolution::getGlobalVehicleId()
+int DecodedFrogLeapSolution::getGlobalVehicleId()
 {
-	short int result = this->globalVehicleId;
+	int result = this->globalVehicleId;
 
 	this->globalVehicleId++;
 
 	return result;
 }
 
-bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots)
+bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, int customerIndex, int numberOfDepots)
 {
 	bool result = true;
-	short int vehicleId;
-	short int depotIndex = this->decodeFrogLeapValue(fvalue, numberOfDepots);
+	int vehicleId;
+	int depotIndex = this->decodeFrogLeapValue(fvalue, numberOfDepots);
 
 	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
 	int remainingDepotCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
-	short int customerId = this->ptrController->getCustomerId(customerIndex);
+	int customerId = this->ptrController->getCustomerId(customerIndex);
 
 	if(customerDemand > VEHICLE_CAPACITY || customerDemand > remainingDepotCapacity)
 	{
@@ -156,7 +156,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 		
 		veh->decRemainingCapacity(customerDemand);				
 
-		//short int depotIndex = vehicleId / numberOfDepots;
+		//int depotIndex = vehicleId / numberOfDepots;
 		veh->setDepotIndex(depotIndex);
 				
 		this->vehicles[depotIndex]->addFrogObjectOrdered(veh);
@@ -178,12 +178,12 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, short int custome
 	return result;
 }
 
-int DecodedFrogLeapSolution::evalSolution()
+float DecodedFrogLeapSolution::evalSolution()
 {
 	Vehicle * vehPtr = NULL;
-	int result = 0;
+	float result = 0;
 
-	for(short int i = 0; i < this->numDepots; i++)
+	for(int i = 0; i < this->numDepots; i++)
 	{
 		for (int j = 0; j < this->vehicles[i]->getSize(); j++)
 		{
@@ -211,14 +211,14 @@ void DecodedFrogLeapSolution::printFrogObj()
 	}
 	
 	printf("Vehículos por depósito\n");
-	for(short int i=0; i < this->numDepots; i++)
+	for(int i=0; i < this->numDepots; i++)
 	{
 		printf("Depósito: %d \n", i);
 
-		short int numVehicles_i = this->vehicles[i]->getSize();
+		int numVehicles_i = this->vehicles[i]->getSize();
 		printf("Cantidad de vehículos: %d \n", numVehicles_i);
 
-		for (short int j = 0; j < numVehicles_i; j++)
+		for (int j = 0; j < numVehicles_i; j++)
 		{
 			vehPtr = (Vehicle *)this->vehicles[i]->getFrogObject(j);
 			vehPtr->printFrogObj();
@@ -253,15 +253,15 @@ bool DecodedFrogLeapSolution::getIsFeasibleSolution()
 	return this->isFeasibleSolution;
 }
 
-int DecodedFrogLeapSolution::applyLocalSearch(FrogLeapController * controller)
+float DecodedFrogLeapSolution::applyLocalSearch(FrogLeapController * controller)
 {
 	Vehicle * vehPtr = NULL;
 
-	int newLocalCostFound = 0;
+	float newLocalCostFound = 0;
 
 	this->localSearchApplied = true;
 
-	for(short int i = 0; i < this->numDepots; i++)
+	for(int i = 0; i < this->numDepots; i++)
 	{
 		for (int j = 0; j < this->vehicles[i]->getSize(); j++)
 		{
@@ -273,12 +273,12 @@ int DecodedFrogLeapSolution::applyLocalSearch(FrogLeapController * controller)
 	return newLocalCostFound;
 }
 
-short int DecodedFrogLeapSolution::getNotAddedCustomer()
+int DecodedFrogLeapSolution::getNotAddedCustomer()
 {
 	return this->notAddedCustomer;
 }
 
-void DecodedFrogLeapSolution::setNotAddedCustomer(short int customerId)
+void DecodedFrogLeapSolution::setNotAddedCustomer(int customerId)
 {
 	this->notAddedCustomer = customerId;
 }

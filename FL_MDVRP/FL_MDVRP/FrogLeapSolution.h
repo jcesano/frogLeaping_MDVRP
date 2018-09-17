@@ -17,10 +17,10 @@ class FrogLeapSolution: public FrogObject
 	private:
 	
 		float * values;
-		short int size;			// number of customers
+		int size;			// number of customers
 
-		short int n_depots;		// number of depots
-		short int nElementsToSort;
+		int n_depots;		// number of depots
+		int nElementsToSort;
 		//time_t timeSeedUsed;
 		SolutionGenerationType sgt;
 		SourceType st;
@@ -29,15 +29,15 @@ class FrogLeapSolution: public FrogObject
 
 	public:
 	
-		FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, short int ncustomers, short int n_depots_v, short int id);
+		FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, int ncustomers, int n_depots_v, int id);
 
 		~FrogLeapSolution();
 
-		float getFLValue(short int i);
+		float getFLValue(int i);
 
-		void setSize(short int size_v);
+		void setSize(int size_v);
 
-		short int getSize();
+		int getSize();
 
 		void genRandomSolution();
 

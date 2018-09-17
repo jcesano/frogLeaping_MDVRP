@@ -112,17 +112,17 @@ void FrogLeapController::incLocalGeneratedSolutions()
 	this->localGeneratedSolutions++;
 }
 
-int FrogLeapController::getNumberOfIterations()
+long int FrogLeapController::getNumberOfIterations()
 {
-	return 150;
+	return 150000;
 }
 
-int FrogLeapController::getMinCostValue()
+float FrogLeapController::getMinCostValue()
 {
 	return this->minCostValue;
 }
 
-void FrogLeapController::setMinCostValue(int cost)
+void FrogLeapController::setMinCostValue(float cost)
 {
 	this->minCostValue = cost;
 }
@@ -144,7 +144,7 @@ void FrogLeapController::setRandomSeed()
 
 void FrogLeapController::applyLocalSearch()
 {
-	int newCost = this->ptrBestSolution->applyLocalSearch(this);
+	float newCost = this->ptrBestSolution->applyLocalSearch(this);
 	this->setMinCostValue(newCost);
 }
 
@@ -167,7 +167,7 @@ void FrogLeapController::printCtrl()
 	printf("	Number of TOTAL Improvements: %d \n", this->getTotalImprovements());
 	printf("	Number of Global Search Improvements: %d \n", this->globalImprovements);
 	printf("	Number of Local Search Improvements: %d \n", this->localSearchImprovements);
-	printf("	Evaluation of best found solution is: %d \n \n", this->getMinCostValue());
+	printf("	Evaluation of best found solution is: %.3f \n \n", this->getMinCostValue());
 
 }
 
@@ -356,12 +356,13 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 			this->loadDepots(filePtr, tspLibEuc2DPtrAux);
 
 			this->tspLibEud2DPtr = tspLibEuc2DPtrAux;
+			fclose(filePtr);
 		}
 		else
 		{
 			printf("Error reading file \n");
-		}
-		
+			fclose(filePtr);
+		}		
 	}
 	else
 	{
@@ -375,7 +376,7 @@ void FrogLeapController::loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc
 	int nodeId = 0, x_coord = 0, y_coord = 0, v_dimension = tspLibEuc2DPtr->getDimension();
 	char buf[LINE_MAX];
 
-	for(short int i=0; i < v_dimension;i++)
+	for(int i=0; i < v_dimension;i++)
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
@@ -421,9 +422,9 @@ void FrogLeapController::loadDemand(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr
 		return;
 	}
 
-	short int dimension = tspLibEuc2DPtr->getDimension();
+	int dimension = tspLibEuc2DPtr->getDimension();
 
-	for (short int i = 0; i < dimension; i++)
+	for (int i = 0; i < dimension; i++)
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
@@ -498,14 +499,14 @@ void FrogLeapController::loadDepots(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr
 
 DistanceTable * FrogLeapController::loadDistanceTable()
 {
-	short int dimension = this->tspLibEud2DPtr->getDimension();
+	int dimension = this->tspLibEud2DPtr->getDimension();
 	float floatDistance;
 
 	DistanceTable * fdt = new DistanceTable(dimension);
 
-	for(short int i = 0; i < dimension; i++)
+	for(int i = 0; i < dimension; i++)
 	{
-		for(short int j = i + 1; j < dimension; j++)
+		for(int j = i + 1; j < dimension; j++)
 		{
 			floatDistance = this->tspLibEud2DPtr->getEucDistance(i, j);			
 
@@ -513,7 +514,7 @@ DistanceTable * FrogLeapController::loadDistanceTable()
 		}
 	}
 
-	for (short int k = 0; k < dimension; k++)
+	for (int k = 0; k < dimension; k++)
 	{
 		fdt->addDiagEdge(k, 0);
 	}
@@ -543,7 +544,7 @@ FloatDistanceTable * FrogLeapController::getFloatDistanceTable()
 	return this->floatDistTablePtr;
 }
 
-short int FrogLeapController::getNumberOfDepots()
+int FrogLeapController::getNumberOfDepots()
 {
 	if(this->source_t == SourceType::Graph)
 	{
@@ -557,13 +558,13 @@ short int FrogLeapController::getNumberOfDepots()
 
 void FrogLeapController::setUpVehiclesPerDepot()
 {
-	short int numOfDepots = this->depotList->getSize();
+	int numOfDepots = this->depotList->getSize();
 	Pair * depotPair = NULL;
-	short int depotDemand, depotId;
+	int depotDemand, depotId;
 
 	this->vehiclePairList = new FrogObjectCol();
 
-	for (short int i = 0; i < numOfDepots; i++)
+	for (int i = 0; i < numOfDepots; i++)
 	{
 		depotPair = this->depotArray[i];
 		depotId = depotPair->get_i_IntValue();
@@ -575,11 +576,11 @@ void FrogLeapController::setUpVehiclesPerDepot()
 	setUpVehiclePairList();
 }
 
-void FrogLeapController::assignVehiclesToDepots(short int depotId, short int depotDemand)
+void FrogLeapController::assignVehiclesToDepots(int depotId, int depotDemand)
 {
-	short int remainingDemand = depotDemand;
+	int remainingDemand = depotDemand;
 	Pair * vehiclePair = NULL;
-	short int currentId = this->vehiclePairList->getSize();
+	int currentId = this->vehiclePairList->getSize();
 	
 	while (remainingDemand > 0)
 	{
@@ -601,7 +602,7 @@ void FrogLeapController::assignVehiclesToDepots(short int depotId, short int dep
 	}
 }
 
-short int FrogLeapController::getNumberOfCustomers()
+int FrogLeapController::getNumberOfCustomers()
 {
 	if (this->source_t == SourceType::Graph)
 	{
@@ -675,7 +676,7 @@ void FrogLeapController::loadTSPSection(char * buf, char * sectionTag)
 {
 	char * auxContentCharPtr = new char[50];
 	string auxContentStr, sectionTagStr;
-	short int auxShortInt;
+	int auxShortInt;
 
 	sectionTagStr = sectionTag;
 
@@ -742,7 +743,7 @@ void FrogLeapController::setSuccessAttempts(int vsucessAttempts)
 	this->successAttempts = vsucessAttempts;
 }
 
-void FrogLeapController::setAsCustomer(short int customerId, int demand)
+void FrogLeapController::setAsCustomer(int customerId, int demand)
 {
 	Pair * customerPair = new Pair(PairType::IntVsInt);
 	customerPair->set_i_IntValue(customerId);
@@ -753,7 +754,7 @@ void FrogLeapController::setAsCustomer(short int customerId, int demand)
 	this->customerList->addFrogObjectOrdered(customerPair);
 }
 
-void FrogLeapController::setAsDepot(short int depotId, int capacity)
+void FrogLeapController::setAsDepot(int depotId, int capacity)
 {
 
 	Pair * depotPair = new Pair(PairType::IntVsInt);
@@ -767,7 +768,7 @@ void FrogLeapController::setAsDepot(short int depotId, int capacity)
 
 void FrogLeapController::setUpCustomerList()
 {
-	short int n_customers = this->getNumberOfCustomers();
+	int n_customers = this->getNumberOfCustomers();
 
 	this->customerArray = new Pair *[n_customers];
 
@@ -779,7 +780,7 @@ void FrogLeapController::setUpCustomerList()
 
 void FrogLeapController::setUpDepotList()
 {
-	short int n_depots = this->getNumberOfDepots();
+	int n_depots = this->getNumberOfDepots();
 
 	this->depotArray = new Pair *[n_depots];
 
@@ -791,16 +792,16 @@ void FrogLeapController::setUpDepotList()
 
 void FrogLeapController::loadCustomerAndDepotList()
 {
-	short int size = this->tspLibEud2DPtr->getDimension(), demand;
+	int size = this->tspLibEud2DPtr->getDimension(), demand;
 
 	IndexList * depotListSection = this->tspLibEud2DPtr->getDepotSection();
 
 	// i is the internal id of the node in the nodeCoordSection collection
-	for (short int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{			
 		Pair * nodeCoord = (Pair *) this->tspLibEud2DPtr->getNodeCoordSection()->getFrogObject(i);
 
-		short int nodeIdLabel = nodeCoord->getId();
+		int nodeIdLabel = nodeCoord->getId();
 
 		Pair * demandPair = (Pair *) this->tspLibEud2DPtr->getDemandSection()->getFrogObjectById(nodeIdLabel);
 
@@ -821,7 +822,7 @@ void FrogLeapController::loadCustomerAndDepotList()
 	}
 }
 
-short int FrogLeapController::getLabel(short int internalId)
+int FrogLeapController::getLabel(int internalId)
 {
 	if(this->source_t == SourceType::Graph)
 	{
@@ -847,7 +848,7 @@ void FrogLeapController::setUpCustomerAndDepotLists()
 
 void FrogLeapController::setUpVehiclePairList()
 {
-	short int n_vehiclePairs = this->vehiclePairList->getSize();
+	int n_vehiclePairs = this->vehiclePairList->getSize();
 
 	this->vehiclePairArray = new Pair *[n_vehiclePairs];
 
@@ -857,45 +858,45 @@ void FrogLeapController::setUpVehiclePairList()
 	}
 }
 
-short int FrogLeapController::getNumberOfVehicles()
+int FrogLeapController::getNumberOfVehicles()
 {
 	return this->vehiclePairList->getSize();
 }
 
-short int FrogLeapController::getCustomerId(short int position)
+int FrogLeapController::getCustomerId(int position)
 {
 	return this->customerArray[position]->get_i_IntValue();
 }
 
 
-int FrogLeapController::getCustomerDemandByIndex(short int position)
+int FrogLeapController::getCustomerDemandByIndex(int position)
 {
 	return this->customerArray[position]->get_j_IntValue();
 }
 
-short int FrogLeapController::getDepotId(short int position)
+int FrogLeapController::getDepotId(int position)
 {
 	
 	return this->depotArray[position]->getId();
 }
 
-int  FrogLeapController::getDepotCapacityByIndex(short int position)
+int  FrogLeapController::getDepotCapacityByIndex(int position)
 {
 	return this->depotArray[position]->get_i_IntValue();
 }
 
-int  FrogLeapController::getDepotRemainingCapacityByIndex(short int position)
+int  FrogLeapController::getDepotRemainingCapacityByIndex(int position)
 {
 	return this->depotArray[position]->get_j_IntValue();
 }
 
-void FrogLeapController::decRemainingDepotCapacity(short int position, int capacity_to_dec)
+void FrogLeapController::decRemainingDepotCapacity(int position, int capacity_to_dec)
 {
-	short int oldValue = this->depotArray[position]->get_j_IntValue();
+	int oldValue = this->depotArray[position]->get_j_IntValue();
 	this->depotArray[position]->set_j_IntValue(oldValue - capacity_to_dec);
 }
 
-void  FrogLeapController::setDepotRemainingCapacityByIndex(short int position, int remaining_capacity)
+void  FrogLeapController::setDepotRemainingCapacityByIndex(int position, int remaining_capacity)
 {
 	this->depotArray[position]->set_j_IntValue(remaining_capacity);
 }
@@ -908,24 +909,24 @@ FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution()
 	return result;
 }
 
-short int FrogLeapController::getTope()
+long int FrogLeapController::getTope()
 {
 	return TOPE_ITERATIONS;
 }
 
 void FrogLeapController::resetDepotRemainingCapacities()
 {
-	for (short int i = 0; i < this->getNumberOfDepots(); i++)
+	for (int i = 0; i < this->getNumberOfDepots(); i++)
 	{
-		short int depotCap = this->depotArray[i]->get_i_IntValue();
+		int depotCap = this->depotArray[i]->get_i_IntValue();
 		this->depotArray[i]->set_j_IntValue(depotCap);
 	}
 }
 
-void FrogLeapController::deleteArray(Pair ** arrayPtr, short int v_size) {
-	short int size = v_size;
+void FrogLeapController::deleteArray(Pair ** arrayPtr, int v_size) {
+	int size = v_size;
 
-	for (short int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		//delete arrayPtr[i];
 		arrayPtr[i] = NULL;

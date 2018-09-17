@@ -5,7 +5,7 @@ class FrogObject
 {
 private:
 	float value;
-	short int id;
+	int id;
 
 public:
 
@@ -13,17 +13,17 @@ public:
 
 	virtual ~FrogObject();
 
-	FrogObject(short int id_v);
+	FrogObject(int id_v);
 
 	float getValue();
 
 	void setValue(float valueV);
 
-	short int getId();
+	int getId();
 
-	void setId(short int id_v);
+	void setId(int id_v);
 
-	bool isTheSame(short int objid);
+	bool isTheSame(int objid);
 
 	virtual void printFrogObj() = 0;
 

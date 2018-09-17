@@ -65,9 +65,9 @@ void FrogObjectCol::addFrogObject(FrogObject * fs)
 	this->colSize++;
 }
 
-short int FrogObjectCol::getFrogObjectPositionById(short int id)
+int FrogObjectCol::getFrogObjectPositionById(int id)
 {
-	short int result = -1, i;
+	int result = -1, i;
 
 	bool found = false;
 	
@@ -199,7 +199,7 @@ int FrogObjectCol::getSize()
 	return this->colSize;
 }
 
-FrogObject * FrogObjectCol::getFrogObject(short int position)
+FrogObject * FrogObjectCol::getFrogObject(int position)
 {
 	// assign the first element
 	FrogObjNode * currentNode = head;
@@ -297,10 +297,10 @@ int FrogObjectCol::frogObjectExists(FrogObject * fs)
 	return 0;
 }
 
-int FrogObjectCol::frogObjectExists(short int objid)
+int FrogObjectCol::frogObjectExists(int objid)
 {
 	bool found = false;
-	short int i;
+	int i;
 
 	if (this != NULL)
 	{
@@ -325,10 +325,10 @@ int FrogObjectCol::frogObjectExists(short int objid)
 	return found;
 }
 
-FrogObject * FrogObjectCol::getFrogObjectById(short int objid)
+FrogObject * FrogObjectCol::getFrogObjectById(int objid)
 {
 	bool found = false;
-	short int i;
+	int i;
 	FrogObject * result = NULL;
 
 	if (this != NULL)
@@ -367,7 +367,7 @@ FrogObject * FrogObjectCol::getMaxValueFrogObject()
 
 	result = this->getFrogObject(0);
 	
-	for (short int i = 1; i < this->getSize(); i++)
+	for (int i = 1; i < this->getSize(); i++)
 	{
 		currentFrogObject = this->getFrogObject(i);
 		if (currentFrogObject->getValue() > result->getValue())
@@ -383,7 +383,7 @@ FrogObject * FrogObjectCol::getFirstUpperValueFrogObject(float searchedValue)
 {
 	FrogObject * result = NULL, *currentFrogObject = NULL;
 
-	for (short int i = 0; i < this->getSize(); i++)
+	for (int i = 0; i < this->getSize(); i++)
 	{
 		currentFrogObject = this->getFrogObject(i);
 		if (currentFrogObject->getValue() >= searchedValue)

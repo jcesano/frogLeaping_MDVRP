@@ -17,37 +17,37 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool isFeasibleSolution;
 
-		short int notAddedCustomer;
+		int notAddedCustomer;
 
 		bool localSearchApplied;
 
-		short int globalVehicleId;
+		int globalVehicleId;
 
-		short int numDepots;
+		int numDepots;
 	
 	public:
 
-		DecodedFrogLeapSolution(short int n_depots);
+		DecodedFrogLeapSolution(int n_depots);
 
-		DecodedFrogLeapSolution(short int n_depots, FrogLeapController * controller);
+		DecodedFrogLeapSolution(int n_depots, FrogLeapController * controller);
 
 		~DecodedFrogLeapSolution();
 
-		void deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, short int v_size);
+		void deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, int v_size);
 
-		void addVehicle(short int depotIndex, Vehicle * v);
+		void addVehicle(int depotIndex, Vehicle * v);
 
-		//Vehicle * getVehicle(short int pos);
+		//Vehicle * getVehicle(int pos);
 
-		short int decodeFixedFloatFrogLeapValue(float fvalue, short int numberOfVehicles);
+		int decodeFixedFloatFrogLeapValue(float fvalue, int numberOfVehicles);
 
-		short int decodeFrogLeapValue(float fvalue, short int numberOfVehicles);
+		int decodeFrogLeapValue(float fvalue, int numberOfVehicles);
 
-		bool decodeFloatFixedFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots, short int numberOfVehicles);
+		//bool decodeFloatFixedFrogLeapItem(float fvalue, int customerIndex, int numberOfDepots, int numberOfVehicles);
 
-		bool decodeFrogLeapItem(float fvalue, short int customerIndex, short int numberOfDepots);		
+		bool decodeFrogLeapItem(float fvalue, int customerIndex, int numberOfDepots);		
 
-		int evalSolution();
+		float evalSolution();
 
 		void setController(FrogLeapController * controller);
 
@@ -57,13 +57,13 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool getIsFeasibleSolution();
 
-		int applyLocalSearch(FrogLeapController * controller);
+		float applyLocalSearch(FrogLeapController * controller);
 
-		short int getGlobalVehicleId();
+		int getGlobalVehicleId();
 		
-		short int getNotAddedCustomer();
+		int getNotAddedCustomer();
 
-		void setNotAddedCustomer(short int customerId);
+		void setNotAddedCustomer(int customerId);
 
 		// abstract methods
 		void printFrogObj();

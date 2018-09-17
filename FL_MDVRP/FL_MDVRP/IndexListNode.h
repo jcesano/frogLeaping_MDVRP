@@ -3,18 +3,18 @@
 
 class IndexListNode
 {
-	short int index;
+	int index;
 	IndexListNode * next;
 public:
-	IndexListNode(short int index, IndexListNode * nextPtr); // Constructor
+	IndexListNode(int index, IndexListNode * nextPtr); // Constructor
 
 	~IndexListNode();
 
-	short int getIndex();
+	int getIndex();
 
 	IndexListNode * getNextPtr();
 
-	void setIndex(short int index);
+	void setIndex(int index);
 
 	void setNextPtr(IndexListNode * nextPtr);
 

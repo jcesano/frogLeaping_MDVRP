@@ -13,10 +13,10 @@ class FrogObjectCol;
 // adjacency list representation
 class Graph
 {
-	short int V;    // No. of vertices
+	int V;    // No. of vertices
 	short int** a;
 
-	short int origin;
+	int origin;
 
 	FrogObjectCol * vertexCol;
 
@@ -25,32 +25,32 @@ class Graph
 	DistanceTable * distanceTable;
 
 public:
-	short int const NO_ADJ = -1;
+	int const NO_ADJ = -1;
 
-	Graph(short int V);  // Constructor
+	Graph(int V);  // Constructor
 
 	~Graph();	// destructor 
 
-	void setOrigin(short int v);
+	void setOrigin(int v);
 
-	short int getOrigin();
+	int getOrigin();
 
 	// function to add an edge to graph
-	void addEdge(short int u, short int v, short int w);
+	void addEdge(int u, int v, int w);
 
-	short int getEdgeValue(short int origin, short int destiny);
+	int getEdgeValue(int origin, int destiny);
 
-	DistVect * dijkstra(short int src);
+	DistVect * dijkstra(int src);
 
-	short int getNextClosestVertex(DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
+	int getNextClosestVertex(DistVect * dvptr); // returns the next unmarked closest adjascent vertex to v	
 	
-	//short int getNextClosestVertex(short int v, short int * prevPathVertex, DistVect * dvptr, short int src); // returns the next unmarked closest adjascent vertex to v	
+	//int getNextClosestVertex(int v, int * prevPathVertex, DistVect * dvptr, int src); // returns the next unmarked closest adjascent vertex to v	
 	
-	short int getPositionVertexById(short int vertexId);
+	int getPositionVertexById(int vertexId);
 
-	short int getVertexIdByPosition(short int internalId);
+	int getVertexIdByPosition(int internalId);
 
-	short int getPositionOrAddVertexById(short int vertexId);
+	int getPositionOrAddVertexById(int vertexId);
 
 	FrogLeapSolution * genRandomFrogLeapSolution();
 

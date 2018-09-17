@@ -14,9 +14,9 @@ class TspLibEuc2D : public FrogObject
 		char * name;
 		char * comment;
 		char * type;
-		short int dimension;
+		int dimension;
 		char * edge_weight_type;
-		short int capacity;
+		int capacity;
 		FrogObjectCol * nodeCoordSection;
 		FrogObjectCol * demand_section;
 		IndexList * depot_section;
@@ -35,28 +35,28 @@ class TspLibEuc2D : public FrogObject
 		void setType(char * v_type);
 		char * getType();
 
-		void setDimension(short int v_dimension);
-		short int getDimension();
+		void setDimension(int v_dimension);
+		int getDimension();
 
 		void setEdgeWeightType(char * v_EdgeWeightType);
 		char * getEdgeWeightType();
 
-		void setCapacity(short int v_capacity);
-		short int getCapacity();
+		void setCapacity(int v_capacity);
+		int getCapacity();
 
 		void AddNodeCoordItem(Pair * v_pair_coord);
 
 		void AddDemandItem(Pair * v_pair_demand);
 
-		void AddDepotItem(short int depotId);	
+		void AddDepotItem(int depotId);	
 
-		float getEucDistance(short int u, short int v);
+		float getEucDistance(int u, int v);
 
 		float calcEuc2D(Pair * origin, Pair * destination);
 
-		short int getNumberOfDepots();
+		int getNumberOfDepots();
 
-		short int getNumberOfCustomers();
+		int getNumberOfCustomers();
 
 		FrogObjectCol * getNodeCoordSection();
 

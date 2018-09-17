@@ -4,9 +4,9 @@
 #include "Graph.h"
 
 // Allocates memory for adjacency list
-DistanceTable::DistanceTable(short int vertexCount)
+DistanceTable::DistanceTable(int vertexCount)
 {
-	short int i;
+	int i;
 
 	this->V = vertexCount;
 
@@ -18,7 +18,7 @@ DistanceTable::DistanceTable(short int vertexCount)
 
 	for (i = 0; i < V; i++) {
 
-		for (short int j = i+1; j < V; j++) {			
+		for (int j = i+1; j < V; j++) {			
 			a[i][j] = NO_ADJ;
 			a[j][i] = NO_ADJ;
 		}
@@ -32,7 +32,7 @@ DistanceTable::DistanceTable(short int vertexCount)
 
 DistanceTable::~DistanceTable()
 {
-	for(short int i = 0; i < this->V; i++)
+	for(int i = 0; i < this->V; i++)
 	{
 		delete a[i];
 	}
@@ -40,18 +40,18 @@ DistanceTable::~DistanceTable()
 	delete[] a;
 }
 
-void DistanceTable::addEdge(short int u, short int v, short int w)
+void DistanceTable::addEdge(int u, int v, float w)
 {
 	a[u][v] = w;
 	a[v][u] = w;
 }
 
-void DistanceTable::addDiagEdge(short int u, short int w)
+void DistanceTable::addDiagEdge(int u, float w)
 {
 	a[u][u] = w;
 }
 
-float DistanceTable::getEdge(short int u, short int v)
+float DistanceTable::getEdge(int u, int v)
 {
 	return this->a[u][v];
 }
@@ -59,7 +59,7 @@ float DistanceTable::getEdge(short int u, short int v)
 // load the table with the minimum distance among all vertexes
 void DistanceTable::loadMinDistanceTable(DistVect * dv)
 {
-	for (short int i = 0; i < this->V; i++)
+	for (int i = 0; i < this->V; i++)
 	{
 		for (short j = 0; j < this->V; j++)
 		{
@@ -68,9 +68,9 @@ void DistanceTable::loadMinDistanceTable(DistVect * dv)
 	}
 }
 
-void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
+void DistanceTable::loadMinDistanceEdge(DistVect * dv, int i, int j)
 {
-	short int min_dist = dv->getDistanceBtwn(i, j);
+	int min_dist = dv->getDistanceBtwn(i, j);
 
 	this->a[i][j] = min_dist;
 	this->a[j][i] = min_dist;
@@ -79,7 +79,7 @@ void DistanceTable::loadMinDistanceEdge(DistVect * dv, short int i, short int j)
 void DistanceTable::fillDistanceTable(DistVect * dv, Graph * g)
 {
 	bool stop = false;
-	short int nextSrc = -1;
+	int nextSrc = -1;
 	
 	do 
 	{
@@ -101,16 +101,16 @@ void DistanceTable::fillDistanceTable(DistVect * dv, Graph * g)
 
 void DistanceTable::fillDistanceTableFromPrevVertex(DistVect * dv, Graph * g)
 {
-	for(short int v = 0; v < this->V; v++)
+	for(int v = 0; v < this->V; v++)
 	{
 		fillFromPrevVertex(dv, g, v);
 	}
 }
 
-void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, short int v)
+void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, int v)
 {
-	short int currentVertex = v, prevVertex;
-	short int edgeValue = -1, acumEdgeValue = 0;
+	int currentVertex = v, prevVertex;
+	int edgeValue = -1, acumEdgeValue = 0;
 
 	while (currentVertex != -1)
 	{
@@ -142,8 +142,8 @@ void DistanceTable::fillFromPrevVertex(DistVect * dv, Graph * g, short int v)
 
 void DistanceTable::fillFromPath(DistVect * dv, Graph * g)
 {
-	short int currentVertex = dv->getLastMarkedVertex(), prevVertex;
-	short int edgeValue = -1, acumEdgeValue = 0;
+	int currentVertex = dv->getLastMarkedVertex(), prevVertex;
+	int edgeValue = -1, acumEdgeValue = 0;
 
 	while (currentVertex != -1)
 	{
@@ -164,11 +164,11 @@ void DistanceTable::fillFromPath(DistVect * dv, Graph * g)
 	}
 }
 
-short int DistanceTable::getNextSourceForDijkstra()
+int DistanceTable::getNextSourceForDijkstra()
 {
-	for(short int i = 0; i < this->V; i++)
+	for(int i = 0; i < this->V; i++)
 	{
-		for(short int j = i; j < this->V; j++)
+		for(int j = i; j < this->V; j++)
 		{
 			if (this->a[i][j] == NO_ADJ)
 			{
@@ -182,9 +182,9 @@ short int DistanceTable::getNextSourceForDijkstra()
 
 bool DistanceTable::allEdgesFilled()
 {
-	for (short int u = 0; u < V; u++) {
+	for (int u = 0; u < V; u++) {
 
-		for (short int v = 0; v < V; v++) {
+		for (int v = 0; v < V; v++) {
 			if (a[u][v] == NO_ADJ)
 			{
 				return false;
@@ -199,9 +199,9 @@ void DistanceTable::printDistanceTable()
 {
 	printf("Printing Distance Table \n");
 
-	for (short int i = 0; i < this->V; i++)
+	for (int i = 0; i < this->V; i++)
 	{
-		for (short int j = i + 1; j < this->V; j++)
+		for (int j = i + 1; j < this->V; j++)
 		{
 			printf("(%d, %d) = %d ", i, j, this->a[i][j]);
 		}

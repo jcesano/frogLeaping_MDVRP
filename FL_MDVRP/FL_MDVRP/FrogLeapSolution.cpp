@@ -9,7 +9,7 @@
 #include <iostream>
 #include <time.h>
 
-FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, short int ncustomers, short int n_depots_v, short int id):FrogObject(id)
+FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, int ncustomers, int n_depots_v, int id):FrogObject(id)
 {
 	this->sgt = v_sgt;
 	this->st = v_sourceType;
@@ -27,17 +27,17 @@ FrogLeapSolution::~FrogLeapSolution()
 	delete[] values;
 }
 
-float FrogLeapSolution::getFLValue(short int i)
+float FrogLeapSolution::getFLValue(int i)
 {
 	return this->values[i];
 }
 
-void FrogLeapSolution::setSize(short int size_v)
+void FrogLeapSolution::setSize(int size_v)
 {
 	this->size = size_v;
 }
 
-short int FrogLeapSolution::getSize()
+int FrogLeapSolution::getSize()
 {
 	return this->size;
 }
@@ -77,7 +77,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFloatFixedFrogLeapSolution()
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(NULL);
 
-	short int i = 0;
+	int i = 0;
 	bool feasible = true;
 
 	do
@@ -95,12 +95,12 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapContr
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(this->n_depots, controller);
 	
-	short int i = 0;
+	int i = 0;
 	bool feasible = true;
 
 	do 
 	{
-		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
+ 		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
 		i++;
 	} while (i < this->getSize() && feasible == true);	
 	

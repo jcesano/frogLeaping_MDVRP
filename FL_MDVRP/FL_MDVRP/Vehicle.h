@@ -13,47 +13,47 @@ class Vehicle : public FrogObject
 {
 	private:
 		FrogObjectCol * customers;
-		short int size;
-		short int depotIndex;
-		short int depotId;
+		int size;
+		int depotIndex;
+		int depotId;
 		int capacity;
 		int remaining_capacity;
 		int demand;
 		bool isFeasible;
 		
 		bool localSearchApplied;
-		int pathCost;
+		float pathCost;
 
 		FrogLeapController * ptrController;
 
-		short int * vehicleCustomerArray;
+		int * vehicleCustomerArray;
 
 	public:
-		Vehicle(short int id);
+		Vehicle(int id);
 
-		Vehicle(short int id, FrogLeapController * controller);
+		Vehicle(int id, FrogLeapController * controller);
 
 		~Vehicle();
 
 		void addCustomerPair(Pair * customerPair);
 
-		void setDepotIndex(short int depot_v);
+		void setDepotIndex(int depot_v);
 
-		short int getDepotIndex();
+		int getDepotIndex();
 
-		void setDepotId(short int v_depotId);
+		void setDepotId(int v_depotId);
 
-		short int getDepotId();
+		int getDepotId();
 
-		int evalPath(FrogLeapController * controller);
+		float evalPath(FrogLeapController * controller);
 
 		void setController(FrogLeapController * controller);
 
 		FrogLeapController * getController();
 
-		void setPathCost(int cost);
+		void setPathCost(float cost);
 
-		int getPathCost();
+		float getPathCost();
 
 		int getCapacity();
 
@@ -73,15 +73,15 @@ class Vehicle : public FrogObject
 
 		void setupLocalSearch();
 
-		int applyLocalSearch(FrogLeapController * controller);
+		float applyLocalSearch(FrogLeapController * controller);
 
-		short int ObtainCustomerIdFromIndex(short int position);
+		int ObtainCustomerIdFromIndex(int position);
 
-		short int ObtainDepotIdFromIndex();
+		int ObtainDepotIdFromIndex();
 
 		bool generateLocalSolutionsAndEvaluate(FrogLeapController * controller);
 
-		void updateBestSolution(FeasibleSolution * fs, int cost);
+		void updateBestSolution(FeasibleSolution * fs, float cost);
 
 		void printLocalSolution();
 
