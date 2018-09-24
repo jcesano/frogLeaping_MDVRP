@@ -22,7 +22,7 @@ public:
 
 	Pair(PairType type, int pairId);
 
-	~Pair();
+	virtual ~Pair();
 
 	PairType getType();
 

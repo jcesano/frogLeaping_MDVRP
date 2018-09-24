@@ -24,7 +24,7 @@ class TspLibEuc2D : public FrogObject
 	public:
 		TspLibEuc2D();
 
-		~TspLibEuc2D();
+		virtual ~TspLibEuc2D();
 
 		void setName(char * v_name);
 		char * getName();

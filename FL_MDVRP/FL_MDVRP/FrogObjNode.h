@@ -20,6 +20,8 @@ public:
 
 	FrogObject * getFrogItem();
 
+	void setFrogItem(FrogObject * item);
+
 	FrogObjNode * getNextFrogObjNode();
 
 	void setNextFrogObjNode(FrogObjNode * node);

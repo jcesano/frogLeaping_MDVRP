@@ -10,11 +10,12 @@ FrogObjNode::FrogObjNode(FrogObject * fs, FrogObjNode * fsnodeptr)
 
 FrogObjNode::~FrogObjNode()
 {
-	printf("Destroying FrogObjNode: STARTED \n");
+	//printf("Destroying FrogObjNode: STARTED \n");
 
 	if(this->frogItem != NULL)
 	{
 		delete this->frogItem;
+		this->frogItem = NULL;
 	}	
 
 	next = NULL;
@@ -24,7 +25,7 @@ FrogObjNode::~FrogObjNode()
 	//	delete next;
 	//}
 
-	printf("Destroying FrogObjNode: FINISHED \n");
+	//printf("Destroying FrogObjNode: FINISHED \n");
 }
 
 void FrogObjNode::printNodeItems()
@@ -45,6 +46,11 @@ void FrogObjNode::printNodeItems()
 FrogObject * FrogObjNode::getFrogItem()
 {
 	return this->frogItem;
+}
+
+void FrogObjNode::setFrogItem(FrogObject * item)
+{
+	this->frogItem = item;
 }
 
 FrogObjNode * FrogObjNode::getNextFrogObjNode()

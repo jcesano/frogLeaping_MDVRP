@@ -33,7 +33,7 @@ class Vehicle : public FrogObject
 
 		Vehicle(int id, FrogLeapController * controller);
 
-		~Vehicle();
+		virtual ~Vehicle();
 
 		void addCustomerPair(Pair * customerPair);
 

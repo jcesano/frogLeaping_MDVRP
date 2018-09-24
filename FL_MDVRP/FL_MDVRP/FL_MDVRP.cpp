@@ -53,7 +53,7 @@ int main()
 
 	char * fileName = "casog01.vrp";
 
-	controller->setSourceType(SourceType::Graph);
+	controller->setSourceType(SourceType::Tsp2DEuc);
 
 	if(controller->getSourceType() == SourceType::Graph)
 	{
@@ -115,6 +115,7 @@ int main()
 	{
 		controller->loadTSPEUC2D_Data(fileName);
 		controller->setUpCustomerAndDepotLists();
+		controller->setUpVehicleCapacity();
 		controller->loadDistanceTable();
 	}
 
@@ -156,68 +157,76 @@ int main()
 	fscol->printFeasSolCol(); 
 	*/
 
-	
-	
+		
 	/* main test frogSolution */
 	int nDepots = controller->getNumberOfDepots();
 	int nCustomers = controller->getNumberOfCustomers();
-
+    
 	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, controller->getSourceType(), nCustomers, nDepots, 0);
 
 	DecodedFrogLeapSolution * dfls_1 = NULL;
 	float evalSol;	
-	const long int itNumber = controller->getNumberOfIterations();
-	long int i = 0;
+	const long long int itNumber = controller->getNumberOfIterations();
+	long long int i = 0;
 	long long int timeBound, execTime;
-	timeBound = 60000;
+	timeBound = 7200000;
 
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto time = end_time - start_time;
 	execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+	bool isFeasibleFLS = false;
+	
+	printf("Program execution started ... \n");
 
-	while(i < itNumber && execTime <= timeBound)
+	while(execTime <= timeBound)
 	{
-		printf("ITERATION NUMBER %d", i);
+		isFeasibleFLS = fls->genRandomSolution2(controller);
 
-		fls->genRandomSolution();
+		//fls->printFrogObj();
 
-		fls->printFrogObj();
-
-		dfls_1 = fls->decodeSolution(controller);
-
-		if (dfls_1->getIsFeasibleSolution() == true) 
+		if(isFeasibleFLS == true)		
 		{
-			controller->incSuccessAttempts();
-			evalSol = dfls_1->evalSolution();
-			printf("Evaluation of frogLeapingSolution is = %d   ", evalSol);
-
-			if(evalSol < controller->getMinCostValue())
+			dfls_1 = fls->decodeSolution(controller);
+			if (dfls_1->getIsFeasibleSolution() == true)			
 			{
-				controller->incGlobalSearchImprovements();
-				controller->setBestDecodedFrogLeapSolution(dfls_1);
-				controller->setMinCostValue(evalSol);
-				//apply local search
-				controller->applyLocalSearch();
+				controller->incSuccessAttempts();
+				evalSol = dfls_1->evalSolution();
+				evalSol = dfls_1->applyLocalSearch(controller);
+				if (evalSol < controller->getMinCostValue())
+				{
+					//printf("New solution found \n");
+					controller->incGlobalSearchImprovements();
+					controller->setBestDecodedFrogLeapSolution(dfls_1);
+					controller->setMinCostValue(evalSol);
+
+					printf("Evaluation of frogLeapingSolution is = %.3f   ", evalSol);
+					//apply local search
+					//controller->applyLocalSearch();					
+					controller->printCtrl();
+				}
+				else
+				{
+					//dfls_1->printFrogObj();
+					delete dfls_1;
+				}
 			}
 			else
 			{
-				dfls_1->printFrogObj();
+				//dfls_1->printFrogObj();
+				controller->incFailAttempts();
 				delete dfls_1;
 			}
 		}
-		else
-		{
-			dfls_1->printFrogObj();
-			controller->incFailAttempts();
-			delete dfls_1;
-		}		
 
 		end_time = std::chrono::high_resolution_clock::now();
 		time = end_time - start_time;
 		execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
+		printf("Iteration Number i = %lld \n", i);
 		i++;
 	}
 	
+	printf("TOTAL ITERATION NUMBER %lld", i);
+
 	controller->printCtrl();
 	
 	//delete g;

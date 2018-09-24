@@ -2,16 +2,22 @@
 #define DECODEDFROGLEAPSOLUTION_H_
 
 #include "FrogObject.h"
+#include <vector>
+using namespace std;
+
 
 class FrogObjectCol;
 class Vehicle;
 class Graph;
 class FrogLeapController;
 
+
 class DecodedFrogLeapSolution : public FrogObject
 {
 	private:
 		FrogObjectCol * * vehicles;
+		//vector<FrogObjectCol> vehicles;
+		//FrogObjectCol * vehicles;
 
 		FrogLeapController * ptrController;
 
@@ -31,7 +37,7 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		DecodedFrogLeapSolution(int n_depots, FrogLeapController * controller);
 
-		~DecodedFrogLeapSolution();
+		virtual ~DecodedFrogLeapSolution();
 
 		void deleteArrayOfFrogObjectCols(FrogObjectCol ** arrayPtr, int v_size);
 
@@ -64,6 +70,8 @@ class DecodedFrogLeapSolution : public FrogObject
 		int getNotAddedCustomer();
 
 		void setNotAddedCustomer(int customerId);
+
+		Vehicle * getFirstUpperValueVehicle(int customerDemand, int depotIndex);
 
 		// abstract methods
 		void printFrogObj();

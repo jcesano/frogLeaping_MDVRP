@@ -310,12 +310,14 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 			controller->incLocalSearchImprovements();
 			veh->updateBestSolution(currentFsSolution, currentCost);
 			delete currentFsSolution;
+			currentFsSolution = NULL;
 			improvement = true;
 			return improvement;
 		}
 		else
 		{
 			delete currentFsSolution;
+			currentFsSolution = NULL;
 			improvement = false;
 			return improvement;
 		}
@@ -341,13 +343,18 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 					controller->incLocalSearchImprovements();
 					veh->updateBestSolution(currentFsSolution, currentCost);
 					delete currentFsSolution;
+					currentFsSolution = NULL;
 					improvement = true;
 					return improvement;
 				}
+				else
+				{
+					delete currentFsSolution;				
+					currentFsSolution = NULL;
+				}
 
 				if(cont == TOPE)
-				{
-					delete currentFsSolution;
+				{					
 					return improvement; // At this point improvement == false
 				}
 
@@ -355,7 +362,6 @@ bool FeasibleSolution::searchOneSwapFeasibleSolutionsAndEval(Vehicle * veh, Frog
 		}//end for i
 	}// end else
 
-	delete currentFsSolution;
 	return improvement; //at this point improvement == false
 };
 

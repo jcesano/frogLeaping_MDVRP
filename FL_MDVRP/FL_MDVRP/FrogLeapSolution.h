@@ -9,6 +9,8 @@ class FeasibleSolution;
 class DecodedFrogLeapSolution;
 class Graph;
 class FrogLeapController;
+class FrogObjectCol;
+class FrogObject;
 enum class SolutionGenerationType;
 enum class SourceType;
 
@@ -39,7 +41,17 @@ class FrogLeapSolution: public FrogObject
 
 		int getSize();
 
-		void genRandomSolution();
+		bool genRandomSolution(FrogLeapController * controller);
+
+		bool genRandomSolution2(FrogLeapController * controller);
+
+		float normalRandomAssigment(FrogLeapController * controller);
+
+		float assignRandomFeasibleDepot(FrogObjectCol * feasibleDepotList, FrogLeapController * controller, int customerIndex);
+
+		float assignRandomFeasibleDepot2(FrogLeapController * controller, int customerIndex);
+
+		FrogObjectCol * initializeFeasibleDepotList(FrogLeapController * controller);
 
 		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);
 

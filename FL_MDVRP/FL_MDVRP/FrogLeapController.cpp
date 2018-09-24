@@ -16,6 +16,7 @@
 #include "FrogLeapSolution.h"
 #include "Pair.h"
 #include "IndexList.h"
+#include <limits>
 
 using std::string;
 
@@ -27,10 +28,11 @@ FrogLeapController::FrogLeapController()
 
 	this->successAttempts = 0;
 
-	this->timeSeedUsed = (unsigned)time(NULL);
+	//this->timeSeedUsed = (unsigned)time(NULL);
+	this->timeSeedUsed = 1537280770;
 	srand(this->timeSeedUsed);
 
-	this->minCostValue = SHRT_MAX;
+	this->minCostValue = std::numeric_limits<float>::max();;
 
 	this->totalImprovements = 0;
 	this->localSearchImprovements = 0;
@@ -129,7 +131,10 @@ void FrogLeapController::setMinCostValue(float cost)
 
 void FrogLeapController::setBestDecodedFrogLeapSolution(DecodedFrogLeapSolution * ptrSolution)
 {
+	DecodedFrogLeapSolution * oldSolution = this->ptrBestSolution;
 	this->ptrBestSolution = ptrSolution;
+	delete oldSolution;
+	oldSolution = NULL;
 }
 
 DecodedFrogLeapSolution * FrogLeapController::getBestDecodedFrogLeapSolution()
@@ -168,7 +173,6 @@ void FrogLeapController::printCtrl()
 	printf("	Number of Global Search Improvements: %d \n", this->globalImprovements);
 	printf("	Number of Local Search Improvements: %d \n", this->localSearchImprovements);
 	printf("	Evaluation of best found solution is: %.3f \n \n", this->getMinCostValue());
-
 }
 
 void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
@@ -556,6 +560,11 @@ int FrogLeapController::getNumberOfDepots()
 	}	
 }
 
+Pair * FrogLeapController::getDepotPairByIndex(int position)
+{
+	return this->depotArray[position];
+}
+
 void FrogLeapController::setUpVehiclesPerDepot()
 {
 	int numOfDepots = this->depotList->getSize();
@@ -835,6 +844,20 @@ int FrogLeapController::getLabel(int internalId)
 	
 }
 
+int FrogLeapController::getDepotListIndexByInternal(int depotIdLabel)
+{
+
+	for (int i = 0; i < this->depotList->getSize(); i++)
+	{
+		if (this->depotArray[i]->getId() == depotIdLabel)
+		{			
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 void FrogLeapController::setUpCustomerAndDepotLists()
 {
 	if(this->getSourceType() == SourceType::Tsp2DEuc)
@@ -844,6 +867,16 @@ void FrogLeapController::setUpCustomerAndDepotLists()
 
 	setUpCustomerList();
 	setUpDepotList();
+}
+
+void FrogLeapController::setUpVehicleCapacity()
+{
+	this->vehicle_capacity = this->tspLibEud2DPtr->getCapacity();
+}
+
+long int FrogLeapController::getVehicleCapacity()
+{
+	return this->vehicle_capacity;
 }
 
 void FrogLeapController::setUpVehiclePairList()
@@ -901,11 +934,11 @@ void  FrogLeapController::setDepotRemainingCapacityByIndex(int position, int rem
 	this->depotArray[position]->set_j_IntValue(remaining_capacity);
 }
 
-FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution()
+FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution(FrogLeapController * controller)
 {
 	FrogLeapSolution * result = new FrogLeapSolution(this->sgt, this->source_t, this->getNumberOfCustomers(), this->getNumberOfDepots(), 0);
 
-	result->genRandomSolution();
+	result->genRandomSolution(controller);
 	return result;
 }
 
@@ -917,10 +950,17 @@ long int FrogLeapController::getTope()
 void FrogLeapController::resetDepotRemainingCapacities()
 {
 	for (int i = 0; i < this->getNumberOfDepots(); i++)
-	{
-		int depotCap = this->depotArray[i]->get_i_IntValue();
-		this->depotArray[i]->set_j_IntValue(depotCap);
+	{		
+		resetDepotRemainingCapacity(this->depotArray[i]);
 	}
+}
+
+void FrogLeapController::resetDepotRemainingCapacity(Pair * depotPair)
+{
+	
+	int depotCap = depotPair->get_i_IntValue();
+	depotPair->set_j_IntValue(depotCap);
+	depotPair->setValue(depotCap);
 }
 
 void FrogLeapController::deleteArray(Pair ** arrayPtr, int v_size) {

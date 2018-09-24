@@ -17,7 +17,7 @@ enum class SourceType { Graph, Tsp2DEuc};
 enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 
 const int VEHICLE_CAPACITY = 500;
-const long int TOPE_ITERATIONS = 100;
+const long int TOPE_ITERATIONS = 10000;
 
 class FrogLeapController
 {
@@ -30,6 +30,7 @@ class FrogLeapController
 		long int totalImprovements;
 		long int localSearchImprovements;
 		long int globalImprovements;
+		long int vehicle_capacity;
 
 		float minCostValue;
 
@@ -134,6 +135,8 @@ class FrogLeapController
 
 		int getNumberOfCustomers();
 
+		Pair * getDepotPairByIndex(int position);
+
 		void setGraph(Graph * gPtr);
 
 		Graph * getGraph();
@@ -155,6 +158,10 @@ class FrogLeapController
 		void setUpDepotList();
 
 		void setUpCustomerAndDepotLists();
+
+		void setUpVehicleCapacity();
+
+		long int getVehicleCapacity();
 
 		void setUpVehiclesPerDepot();
 
@@ -178,7 +185,9 @@ class FrogLeapController
 
 		void setDepotRemainingCapacityByIndex(int position, int remaining_capacity);
 
-		FrogLeapSolution * genRandomFrogLeapSolution();
+		FrogLeapSolution * genRandomFrogLeapSolution(FrogLeapController * controller);
+
+		void resetDepotRemainingCapacity(Pair * depotPair);
 
 		long int getTope();
 
@@ -187,5 +196,7 @@ class FrogLeapController
 		void loadCustomerAndDepotList();
 
 		int getLabel(int internalId);
+
+		int getDepotListIndexByInternal(int depotIdLabel);
 };
 #endif

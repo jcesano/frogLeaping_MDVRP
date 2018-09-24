@@ -7,17 +7,19 @@
 #include "FrogObject.h"
 #include "FeasibleSolution.h"
 #include "FrogLeapController.h"
+#include <limits>
 
 Vehicle::Vehicle(int id):FrogObject(id)
 {
 	customers = NULL;
 	this->ptrController = NULL;
 	size = 0;
-	this->pathCost = 0;
+	this->pathCost = std::numeric_limits<float>::max();
 	this->capacity = VEHICLE_CAPACITY;
 	this->setValue(this->capacity);
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;
+	this->vehicleCustomerArray = NULL;
 }
 
 Vehicle::Vehicle(int id, FrogLeapController * controller) :FrogObject(id)
@@ -25,12 +27,13 @@ Vehicle::Vehicle(int id, FrogLeapController * controller) :FrogObject(id)
 	customers = NULL;
 	this->ptrController = controller;
 	size = 0;
-	this->pathCost = 0;
+	this->pathCost = std::numeric_limits<float>::max();
 	this->capacity = VEHICLE_CAPACITY;
 	this->setValue(this->capacity);
 	this->remaining_capacity = VEHICLE_CAPACITY;
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;	
+	this->vehicleCustomerArray = NULL;
 }
 
 Vehicle::~Vehicle()
@@ -38,8 +41,15 @@ Vehicle::~Vehicle()
 	if(this->customers != NULL)
 	{
 		delete this->customers;
+		this->customers = NULL;
 	}
 	
+	if(this->vehicleCustomerArray != NULL)
+	{
+		delete[] vehicleCustomerArray;
+		vehicleCustomerArray = NULL;
+	}
+
 	this->ptrController = NULL;
 }
 
@@ -205,7 +215,7 @@ int Vehicle::ObtainCustomerIdFromIndex(int position)
 
 	tmp = (Pair *) this->customers->getFrogObject(position); //obtaining Pair(CustomerIndex, flValue)
 	customerIndex = tmp->get_i_IntValue();
-	customerId = this->ptrController->getCustomerId(customerIndex); //obtaining the customerId in the graph
+	customerId = this->ptrController->getCustomerId(customerIndex); //obtaining the customerId
 
 	return customerId;
 }
@@ -220,6 +230,11 @@ float Vehicle::applyLocalSearch(FrogLeapController * controller)
 	{
 		setupLocalSearch();		
 		this->localSearchApplied = true;
+	}
+
+	if(this->customers->getSize() == 0)
+	{
+		return 0;
 	}
 
 	// until we do not find any better solution we continue applying local search to each improvement solution found.

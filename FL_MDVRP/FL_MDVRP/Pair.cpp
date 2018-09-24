@@ -23,7 +23,7 @@ Pair::Pair(PairType type, int pairId):FrogObject(pairId)
 
 Pair::~Pair()
 {
-	printf("Destroying Pair \n");
+	//printf("Destroying Pair \n");
 }
 
 PairType Pair::getType()
@@ -83,34 +83,36 @@ void Pair::printFrogObj()
 
 bool Pair::isTheSame(FrogObject * fs)
 {
-	Pair * fspair = (Pair *)fs;
+	
+	return (this == fs);
+	//Pair * fspair = (Pair *)fs;
 
-	if (fspair->getType() != this->getType())
-	{
-		return false;
-	}
+	//if (fspair->getType() != this->getType())
+	//{
+	//	return false;
+	//}
 
-	if (fspair->get_i_IntValue() != this->get_i_IntValue())
-	{
-		return false;
-	}
+	//if (fspair->get_i_IntValue() != this->get_i_IntValue())
+	//{
+	//	return false;
+	//}
 
-	if (fspair->get_j_IntValue() != this->get_j_IntValue())
-	{
-		return false;
-	}
+	//if (fspair->get_j_IntValue() != this->get_j_IntValue())
+	//{
+	//	return false;
+	//}
 
-	if (fspair->get_i_FloatValue() != this->get_i_FloatValue())
-	{
-		return false;
-	}
+	//if (fspair->get_i_FloatValue() != this->get_i_FloatValue())
+	//{
+	//	return false;
+	//}
 
-	if (fspair->get_j_FloatValue() != this->get_j_FloatValue())
-	{
-		return false;
-	}
+	//if (fspair->get_j_FloatValue() != this->get_j_FloatValue())
+	//{
+	//	return false;
+	//}
 
-	return true;
+	//return true;
 }
 
 
