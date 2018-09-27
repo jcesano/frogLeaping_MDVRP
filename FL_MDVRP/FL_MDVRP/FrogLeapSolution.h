@@ -45,17 +45,19 @@ class FrogLeapSolution: public FrogObject
 
 		bool genRandomSolution2(FrogLeapController * controller);
 
+		bool genRandomSolution3(FrogLeapController * controller);
+
 		float normalRandomAssigment(FrogLeapController * controller);
 
 		float assignRandomFeasibleDepot(FrogObjectCol * feasibleDepotList, FrogLeapController * controller, int customerIndex);
 
 		float assignRandomFeasibleDepot2(FrogLeapController * controller, int customerIndex);
 
+		float assignRandomFeasibleDepot3(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex);
+
 		FrogObjectCol * initializeFeasibleDepotList(FrogLeapController * controller);
 
-		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);
-
-		DecodedFrogLeapSolution * decodeFloatFixedFrogLeapSolution();
+		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);		
 
 		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller);
 

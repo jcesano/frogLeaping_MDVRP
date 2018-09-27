@@ -28,9 +28,9 @@ Vehicle::Vehicle(int id, FrogLeapController * controller) :FrogObject(id)
 	this->ptrController = controller;
 	size = 0;
 	this->pathCost = std::numeric_limits<float>::max();
-	this->capacity = VEHICLE_CAPACITY;
+	this->capacity = controller->getVehicleCapacity();
 	this->setValue(this->capacity);
-	this->remaining_capacity = VEHICLE_CAPACITY;
+	this->remaining_capacity = this->capacity;
 	this->isFeasible = true;  // used for testing purpose in printing information
 	localSearchApplied = false;	
 	this->vehicleCustomerArray = NULL;
@@ -137,12 +137,12 @@ float Vehicle::getPathCost()
 	return this->pathCost;
 }
 
-int Vehicle::getCapacity()
+long int Vehicle::getCapacity()
 {
 	return this->capacity;
 }
 
-int Vehicle::getRemainingCapacity()
+long int Vehicle::getRemainingCapacity()
 {
 	return this->remaining_capacity;
 }

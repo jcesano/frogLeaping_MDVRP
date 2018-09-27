@@ -126,6 +126,44 @@ bool FrogLeapSolution::genRandomSolution2(FrogLeapController * controller)
 	return result;
 }
 
+bool FrogLeapSolution::genRandomSolution3(FrogLeapController * controller)
+{
+	float u;
+	int a = this->size;
+
+	bool result = true;
+	int i = 0;
+
+	controller->resetDepotRemainingCapacities();
+
+	FrogObjectCol * localDepotCol = controller->createDepotListOrderedByCapacity();
+
+	while ((i < this->size) && (result == true))
+	{
+		u = assignRandomFeasibleDepot3(controller, localDepotCol, i);
+
+		// code to eliminate fixed random assignment of customers to depots
+		//u = this->normalRandomAssigment(controller);
+
+		//this->values[i] = u;
+
+		if (u >= 0)
+		{
+			this->values[i] = u;
+		}
+		else
+		{
+			result = false;
+		}
+
+		i++;
+	};
+
+	localDepotCol->unReferenceFrogObjectCol();
+	delete localDepotCol;
+	return result;
+}
+
 float FrogLeapSolution::normalRandomAssigment(FrogLeapController * controller)
 {	
 	float depotsNum = controller->getNumberOfDepots();
@@ -254,6 +292,61 @@ float FrogLeapSolution::assignRandomFeasibleDepot2(FrogLeapController * controll
 	return  result;
 }
 
+float FrogLeapSolution::assignRandomFeasibleDepot3(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex)
+{
+	float u = -1, result = -1;
+	Pair * depotPairSelected = NULL;
+	int lowBoundIndex = -1;
+
+	// get the customer demand
+	int customerDemand = controller->getCustomerDemandByIndex(customerIndex);
+
+	// get the index of the first depot with capacity enough to attend customer demand
+	localDepotCol->getFirstUpperValueFrogObjectIndex(customerDemand, lowBoundIndex);
+
+	// if there is not any depot then return -1
+	if(lowBoundIndex == -1)
+	{
+		return result;
+	}
+
+	// choose between the available depots with suffiecient capacity to attend the customer demand
+	int numberOfDepots = controller->getNumberOfDepots();
+
+	do
+	{
+		u = this->genRandomFloatingNumber(lowBoundIndex, numberOfDepots);
+	} while (u >= numberOfDepots);
+
+	int positionSelected = floor(u);
+
+	// get the depotPair selected in the list of available depots
+	depotPairSelected = (Pair *)localDepotCol->getFrogObject(positionSelected);
+		
+	//update remaining capacity of depot pair
+	int depotRemainingCap = depotPairSelected->get_j_IntValue();		
+	int newCapacity = depotRemainingCap - customerDemand;
+	depotPairSelected->set_j_IntValue(newCapacity);
+	depotPairSelected->setValue(newCapacity);
+
+	localDepotCol->reorderFrogObject(depotPairSelected);
+
+	// get the depot index in the controller of the selected depot
+	int depotId = depotPairSelected->getId();
+	int depotIndex = controller->getDepotListIndexByInternal(depotId);
+
+	// assign a random number to the depot selected
+	float randnum;
+
+	do
+	{
+		randnum = this->genRandomFloatingNumber(0, 1);
+	} while (randnum >= 1);
+
+	result = depotIndex + randnum;
+
+	return  result;
+}
 
 FrogObjectCol * FrogLeapSolution::initializeFeasibleDepotList(FrogLeapController *controller)
 {
@@ -279,23 +372,6 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeSolution(FrogLeapController * 
 	return this->decodeFrogLeapSolution(controller);
 }
 
-// This algorithm uses a float distance table and the fixed algorithm
-DecodedFrogLeapSolution * FrogLeapSolution::decodeFloatFixedFrogLeapSolution()
-{
-	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(NULL);
-
-	int i = 0;
-	bool feasible = true;
-
-	do
-	{
-		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
-		i++;
-	} while (i < this->getSize() && feasible == true);
-
-	return decodedSolution;
-}
-
 //if generated instance of DecodedFrogLeapSolution is NULL then solution is not valid due to a vehicle capacity violation
 // This algorithm uses an int distance table
 DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapController * controller)
@@ -307,7 +383,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapContr
 
 	do 
 	{
- 		feasible = decodedSolution->decodeFrogLeapItem(this->getFLValue(i), i, this->n_depots);
+ 		feasible = decodedSolution->decodeFrogLeapItem(controller, this->getFLValue(i), i, this->n_depots);
 		i++;
 	} while (i < this->getSize() && feasible == true);	
 	

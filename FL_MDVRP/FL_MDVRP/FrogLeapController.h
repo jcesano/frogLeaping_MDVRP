@@ -5,6 +5,7 @@ class DecodedFrogLeapSolution;
 class FrogObject;
 class FrogObjectCol;
 class TspLibEuc2D;
+class TestCaseObj;
 class DistanceTable;
 class FloatDistanceTable;
 class Graph;
@@ -39,6 +40,8 @@ class FrogLeapController
 		DecodedFrogLeapSolution * ptrBestSolution;
 
 		TspLibEuc2D * tspLibEud2DPtr;
+
+		TestCaseObj * testCaseObjPtr;
 
 		DistanceTable * distTablePtr;
 		FloatDistanceTable * floatDistTablePtr;
@@ -111,9 +114,13 @@ class FrogLeapController
 
 		void loadTSPEUC2D_Data(char * fileName);
 
+		void loadTestCaseData(char * fileName);
+
 		void readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar, int * off_set);
 
 		void loadTSPSection(char * buf, char * sectionTag);
+
+		void loadAssignations(FILE * filePtr, TestCaseObj * testCaseObjPtr);
 
 		void loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 		
@@ -190,6 +197,8 @@ class FrogLeapController
 		void resetDepotRemainingCapacity(Pair * depotPair);
 
 		long int getTope();
+
+		FrogObjectCol * createDepotListOrderedByCapacity();
 
 		void resetDepotRemainingCapacities();
 

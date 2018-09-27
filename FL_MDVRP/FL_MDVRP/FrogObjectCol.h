@@ -54,6 +54,8 @@ public:
 
 	FrogObject * getFirstUpperValueFrogObject(float searchedValue);
 
+	FrogObject * getFirstUpperValueFrogObjectIndex(float searchedValue, int &frogObjectValue);
+
 	void reorderFrogObject(FrogObject * fs);
 
 	void removeAllLowerValueFrogObject(int value, FrogObjectCol * deletedFrogObjects);

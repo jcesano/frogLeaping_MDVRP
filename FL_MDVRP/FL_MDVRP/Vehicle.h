@@ -16,8 +16,8 @@ class Vehicle : public FrogObject
 		int size;
 		int depotIndex;
 		int depotId;
-		int capacity;
-		int remaining_capacity;
+		long int capacity;
+		long int remaining_capacity;
 		int demand;
 		bool isFeasible;
 		
@@ -55,9 +55,9 @@ class Vehicle : public FrogObject
 
 		float getPathCost();
 
-		int getCapacity();
+		long int getCapacity();
 
-		int getRemainingCapacity();
+		long int getRemainingCapacity();
 
 		void decRemainingCapacity(int capacity_to_dec);
 

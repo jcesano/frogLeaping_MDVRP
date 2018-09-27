@@ -9,6 +9,7 @@
 #include "FrogObjectCol.h"
 #include "DecodedFrogLeapSolution.h"
 #include "TspLibEuc2D.h"
+#include "TestCaseObj.h"
 #include "Pair.h"
 #include "DistanceTable.h"
 #include "FloatDistanceTable.h"
@@ -28,8 +29,8 @@ FrogLeapController::FrogLeapController()
 
 	this->successAttempts = 0;
 
-	//this->timeSeedUsed = (unsigned)time(NULL);
-	this->timeSeedUsed = 1537280770;
+	this->timeSeedUsed = (unsigned)time(NULL);
+	//this->timeSeedUsed = 1537280770;
 	srand(this->timeSeedUsed);
 
 	this->minCostValue = std::numeric_limits<float>::max();;
@@ -39,6 +40,7 @@ FrogLeapController::FrogLeapController()
 	this->globalImprovements = 0;
 
 	this->tspLibEud2DPtr = NULL;
+	this->testCaseObjPtr = NULL;
 
 	this->distTablePtr = NULL;
 	this->floatDistTablePtr = NULL;
@@ -374,6 +376,255 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 	}
 }
 
+void FrogLeapController::loadTestCaseData(char * fileName)
+{
+	FILE * filePtr;
+	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
+	string ctrlSectionTagStr, ctrlSeparatorCharStr, sectionTagStr, separatorCharStr;
+
+	TestCaseObj * testCaseObjPtr = new TestCaseObj();
+
+	if ((filePtr = fopen(fileName, "r")) != NULL)
+	{
+		// Reading section tag NAME
+		char * name = new char[50];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, name);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, name);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("NAME");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setName(name);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading COMMENT
+		char * comment = new char[100];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, comment);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, comment);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+			ctrlSectionTagStr = string("COMMENT");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setComment(comment);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading type
+		char * type = new char[50];
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, type);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, type);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("TYPE");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setType(type);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading DIMENSION
+		int dimension;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %d", sectionTag, separatorChar, &dimension);
+			printf("Section: %s %s %d \n", sectionTag, separatorChar, dimension);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("DIMENSION");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setDimension(dimension);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading EDGE_WEIGHT_TYPE
+		char * edge_weight_type = new char[50];;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, edge_weight_type);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, edge_weight_type);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("EDGE_WEIGHT_TYPE");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setEdgeWeightType(edge_weight_type);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading CAPACITY
+		int capacity;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s %s %d", sectionTag, separatorChar, &capacity);
+			printf("Section: %s %s %d \n", sectionTag, separatorChar, capacity);
+
+			sectionTagStr = sectionTag;
+			separatorCharStr = separatorChar;
+
+			ctrlSectionTagStr = string("CAPACITY");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			testCaseObjPtr->setCapacity(capacity);
+		}
+		else
+		{
+			printf("Error reading file \n");
+		}
+
+		// reading Assignation Section
+		char * assignationSection = new char[50];;
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			sscanf(buf, "%s ", assignationSection);
+			printf("Section: %s \n", assignationSection);
+
+			sectionTagStr = assignationSection;
+
+			ctrlSectionTagStr = string("ASSIGNATION");
+			if (sectionTagStr.compare(ctrlSectionTagStr) != 0)
+			{
+				printf("Error in file format \n");
+				return;
+			}
+
+			// Loading coordinates
+			this->loadAssignations(filePtr, testCaseObjPtr);
+
+			fclose(filePtr);
+		}
+		else
+		{
+			printf("Error reading file \n");
+			fclose(filePtr);
+		}
+
+	}
+}
+
+void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCaseObjPtr)
+{
+	bool stopLoop = false, depotDataLoaded = false, assignationBlockLoaded = false;
+	int nodeLabelId = 0, depot_capacity = 0, customer_load = 0, v_dimension = testCaseObjPtr->getDimension();
+	char buf[LINE_MAX];
+	Pair * currPair;
+
+	while(stopLoop == false)
+	{
+		if (fgets(buf, sizeof buf, filePtr) != NULL)
+		{
+			if(depotDataLoaded == false)
+			{
+				sscanf(buf, "%d %d %d", &nodeLabelId, &depot_capacity, &customer_load);
+				printf("Depot data: %d %d %d \n", nodeLabelId, depot_capacity, customer_load);
+
+				currPair = new Pair(PairType::IntVsInt, nodeLabelId);
+				currPair->set_i_IntValue(depot_capacity);
+				currPair->set_j_IntValue(customer_load);
+				currPair->setId(nodeLabelId);
+				currPair->setValue(nodeLabelId);
+
+				testCaseObjPtr->AddDepotItem(currPair);
+				depotDataLoaded = true;
+			}
+			else
+			{
+				int customerLabelId;
+				if(assignationBlockLoaded == false)
+				{					
+					sscanf(buf, "%d ", &customerLabelId);
+					printf("Customer Label Id : %d \n", customerLabelId);
+					
+					if(customerLabelId == -1)
+					{
+						assignationBlockLoaded = true;
+						depotDataLoaded = false;
+					}
+					else
+					{
+						if(customerLabelId == -2)
+						{
+							stopLoop = true;
+						}
+						else
+						{
+							currPair = new Pair(PairType::IntVsInt, customerLabelId);
+							currPair->set_i_IntValue(customerLabelId);
+							currPair->set_j_IntValue(nodeLabelId);
+							currPair->setId(customerLabelId);
+							currPair->setValue(customerLabelId);
+
+							testCaseObjPtr->AddCustomerItem(currPair);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			printf("Error reading file: Section Node Coordinates \n");
+			return;
+		}
+	}
+}
+
 void FrogLeapController::loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr)
 {
 	bool stopLoop = false;
@@ -596,13 +847,13 @@ void FrogLeapController::assignVehiclesToDepots(int depotId, int depotDemand)
 		vehiclePair = new Pair(PairType::IntVsInt);
 		vehiclePair->setId(currentId);		
 
-		vehiclePair->set_i_IntValue(VEHICLE_CAPACITY);
+		vehiclePair->set_i_IntValue(this->getVehicleCapacity());
 		vehiclePair->set_j_IntValue(depotId);
 		this->vehiclePairList->addFrogObjectOrdered(vehiclePair);
 
-		if(remainingDemand >= VEHICLE_CAPACITY)
+		if(remainingDemand >= this->getVehicleCapacity())
 		{
-			remainingDemand = remainingDemand - VEHICLE_CAPACITY;
+			remainingDemand = remainingDemand - this->getVehicleCapacity();
 		}
 		else
 		{
@@ -844,12 +1095,12 @@ int FrogLeapController::getLabel(int internalId)
 	
 }
 
-int FrogLeapController::getDepotListIndexByInternal(int depotIdLabel)
+int FrogLeapController::getDepotListIndexByInternal(int depotInternalId)
 {
 
 	for (int i = 0; i < this->depotList->getSize(); i++)
 	{
-		if (this->depotArray[i]->getId() == depotIdLabel)
+		if (this->depotArray[i]->getId() == depotInternalId)
 		{			
 			return i;
 		}
@@ -945,6 +1196,20 @@ FrogLeapSolution * FrogLeapController::genRandomFrogLeapSolution(FrogLeapControl
 long int FrogLeapController::getTope()
 {
 	return TOPE_ITERATIONS;
+}
+
+FrogObjectCol * FrogLeapController::createDepotListOrderedByCapacity()
+{
+	FrogObjectCol * localDepotCol = new FrogObjectCol();
+	Pair * current = NULL;
+
+	for(int i = 0; i < this->getNumberOfDepots(); i++)
+	{
+		current = this->depotArray[i];
+		localDepotCol->addFrogObjectOrdered(current);
+	}
+
+	return localDepotCol;
 }
 
 void FrogLeapController::resetDepotRemainingCapacities()

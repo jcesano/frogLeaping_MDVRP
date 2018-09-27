@@ -51,7 +51,7 @@ int main()
 	
 	FrogLeapController * controller = new FrogLeapController();
 
-	char * fileName = "casog01.vrp";
+	char * fileName = "casog01.vrp", * testCaseFileName = "TestCase01Casog01.txt";
 
 	controller->setSourceType(SourceType::Tsp2DEuc);
 
@@ -117,7 +117,8 @@ int main()
 		controller->setUpCustomerAndDepotLists();
 		controller->setUpVehicleCapacity();
 		controller->loadDistanceTable();
-	}
+
+		controller->loadTestCaseData(testCaseFileName);	}
 
 	//controller->setUpVehiclesPerDepot();	
 	
@@ -169,7 +170,7 @@ int main()
 	const long long int itNumber = controller->getNumberOfIterations();
 	long long int i = 0;
 	long long int timeBound, execTime;
-	timeBound = 7200000;
+	timeBound = 10800000;
 
 	auto end_time = std::chrono::high_resolution_clock::now();
 	auto time = end_time - start_time;
@@ -180,14 +181,14 @@ int main()
 
 	while(execTime <= timeBound)
 	{
-		isFeasibleFLS = fls->genRandomSolution2(controller);
+		isFeasibleFLS = fls->genRandomSolution3(controller);
 
 		//fls->printFrogObj();
 
 		if(isFeasibleFLS == true)		
 		{
 			dfls_1 = fls->decodeSolution(controller);
-			if (dfls_1->getIsFeasibleSolution() == true)			
+			if (dfls_1->getIsFeasibleSolution() == true)
 			{
 				controller->incSuccessAttempts();
 				evalSol = dfls_1->evalSolution();
@@ -221,11 +222,11 @@ int main()
 		end_time = std::chrono::high_resolution_clock::now();
 		time = end_time - start_time;
 		execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
-		printf("Iteration Number i = %lld \n", i);
+		printf("Iteration Number i = %lld MinCostValue = %.3f \n", i, controller->getMinCostValue());
 		i++;
 	}
 	
-	printf("TOTAL ITERATION NUMBER %lld", i);
+ 	printf("TOTAL ITERATION NUMBER %lld", i);
 
 	controller->printCtrl();
 	

@@ -121,16 +121,16 @@ int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, int numberOfDepot
 	return result;
 }
 
-int DecodedFrogLeapSolution::getGlobalVehicleId()
+long long int DecodedFrogLeapSolution::getGlobalVehicleId()
 {
-	int result = this->globalVehicleId;
+	long long int result = this->globalVehicleId;
 
 	this->globalVehicleId++;
 
 	return result;
 }
 
-bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, int customerIndex, int numberOfDepots)
+bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots)
 {
 	bool result = true;
 	int vehicleId;
@@ -140,7 +140,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(float fvalue, int customerIndex
 	int remainingDepotCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
 	int customerId = this->ptrController->getCustomerId(customerIndex);
 
-	if(customerDemand > VEHICLE_CAPACITY || customerDemand > remainingDepotCapacity)
+	if(customerDemand > controller->getVehicleCapacity() || customerDemand > remainingDepotCapacity)
 	{
 		this->setIsFeasibleSolution(false);
 		this->setNotAddedCustomer(customerId);

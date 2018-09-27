@@ -497,6 +497,25 @@ FrogObject * FrogObjectCol::getFirstUpperValueFrogObject(float searchedValue)
 	return result;
 }
 
+FrogObject * FrogObjectCol::getFirstUpperValueFrogObjectIndex(float searchedValue, int & frogObjectIndex)
+{	
+	FrogObject * currentFrogObject = NULL, * result = NULL;
+
+	for (int i = 0; i < this->getSize(); i++)
+	{
+		currentFrogObject = this->getFrogObject(i);
+		if (currentFrogObject->getValue() >= searchedValue)
+		{
+			result = currentFrogObject;
+			frogObjectIndex = i;  
+			return result;
+		}
+	}
+
+	frogObjectIndex = -1;
+	return result;
+}
+
 void FrogObjectCol::ConcatCol(FrogObjectCol * fs)
 {
 }

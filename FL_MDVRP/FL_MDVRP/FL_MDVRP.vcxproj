@@ -163,6 +163,7 @@
     <ClInclude Include="Pair.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestCaseObj.h" />
     <ClInclude Include="TspLibEuc2D.h" />
     <ClInclude Include="Vehicle.h" />
     <ClInclude Include="Vertex.h" />
@@ -189,6 +190,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestCaseObj.cpp" />
     <ClCompile Include="TspLibEuc2D.cpp" />
     <ClCompile Include="Vehicle.cpp" />
     <ClCompile Include="Vertex.cpp" />
