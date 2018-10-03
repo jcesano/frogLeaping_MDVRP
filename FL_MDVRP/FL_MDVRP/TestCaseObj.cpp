@@ -14,7 +14,7 @@ TestCaseObj::TestCaseObj() :FrogObject()
 	this->comment = NULL;
 	this->edge_weight_type = NULL;
 	this->capacity = 0;
-	this->depotIdCol = new FrogObjectCol();
+	this->vehicleTestCol = new FrogObjectCol();
 	this->customer_section = new FrogObjectCol();
 	this->depot_section = new FrogObjectCol();
 }
@@ -84,14 +84,14 @@ int TestCaseObj::getCapacity()
 	return this->capacity;
 }
 
-void TestCaseObj::AddDepotItem(Pair * v_pair_coord)
+void TestCaseObj::AddVehicleItem(Pair * v_pair_coord)
 {
-	this->depotIdCol->addFrogObjectOrdered(v_pair_coord);
+	this->vehicleTestCol->addLastFrogObject(v_pair_coord);
 }
 
 void TestCaseObj::AddCustomerItem(Pair * v_pair_demand)
 {
-	this->customer_section->AddLastFrogObject(v_pair_demand);
+	this->customer_section->addLastFrogObject(v_pair_demand);
 }
 
 float TestCaseObj::getEucDistance(int u, int v)
@@ -100,8 +100,8 @@ float TestCaseObj::getEucDistance(int u, int v)
 	float result = 0;
 	Pair * coordinateOrigin = NULL, *coordinateDestination = NULL;
 
-	coordinateOrigin = (Pair *)depotIdCol->getFrogObject(u);
-	coordinateDestination = (Pair *)depotIdCol->getFrogObject(v);
+	coordinateOrigin = (Pair *)vehicleTestCol->getFrogObject(u);
+	coordinateDestination = (Pair *)vehicleTestCol->getFrogObject(v);
 
 	result = calcEuc2D(coordinateOrigin, coordinateDestination);
 
@@ -136,9 +136,9 @@ int TestCaseObj::getNumberOfCustomers()
 	return (this->customer_section->getSize());
 }
 
-FrogObjectCol * TestCaseObj::getNodeCoordSection()
+FrogObjectCol * TestCaseObj::getCustomerSection()
 {
-	return this->depotIdCol;
+	return this->customer_section;
 }
 
 FrogObjectCol * TestCaseObj::getDemandSection()

@@ -25,9 +25,7 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		int notAddedCustomer;
 
-		bool localSearchApplied;
-
-		long long int globalVehicleId;
+		bool localSearchApplied;		
 
 		int numDepots;
 	
@@ -63,15 +61,17 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool getIsFeasibleSolution();
 
-		float applyLocalSearch(FrogLeapController * controller);
-
-		long long int getGlobalVehicleId();
+		float applyLocalSearch(FrogLeapController * controller);		
 		
 		int getNotAddedCustomer();
 
 		void setNotAddedCustomer(int customerId);
 
 		Vehicle * getFirstUpperValueVehicle(int customerDemand, int depotIndex);
+
+		void adjustVehicleRoutes(FrogLeapController * controller);
+
+		void adjustDepotVehicleRoutes(FrogObjectCol * customerList, FrogLeapController * controller);
 
 		// abstract methods
 		void printFrogObj();

@@ -37,6 +37,8 @@ class Vehicle : public FrogObject
 
 		void addCustomerPair(Pair * customerPair);
 
+		void addLastCustomerPair(Pair * customerPair);
+
 		void setDepotIndex(int depot_v);
 
 		int getDepotIndex();
@@ -87,6 +89,13 @@ class Vehicle : public FrogObject
 
 		void printGlobalSolution();
 
+		void adjustCustomerRoute(FrogLeapController * controller);
+
+		
+		Pair * getClosestIndexToDepot(int depotInternalId, FrogLeapController * controller);
+
+		Pair * getClosestIndexToCustomer(int depotInternalId, FrogLeapController * controller);
+		
 		// abstract methods
 		void printFrogObj();
 

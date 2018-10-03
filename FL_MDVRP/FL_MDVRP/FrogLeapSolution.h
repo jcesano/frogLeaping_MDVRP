@@ -11,6 +11,7 @@ class Graph;
 class FrogLeapController;
 class FrogObjectCol;
 class FrogObject;
+class Pair;
 enum class SolutionGenerationType;
 enum class SourceType;
 
@@ -27,7 +28,9 @@ class FrogLeapSolution: public FrogObject
 		SolutionGenerationType sgt;
 		SourceType st;
 
-		float genRandomFloatingNumber(float a, float b);		
+		float genRandomFloatingNumber(float a, float b);	
+
+		FeasibleSolution * randomCustomerSelectionList;
 
 	public:
 	
@@ -36,6 +39,8 @@ class FrogLeapSolution: public FrogObject
 		~FrogLeapSolution();
 
 		float getFLValue(int i);
+
+		void setFLValue(int i, float v_float);
 
 		void setSize(int size_v);
 
@@ -47,13 +52,19 @@ class FrogLeapSolution: public FrogObject
 
 		bool genRandomSolution3(FrogLeapController * controller);
 
+		bool genRandomSolution4(FrogLeapController * controller);
+
+		bool genRandomSolutionFromTestCase(FrogLeapController * controller);
+
 		float normalRandomAssigment(FrogLeapController * controller);
 
 		float assignRandomFeasibleDepot(FrogObjectCol * feasibleDepotList, FrogLeapController * controller, int customerIndex);
 
 		float assignRandomFeasibleDepot2(FrogLeapController * controller, int customerIndex);
 
-		float assignRandomFeasibleDepot3(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex);
+		float assignRandomFeasibleDepot3(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex);		
+
+		float assignRandomFeasibleDepot4(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex);
 
 		FrogObjectCol * initializeFeasibleDepotList(FrogLeapController * controller);
 
@@ -65,6 +76,12 @@ class FrogLeapSolution: public FrogObject
 
 		SolutionGenerationType getSolutionGenerationType();
 
+		void initRandomCustomerSelection(FrogLeapController * controller);
+
+		void destroyRandomCustomerSelectionList();
+
+		int selectRandomCustomerIndex(int i);
+		
 		// abstract methods
 		void printFrogObj();
 

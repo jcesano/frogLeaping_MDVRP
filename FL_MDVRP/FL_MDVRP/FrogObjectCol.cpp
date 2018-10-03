@@ -109,7 +109,7 @@ int FrogObjectCol::getFrogObjectPositionById(int id)
 	return result;
 }
 
-void FrogObjectCol::AddLastFrogObject(FrogObject * fs) 
+void FrogObjectCol::addLastFrogObject(FrogObject * fs) 
 {
 	FrogObjNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
 	bool stopLoop = false;
@@ -322,7 +322,7 @@ void FrogObjectCol::removeAllLowerValueFrogObject(int value, FrogObjectCol * del
 				if (head == nodePtr)
 				{
 					nodePtrTemp = head;
-					deletedFrogObjects->AddLastFrogObject(nodePtrTemp->getFrogItem());
+					deletedFrogObjects->addLastFrogObject(nodePtrTemp->getFrogItem());
 
 					head = head->getNextFrogObjNode();
 					nodePtr = head;
@@ -336,7 +336,7 @@ void FrogObjectCol::removeAllLowerValueFrogObject(int value, FrogObjectCol * del
 				else
 				{
 					nodePtrTemp = nodePtr;
-					deletedFrogObjects->AddLastFrogObject(nodePtrTemp->getFrogItem());
+					deletedFrogObjects->addLastFrogObject(nodePtrTemp->getFrogItem());
 					nodePtrPrev->setNextFrogObjNode(nodePtr->getNextFrogObjNode());
 					nodePtr = nodePtrTemp->getNextFrogObjNode();
 

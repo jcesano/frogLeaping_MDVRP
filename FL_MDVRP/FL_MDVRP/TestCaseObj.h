@@ -21,7 +21,7 @@ private:
 	int dimension;
 	char * edge_weight_type;
 	int capacity;
-	FrogObjectCol * depotIdCol;
+	FrogObjectCol * vehicleTestCol;
 	FrogObjectCol * customer_section;
 	FrogObjectCol * depot_section;
 
@@ -49,11 +49,9 @@ public:
 	void setCapacity(int v_capacity);
 	int getCapacity();
 
-	void AddDepotItem(Pair * v_pair_coord);
+	void AddVehicleItem(Pair * v_pair_coord);
 
-	void AddCustomerItem(Pair * v_pair_demand);
-
-	void AddDepotItem(int depotId);
+	void AddCustomerItem(Pair * v_pair_demand);	
 
 	float getEucDistance(int u, int v);
 
@@ -63,7 +61,7 @@ public:
 
 	int getNumberOfCustomers();
 
-	FrogObjectCol * getNodeCoordSection();
+	FrogObjectCol * getCustomerSection();
 
 	FrogObjectCol * getDemandSection();
 	

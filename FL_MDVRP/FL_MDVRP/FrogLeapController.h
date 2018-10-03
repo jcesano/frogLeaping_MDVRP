@@ -33,6 +33,8 @@ class FrogLeapController
 		long int globalImprovements;
 		long int vehicle_capacity;
 
+		long long int globalVehicleId;
+
 		float minCostValue;
 
 		time_t timeSeedUsed;
@@ -56,7 +58,7 @@ class FrogLeapController
 
 		FrogObjectCol * depotList;
 
-		FrogObjectCol * vehiclePairList;
+		FrogObjectCol * vehiclePairList;		
 
 		Pair * * vehiclePairArray;
 
@@ -114,13 +116,17 @@ class FrogLeapController
 
 		void loadTSPEUC2D_Data(char * fileName);
 
-		void loadTestCaseData(char * fileName);
+		DecodedFrogLeapSolution * loadTestCaseData(char * fileName);
 
 		void readTSPSection(FILE * filePtr, char * ctrlSectionTag, char * ctrlSeparatorChar, int * off_set);
 
 		void loadTSPSection(char * buf, char * sectionTag);
 
 		void loadAssignations(FILE * filePtr, TestCaseObj * testCaseObjPtr);
+
+		DecodedFrogLeapSolution * loadAssignations2(FILE * filePtr, TestCaseObj * testCaseObjPtr);
+
+		FrogLeapSolution * loadAssignations3(FILE * filePtr, TestCaseObj * testCaseObjPtr);
 
 		void loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr);
 		
@@ -207,5 +213,17 @@ class FrogLeapController
 		int getLabel(int internalId);
 
 		int getDepotListIndexByInternal(int depotIdLabel);
+
+		int getDepotIndexByLabelId(int depotLabelId);
+
+		int getCustomerIndexByLabelId(int depotLabelId);
+
+		FrogObjectCol * getTestCustomerSectionList();
+
+		long long int getGlobalVehicleId();		
+
+		int getCloserIndexToDepot(int depotIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol);
+
+		int getCloserIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol);
 };
 #endif

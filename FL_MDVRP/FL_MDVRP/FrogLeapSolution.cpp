@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FrogLeapSolution.h"
+#include "FeasibleSolution.h"
 #include "DecodedFrogLeapSolution.h"
 #include "FrogLeapController.h"
 #include "Vehicle.h"
@@ -23,6 +24,8 @@ FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_so
 	this->nElementsToSort = this->n_depots;
 		
 	this->values = new float[this->size];		
+
+	randomCustomerSelectionList = NULL;
 }
 
 FrogLeapSolution::~FrogLeapSolution()
@@ -33,6 +36,11 @@ FrogLeapSolution::~FrogLeapSolution()
 float FrogLeapSolution::getFLValue(int i)
 {
 	return this->values[i];
+}
+
+void FrogLeapSolution::setFLValue(int i, float v_float)
+{
+	this->values[i] = v_float;
 }
 
 void FrogLeapSolution::setSize(int size_v)
@@ -161,6 +169,89 @@ bool FrogLeapSolution::genRandomSolution3(FrogLeapController * controller)
 
 	localDepotCol->unReferenceFrogObjectCol();
 	delete localDepotCol;
+	return result;
+}
+
+bool FrogLeapSolution::genRandomSolution4(FrogLeapController * controller)
+{
+	float u;
+	int a = this->size;
+
+	bool result = true;
+	int i = 0;
+
+	controller->resetDepotRemainingCapacities();
+	
+	FrogObjectCol * localDepotCol = controller->createDepotListOrderedByCapacity();
+
+	this->initRandomCustomerSelection(controller);
+
+	while ((i < this->size) && (result == true))
+	{
+		int rand_i = this->selectRandomCustomerIndex(i);
+
+		u = assignRandomFeasibleDepot4(controller, localDepotCol, rand_i);
+
+		// code to eliminate fixed random assignment of customers to depots
+		//u = this->normalRandomAssigment(controller);
+
+		//this->values[i] = u;
+
+		if (u >= 0)
+		{
+			this->values[rand_i] = u;
+		}
+		else
+		{
+			result = false; 
+		}
+
+		i++;
+	};
+
+	localDepotCol->unReferenceFrogObjectCol();
+	delete localDepotCol;
+	
+	this->destroyRandomCustomerSelectionList();
+
+	return result;
+}
+
+bool FrogLeapSolution::genRandomSolutionFromTestCase(FrogLeapController * controller)
+{
+	float u;
+	int a = this->size;
+
+	bool result = true;
+	int i = 0;
+
+	//controller->resetDepotRemainingCapacities();
+
+	FrogObjectCol * testCustomerPairs = controller->getTestCustomerSectionList();
+
+	while ((i < this->size) && (result == true))
+	{
+		u = assignRandomFeasibleDepot3(controller, testCustomerPairs, i);
+
+		// code to eliminate fixed random assignment of customers to depots
+		//u = this->normalRandomAssigment(controller);
+
+		//this->values[i] = u;
+
+		if (u >= 0)
+		{
+			this->values[i] = u;
+		}
+		else
+		{
+			result = false;
+		}
+
+		i++;
+	};
+
+	testCustomerPairs->unReferenceFrogObjectCol();
+	delete testCustomerPairs;
 	return result;
 }
 
@@ -348,6 +439,57 @@ float FrogLeapSolution::assignRandomFeasibleDepot3(FrogLeapController * controll
 	return  result;
 }
 
+float FrogLeapSolution::assignRandomFeasibleDepot4(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex)
+{
+	float u = -1, result = -1;
+	Pair * depotPairSelected = NULL;
+	int lowBoundIndex = -1;
+
+	// get the customer demand
+	int customerDemand = controller->getCustomerDemandByIndex(customerIndex);
+
+	// get the index of the first depot with capacity enough to attend customer demand
+	localDepotCol->getFirstUpperValueFrogObjectIndex(customerDemand, lowBoundIndex);
+
+	// if there is not any depot then return -1
+	if (lowBoundIndex == -1)
+	{
+		return result;
+	}
+
+	// choose between the available depots with suffiecient capacity to attend the customer demand
+	int numberOfDepots = controller->getNumberOfDepots();
+
+	int positionSelected = controller->getCloserIndexToCustomer(customerIndex, lowBoundIndex, localDepotCol->getSize(), localDepotCol);
+	
+	// get the depotPair selected in the list of available depots
+	depotPairSelected = (Pair *)localDepotCol->getFrogObject(positionSelected);
+
+	//update remaining capacity of depot pair
+	int depotRemainingCap = depotPairSelected->get_j_IntValue();
+	int newCapacity = depotRemainingCap - customerDemand;
+	depotPairSelected->set_j_IntValue(newCapacity);
+	depotPairSelected->setValue(newCapacity);
+
+	localDepotCol->reorderFrogObject(depotPairSelected);
+
+	// get the depot index in the controller of the selected depot
+	int depotId = depotPairSelected->getId();
+	int depotIndex = controller->getDepotListIndexByInternal(depotId);
+
+	// assign a random number to the depot selected
+	float randnum;
+
+	do
+	{
+		randnum = this->genRandomFloatingNumber(0, 1);
+	} while (randnum >= 1);
+
+	result = depotIndex + randnum;
+
+	return  result;
+}
+
 FrogObjectCol * FrogLeapSolution::initializeFeasibleDepotList(FrogLeapController *controller)
 {
 	Pair * depotPair = NULL;
@@ -359,7 +501,7 @@ FrogObjectCol * FrogLeapSolution::initializeFeasibleDepotList(FrogLeapController
 	for (int i = 0; i < depotNum; i++)
 	{
 		depotPair = controller->getDepotPairByIndex(i);
-		feasibleDepotList->AddLastFrogObject(depotPair);
+		feasibleDepotList->addLastFrogObject(depotPair);
 		depotPair = NULL;
 	}
 
@@ -378,16 +520,22 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapContr
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(this->n_depots, controller);
 	
-	int i = 0;
+	int i = 0, rand_i;
 	bool feasible = true;
+
+	this->initRandomCustomerSelection(controller);
 
 	do 
 	{
- 		feasible = decodedSolution->decodeFrogLeapItem(controller, this->getFLValue(i), i, this->n_depots);
+		rand_i = this->selectRandomCustomerIndex(i);
+		feasible = decodedSolution->decodeFrogLeapItem(controller, this->getFLValue(rand_i), rand_i, this->n_depots);
 		i++;
 	} while (i < this->getSize() && feasible == true);	
+		
+	this->destroyRandomCustomerSelectionList();
 	
-	
+	decodedSolution->adjustVehicleRoutes(controller);
+
 	return decodedSolution;
 }
 
@@ -434,5 +582,39 @@ bool FrogLeapSolution::isTheSame(FrogObject * fs)
 	return true;
 }
 
+int FrogLeapSolution::selectRandomCustomerIndex(int i)
+{
+	// select a random depot between the set of customers
+	int size = this->randomCustomerSelectionList->getSize();
+	int customerIndex;
+	float u;
 
+	do
+	{
+		u = this->genRandomFloatingNumber(i, size);
+	} while (u >= size);
+
+	int positionSelected = floor(u);
+
+	customerIndex = this->randomCustomerSelectionList->getSolFactValue(positionSelected);
+
+	this->randomCustomerSelectionList->swapItems(i, positionSelected);
+
+	return customerIndex;
+}
+
+void FrogLeapSolution::initRandomCustomerSelection(FrogLeapController * controller)
+{
+	this->randomCustomerSelectionList = new FeasibleSolution(controller->getNumberOfCustomers());
+
+	for (int i = 0; i < controller->getNumberOfCustomers(); i++)
+	{
+		this->randomCustomerSelectionList->setSolFactValue(i, i);
+	}
+}
+
+void FrogLeapSolution::destroyRandomCustomerSelectionList()
+{
+	delete this->randomCustomerSelectionList;
+}
 

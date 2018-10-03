@@ -19,8 +19,7 @@ DecodedFrogLeapSolution::DecodedFrogLeapSolution(int n_depots):FrogObject()
 	};	
 
 	this->ptrController = NULL;
-	this->isFeasibleSolution = true;
-	this->globalVehicleId = 0;
+	this->isFeasibleSolution = true;	
 	this->numDepots = n_depots;
 }
 
@@ -34,8 +33,7 @@ DecodedFrogLeapSolution::DecodedFrogLeapSolution(int n_depots, FrogLeapControlle
 	};
 
 	this->ptrController = controller;
-	this->isFeasibleSolution = true;
-	this->globalVehicleId = 0;
+	this->isFeasibleSolution = true;	
 	this->numDepots = n_depots;
 }
 
@@ -121,15 +119,6 @@ int DecodedFrogLeapSolution::decodeFrogLeapValue(float fvalue, int numberOfDepot
 	return result;
 }
 
-long long int DecodedFrogLeapSolution::getGlobalVehicleId()
-{
-	long long int result = this->globalVehicleId;
-
-	this->globalVehicleId++;
-
-	return result;
-}
-
 bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots)
 {
 	bool result = true;
@@ -157,7 +146,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller
 	
 	if(veh == NULL)
 	{
-		vehicleId = this->getGlobalVehicleId();
+		vehicleId = controller->getGlobalVehicleId();
 
  		veh = new Vehicle(vehicleId, this->ptrController);
 		
@@ -331,4 +320,25 @@ Vehicle * DecodedFrogLeapSolution::getFirstUpperValueVehicle(int customerDemand,
 	}
 
 	return result_veh;
+}
+
+void DecodedFrogLeapSolution::adjustVehicleRoutes(FrogLeapController * controller)
+{
+	for(int i = 0; i < controller->getNumberOfDepots(); i++)
+	{
+		this->adjustDepotVehicleRoutes(this->vehicles[i], controller);
+	}	
+}
+
+void DecodedFrogLeapSolution::adjustDepotVehicleRoutes(FrogObjectCol * vehicleList, FrogLeapController * controller)
+{
+	Vehicle * currentVehicle = NULL;
+	int size = vehicleList->getSize();
+
+	for(int i = 0; i < size; i++)
+	{
+		currentVehicle = (Vehicle *)vehicleList->getFrogObject(i);
+
+		currentVehicle->adjustCustomerRoute(controller);
+	}
 }

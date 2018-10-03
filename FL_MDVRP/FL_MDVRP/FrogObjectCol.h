@@ -24,7 +24,7 @@ public:
 
 	void addFrogObject(FrogObject * fs);
 
-	void AddLastFrogObject(FrogObject * fs);
+	void addLastFrogObject(FrogObject * fs);
 
 	void addFrogObjectOrdered(FrogObject * fs);
 	

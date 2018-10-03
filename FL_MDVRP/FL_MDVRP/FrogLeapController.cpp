@@ -17,6 +17,7 @@
 #include "FrogLeapSolution.h"
 #include "Pair.h"
 #include "IndexList.h"
+#include "Vehicle.h"
 #include <limits>
 
 using std::string;
@@ -51,6 +52,8 @@ FrogLeapController::FrogLeapController()
 	this->depotList = new FrogObjectCol();
 	this->vehiclePairList = new FrogObjectCol();
 	this->ptrBestSolution = NULL;
+
+	this->globalVehicleId = 0;	
 }
 
 FrogLeapController::~FrogLeapController()
@@ -376,13 +379,15 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 	}
 }
 
-void FrogLeapController::loadTestCaseData(char * fileName)
+DecodedFrogLeapSolution * FrogLeapController::loadTestCaseData(char * fileName)
 {
 	FILE * filePtr;
 	char * sectionTag = new char[50], *separatorChar = new char[1], buf[LINE_MAX];
 	string ctrlSectionTagStr, ctrlSeparatorCharStr, sectionTagStr, separatorCharStr;
 
 	TestCaseObj * testCaseObjPtr = new TestCaseObj();
+
+	ctrlSeparatorCharStr = string(":");
 
 	if ((filePtr = fopen(fileName, "r")) != NULL)
 	{
@@ -397,10 +402,11 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 			separatorCharStr = separatorChar;
 
 			ctrlSectionTagStr = string("NAME");
+			
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
 			testCaseObjPtr->setName(name);
@@ -408,6 +414,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 		else
 		{
 			printf("Error reading file \n");
+			return NULL;
 		}
 
 		// reading COMMENT
@@ -423,7 +430,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
 			testCaseObjPtr->setComment(comment);
@@ -431,30 +438,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 		else
 		{
 			printf("Error reading file \n");
-		}
-
-		// reading type
-		char * type = new char[50];
-		if (fgets(buf, sizeof buf, filePtr) != NULL)
-		{
-			sscanf(buf, "%s %s %s", sectionTag, separatorChar, type);
-			printf("Section: %s %s %s \n", sectionTag, separatorChar, type);
-
-			sectionTagStr = sectionTag;
-			separatorCharStr = separatorChar;
-
-			ctrlSectionTagStr = string("TYPE");
-			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
-			{
-				printf("Error in file format \n");
-				return;
-			}
-
-			testCaseObjPtr->setType(type);
-		}
-		else
-		{
-			printf("Error reading file \n");
+			return NULL;
 		}
 
 		// reading DIMENSION
@@ -471,7 +455,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
 			testCaseObjPtr->setDimension(dimension);
@@ -479,30 +463,32 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 		else
 		{
 			printf("Error reading file \n");
+			return NULL;
 		}
 
-		// reading EDGE_WEIGHT_TYPE
-		char * edge_weight_type = new char[50];;
+		// reading type
+		char * type = new char[50];
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
-			sscanf(buf, "%s %s %s", sectionTag, separatorChar, edge_weight_type);
-			printf("Section: %s %s %s \n", sectionTag, separatorChar, edge_weight_type);
+			sscanf(buf, "%s %s %s", sectionTag, separatorChar, type);
+			printf("Section: %s %s %s \n", sectionTag, separatorChar, type);
 
 			sectionTagStr = sectionTag;
 			separatorCharStr = separatorChar;
 
-			ctrlSectionTagStr = string("EDGE_WEIGHT_TYPE");
+			ctrlSectionTagStr = string("TYPE");
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
-			testCaseObjPtr->setEdgeWeightType(edge_weight_type);
+			testCaseObjPtr->setType(type);
 		}
 		else
 		{
 			printf("Error reading file \n");
+			return NULL;
 		}
 
 		// reading CAPACITY
@@ -519,7 +505,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0 || separatorCharStr.compare(ctrlSeparatorCharStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
 			testCaseObjPtr->setCapacity(capacity);
@@ -527,6 +513,7 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 		else
 		{
 			printf("Error reading file \n");
+			return NULL;
 		}
 
 		// reading Assignation Section
@@ -542,26 +529,34 @@ void FrogLeapController::loadTestCaseData(char * fileName)
 			if (sectionTagStr.compare(ctrlSectionTagStr) != 0)
 			{
 				printf("Error in file format \n");
-				return;
+				return NULL;
 			}
 
-			// Loading coordinates
-			this->loadAssignations(filePtr, testCaseObjPtr);
+			DecodedFrogLeapSolution * dfls = NULL;
+			FrogLeapSolution * fls = NULL;
 
+			// Loading assignations (customers to vehicles)
+			//DecodedFrogLeapSolution * dfls = this->loadAssignations2(filePtr, testCaseObjPtr);
+			fls = this->loadAssignations3(filePtr, testCaseObjPtr);
+			dfls = fls->decodeFrogLeapSolution(this);
+			float evaluation = dfls->evalSolution();
+			printf("Showing test evaluation: %.3f", evaluation);
 			fclose(filePtr);
+			return dfls;
 		}
 		else
 		{
 			printf("Error reading file \n");
 			fclose(filePtr);
-		}
 
+			return NULL;
+		}
 	}
 }
 
 void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCaseObjPtr)
 {
-	bool stopLoop = false, depotDataLoaded = false, assignationBlockLoaded = false;
+	bool stopLoop = false, vehicleDataLoaded = false, assignationBlockLoaded = false;
 	int nodeLabelId = 0, depot_capacity = 0, customer_load = 0, v_dimension = testCaseObjPtr->getDimension();
 	char buf[LINE_MAX];
 	Pair * currPair;
@@ -570,7 +565,7 @@ void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCase
 	{
 		if (fgets(buf, sizeof buf, filePtr) != NULL)
 		{
-			if(depotDataLoaded == false)
+			if(vehicleDataLoaded == false)
 			{
 				sscanf(buf, "%d %d %d", &nodeLabelId, &depot_capacity, &customer_load);
 				printf("Depot data: %d %d %d \n", nodeLabelId, depot_capacity, customer_load);
@@ -581,8 +576,9 @@ void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCase
 				currPair->setId(nodeLabelId);
 				currPair->setValue(nodeLabelId);
 
-				testCaseObjPtr->AddDepotItem(currPair);
-				depotDataLoaded = true;
+				testCaseObjPtr->AddVehicleItem(currPair);
+				vehicleDataLoaded = true;
+				assignationBlockLoaded = false;
 			}
 			else
 			{
@@ -595,7 +591,7 @@ void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCase
 					if(customerLabelId == -1)
 					{
 						assignationBlockLoaded = true;
-						depotDataLoaded = false;
+						vehicleDataLoaded = false;
 					}
 					else
 					{
@@ -624,6 +620,157 @@ void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCase
 		}
 	}
 }
+
+DecodedFrogLeapSolution * FrogLeapController::loadAssignations2(FILE * filePtr, TestCaseObj * testCaseObjPtr)
+{
+	bool stopLoop = false, vehicleDataLoaded = false, assignationBlockLoaded = false;
+	int depotLabelId = 0, vehicle_cost = 0, vehicle_load = 0, v_dimension = testCaseObjPtr->getDimension();
+	char buf[LINE_MAX];
+	Pair * currPair;
+	float globalCounter = 0;
+	int depotIndex;
+
+	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(this->getNumberOfDepots(), this);
+	Vehicle * veh = NULL;
+	int count;
+	Pair * customerPair = NULL;
+
+	int prevDepotLabelId = -1;
+
+	while (fgets(buf, sizeof buf, filePtr) != NULL)
+	{
+		char* tok = strtok(buf, " ");
+			
+		// read data of the depot vehicle
+		count = 0;
+			
+		// Loading the first three data of the vehicle depot
+		while (tok != NULL && count < 3) // Correct logic to use to stop looping.
+		{
+			if(count == 0)
+			{
+				depotLabelId = atoi(tok);
+				cout << depotLabelId << endl;  // Print the current token before getting the next token.
+			}				
+
+			if(count == 1)
+			{
+				vehicle_cost = atoi(tok);
+				cout << vehicle_cost << endl;  // Print the current token before getting the next token.
+			}
+
+			if(count == 2)
+			{
+				vehicle_load = atoi(tok);
+				cout << vehicle_load << endl;  // Print the current token before getting the next token.
+			}
+								
+			tok = strtok(NULL, " ");
+			count++;
+		}
+
+		veh = new Vehicle(this->getGlobalVehicleId(), this);
+		veh->setDepotId(depotLabelId);
+		depotIndex = this->getDepotIndexByLabelId(depotLabelId);
+		veh->setDepotIndex(depotIndex);
+
+		decodedSolution->addVehicle(depotIndex, veh);
+
+		count = 0;
+
+		int customerLabelId, customerIndex;
+		while (tok != NULL) 
+		{
+			customerLabelId = atoi(tok);
+			customerIndex = this->getCustomerIndexByLabelId(customerLabelId);
+			float fvalue = depotIndex + (globalCounter / 1000);
+			customerPair = new Pair(PairType::IntVsFloat);
+			customerPair->set_i_IntValue(customerIndex);
+			customerPair->set_j_FloatValue(fvalue);
+			customerPair->setValue(fvalue);
+			customerPair->setId(customerIndex);
+				
+			veh->addLastCustomerPair(customerPair);
+
+			tok = strtok(NULL, " ");
+
+			globalCounter = globalCounter + 1;
+		}
+
+		globalCounter = 0;
+		prevDepotLabelId = depotLabelId;
+	}
+
+	return decodedSolution;
+}
+
+
+FrogLeapSolution * FrogLeapController::loadAssignations3(FILE * filePtr, TestCaseObj * testCaseObjPtr)
+{
+	bool stopLoop = false, vehicleDataLoaded = false, assignationBlockLoaded = false;
+	int depotLabelId = 0, vehicle_cost = 0, vehicle_load = 0, v_dimension = testCaseObjPtr->getDimension();
+	char buf[LINE_MAX];
+	Pair * currPair;
+	float globalCounter = 0;
+	int depotIndex;
+
+	FrogLeapSolution * frogLeapSolution = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, this->getSourceType(), this->getNumberOfCustomers(), this->getNumberOfDepots(), 0);
+		
+	int count;
+	Pair * customerPair = NULL;
+		
+	while (fgets(buf, sizeof buf, filePtr) != NULL)
+	{
+		char* tok = strtok(buf, " ");
+
+		// read data of the depot vehicle
+		count = 0;
+
+		// Loading the first three data of the vehicle depot
+		while (tok != NULL && count < 3) // Correct logic to use to stop looping.
+		{
+			if (count == 0)
+			{
+				depotLabelId = atoi(tok);
+				cout << depotLabelId << endl;  // Print the current token before getting the next token.
+			}
+
+			if (count == 1)
+			{
+				vehicle_cost = atoi(tok);
+				cout << vehicle_cost << endl;  // Print the current token before getting the next token.
+			}
+
+			if (count == 2)
+			{
+				vehicle_load = atoi(tok);
+				cout << vehicle_load << endl;  // Print the current token before getting the next token.
+			}
+
+			tok = strtok(NULL, " ");
+			count++;
+		}
+
+		depotIndex = this->getDepotIndexByLabelId(depotLabelId);
+		count = 0;
+
+		int customerLabelId, customerIndex;
+		while (tok != NULL)
+		{
+			customerLabelId = atoi(tok);
+			customerIndex = this->getCustomerIndexByLabelId(customerLabelId);
+			float fvalue = depotIndex + (globalCounter / 1000);
+			frogLeapSolution->setFLValue(customerIndex, fvalue);
+
+			tok = strtok(NULL, " ");
+
+			globalCounter = globalCounter + 1;
+		}		
+	}
+
+	return frogLeapSolution;
+}
+
 
 void FrogLeapController::loadCoordinates(FILE * filePtr, TspLibEuc2D * tspLibEuc2DPtr)
 {
@@ -766,6 +913,12 @@ DistanceTable * FrogLeapController::loadDistanceTable()
 			floatDistance = this->tspLibEud2DPtr->getEucDistance(i, j);			
 
 			fdt->addEdge(i, j, floatDistance);			
+
+			if (i == 54 && j == 260)
+			{
+				printf("Testing distance table: dt[%d, %d] = %f", i, j, fdt->getEdge(i,j));
+			}
+
 		}
 	}
 
@@ -1109,6 +1262,68 @@ int FrogLeapController::getDepotListIndexByInternal(int depotInternalId)
 	return -1;
 }
 
+int FrogLeapController::getDepotIndexByLabelId(int depotLabelId)
+{
+	
+	int depotInternalIndex = -1;
+	Pair * depotPair = NULL;
+	Pair * nodeCoord = NULL;
+
+	for(int i = 0; i < this->getNumberOfDepots(); i++)
+	{
+		depotPair = (Pair *)this->depotArray[i];
+
+		if(depotPair != NULL)
+		{
+			depotInternalIndex = depotPair->getId();
+			nodeCoord = (Pair *) this->tspLibEud2DPtr->getNodeCoordSection()->getFrogObject(depotInternalIndex);
+			if(nodeCoord != NULL)
+			{
+				int nodeIdLabel = nodeCoord->getId();
+				if(nodeIdLabel == depotLabelId)
+				{
+					return i;
+				}
+			}
+		}		
+	}
+
+	return -1;
+}
+
+int FrogLeapController::getCustomerIndexByLabelId(int customerLabelId)
+{
+	int customerInternalIndex = -1;
+	Pair * customerPair = NULL;
+	Pair * nodeCoord = NULL;
+
+	for (int i = 0; i < this->getNumberOfCustomers(); i++)
+	{
+		customerPair = (Pair *)this->customerArray[i];
+
+		if (customerPair != NULL)
+		{
+			customerInternalIndex = customerPair->getId();
+			nodeCoord = (Pair *) this->tspLibEud2DPtr->getNodeCoordSection()->getFrogObject(customerInternalIndex);
+			if (nodeCoord != NULL)
+			{
+				int nodeIdLabel = nodeCoord->getId();
+				if (nodeIdLabel == customerLabelId)
+				{
+					return i;
+				}
+			}
+		}
+	}
+
+	return -1;
+}
+
+FrogObjectCol * FrogLeapController::getTestCustomerSectionList()
+{
+	return this->testCaseObjPtr->getCustomerSection();
+}
+
 void FrogLeapController::setUpCustomerAndDepotLists()
 {
 	if(this->getSourceType() == SourceType::Tsp2DEuc)
@@ -1239,3 +1454,60 @@ void FrogLeapController::deleteArray(Pair ** arrayPtr, int v_size) {
 
 	delete[] arrayPtr;
 }
+
+long long int FrogLeapController::getGlobalVehicleId()
+{
+	long long int result = this->globalVehicleId;
+
+	this->globalVehicleId++;
+
+	return result;
+}
+
+int FrogLeapController::getCloserIndexToDepot(int depotIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localNodeCol)
+{
+	float closerDistance = FLT_MAX;
+	int closerNodeIndex = INT_MAX;
+
+	for (int i = lowBoundIndex; i < topBoundIndex; i++)
+	{
+		Pair * currentPair = (Pair *)localNodeCol->getFrogObject(i);
+		Pair * depotPair = (Pair *) this->depotArray[depotIndex];
+		int nodeInternalId = currentPair->getId();
+		int depotInternalId = depotPair->getId();
+		DistanceTable * dt = this->getDistanceTable();
+		float currentDistance = dt->getEdge(nodeInternalId, depotInternalId);
+		if (currentDistance < closerDistance)
+		{
+			closerDistance = currentDistance;
+			closerNodeIndex = i;
+		}
+	}
+
+	return closerNodeIndex;
+}
+
+int FrogLeapController::getCloserIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localNodeCol)
+{
+	float closerDistance = FLT_MAX;
+	int closerNodeIndex = INT_MAX;
+
+	for(int i = lowBoundIndex; i < topBoundIndex; i++ )
+	{
+		Pair * currentPair = (Pair *)localNodeCol->getFrogObject(i);
+		Pair * customerPair = (Pair *) this->customerArray[customerIndex];
+		int nodeInternalId = currentPair->getId();
+		int customerInternalId = customerPair->getId();
+		DistanceTable * dt = this->getDistanceTable();
+		float currentDistance = dt->getEdge(nodeInternalId, customerInternalId);
+		if(currentDistance < closerDistance)
+		{
+			closerDistance = currentDistance;
+			closerNodeIndex = i;
+		}
+	}
+
+	return closerNodeIndex;	
+}
+
+

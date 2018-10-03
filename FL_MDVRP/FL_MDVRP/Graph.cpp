@@ -82,7 +82,7 @@ int Graph::getPositionOrAddVertexById(int vertexId)
 		int lastPosition = this->vertexCol->getSize();
 		u_vertexPair->set_i_IntValue(lastPosition);
 		u_vertexPair->set_j_IntValue(vertexId);
-		this->vertexCol->AddLastFrogObject(u_vertexPair);
+		this->vertexCol->addLastFrogObject(u_vertexPair);
 		return lastPosition;
 	}
 	else

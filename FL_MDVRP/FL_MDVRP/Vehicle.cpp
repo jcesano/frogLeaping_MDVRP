@@ -63,6 +63,16 @@ void Vehicle::addCustomerPair(Pair * customerPair)
 	this->customers->addFrogObjectOrdered(customerPair);
 }
 
+void Vehicle::addLastCustomerPair(Pair * customerPair)
+{
+	if (this->customers == NULL)
+	{
+		this->customers = new FrogObjectCol();
+	}
+
+	this->customers->addLastFrogObject(customerPair);
+}
+
 void Vehicle::setDepotIndex(int depot_v)
 {
 	this->depotIndex = depot_v;
@@ -361,6 +371,45 @@ void Vehicle::printGlobalSolution()
 		destinationLabelId = this->ptrController->getLabel(destinationId);
 		printf("(%d - %d) = %.3f  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 	}
+}
+
+void Vehicle::adjustCustomerRoute(FrogLeapController * controller)
+{
+	FrogObjectCol * customerDistanceOrderedCol = new FrogObjectCol();
+	int depotIndex = this->getDepotIndex();
+	int customerIndex;
+
+	Pair * customerPair = this->getClosestIndexToDepot(depotIndex, controller);
+
+	this->customers->removeFrogObject(customerPair);
+
+	customerDistanceOrderedCol->addLastFrogObject(customerPair);
+
+	while (this->customers->getSize() > 0)
+	{
+		customerIndex = customerPair->getId();
+		customerPair = this->getClosestIndexToCustomer(customerIndex, controller);
+		
+		this->customers->removeFrogObject(customerPair);
+		customerDistanceOrderedCol->addLastFrogObject(customerPair);
+	}
+
+	delete this->customers;
+	this->customers = customerDistanceOrderedCol;
+}
+
+Pair * Vehicle::getClosestIndexToDepot(int depotIndex, FrogLeapController * controller)
+{
+	int closestIndex = controller->getCloserIndexToDepot(depotIndex, 0, this->customers->getSize(), this->customers);
+	
+	return (Pair *)this->customers->getFrogObject(closestIndex);
+}
+
+Pair * Vehicle::getClosestIndexToCustomer(int customerIndex, FrogLeapController * controller)
+{
+	int closestIndex = controller->getCloserIndexToCustomer(customerIndex, 0, this->customers->getSize(), this->customers);
+
+	return (Pair *)this->customers->getFrogObject(closestIndex);
 }
 
 bool Vehicle::isTheSame(FrogObject * fs)

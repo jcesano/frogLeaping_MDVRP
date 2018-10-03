@@ -51,9 +51,11 @@ int main()
 	
 	FrogLeapController * controller = new FrogLeapController();
 
-	char * fileName = "casog01.vrp", * testCaseFileName = "TestCase01Casog01.txt";
+	char * fileName = "casog01.vrp", * testCaseFileName = "TestCase01Casog01 - copia.txt";
 
 	controller->setSourceType(SourceType::Tsp2DEuc);
+
+	DecodedFrogLeapSolution * dfls_1 = NULL;
 
 	if(controller->getSourceType() == SourceType::Graph)
 	{
@@ -118,7 +120,8 @@ int main()
 		controller->setUpVehicleCapacity();
 		controller->loadDistanceTable();
 
-		controller->loadTestCaseData(testCaseFileName);	}
+		dfls_1 =  controller->loadTestCaseData(testCaseFileName);
+	}
 
 	//controller->setUpVehiclesPerDepot();	
 	
@@ -160,12 +163,17 @@ int main()
 
 		
 	/* main test frogSolution */
+	
+	DistanceTable * dt = controller->getDistanceTable();
+
+	printf("Testing distance table: dt[%d, %d] = %f", 260, 54, dt[260, 54]);
+
 	int nDepots = controller->getNumberOfDepots();
 	int nCustomers = controller->getNumberOfCustomers();
     
 	FrogLeapSolution * fls = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, controller->getSourceType(), nCustomers, nDepots, 0);
 
-	DecodedFrogLeapSolution * dfls_1 = NULL;
+	dfls_1 = NULL;
 	float evalSol;	
 	const long long int itNumber = controller->getNumberOfIterations();
 	long long int i = 0;
@@ -181,7 +189,7 @@ int main()
 
 	while(execTime <= timeBound)
 	{
-		isFeasibleFLS = fls->genRandomSolution3(controller);
+		isFeasibleFLS = fls->genRandomSolution4(controller);
 
 		//fls->printFrogObj();
 
