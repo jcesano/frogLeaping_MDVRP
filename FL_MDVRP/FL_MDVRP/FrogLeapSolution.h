@@ -26,9 +26,7 @@ class FrogLeapSolution: public FrogObject
 		int nElementsToSort;
 		//time_t timeSeedUsed;
 		SolutionGenerationType sgt;
-		SourceType st;
-
-		float genRandomFloatingNumber(float a, float b);	
+		SourceType st;		
 
 		FeasibleSolution * randomCustomerSelectionList;
 
@@ -70,7 +68,11 @@ class FrogLeapSolution: public FrogObject
 
 		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);		
 
+		DecodedFrogLeapSolution * decodeSolution2(FrogLeapController * g);
+
 		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller);
+
+		DecodedFrogLeapSolution * decodeFrogLeapSolution2(FrogLeapController * controller);
 
 		void setSolutionGenerationType(SolutionGenerationType v_sgt);
 
@@ -80,7 +82,7 @@ class FrogLeapSolution: public FrogObject
 
 		void destroyRandomCustomerSelectionList();
 
-		int selectRandomCustomerIndex(int i);
+		int selectRandomCustomerIndex(int i, FrogLeapController * controller);
 		
 		// abstract methods
 		void printFrogObj();

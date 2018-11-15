@@ -224,6 +224,20 @@ class FrogLeapController
 
 		int getCloserIndexToDepot(int depotIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol);
 
-		int getCloserIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol);
+		int getClosestLocalDepotIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol, float & distance);
+
+		int getClosestCustomerLocalIndexToDepot(int depotIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localNodeCol);
+
+		int getClosestCustomerLocalIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localCustomerIndexesCol);
+
+		bool existInLocalDepotList(int assignedDepotIndex, FrogObjectCol * localDepotCol, int low, int top);
+
+		int getClosestDepotIndexOfAssignedCustomers(int customerIndex, FrogObjectCol * localDepotCol, int low, int top, float & distanceToCustomer);
+
+		void setCustomerPairAsAssigned(int customerIndex, int depotIndex);
+
+		void resetCustomersAsNotAssigned();
+
+		float genRandomFloatingNumber(float a, float b);
 };
 #endif

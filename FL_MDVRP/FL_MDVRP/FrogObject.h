@@ -5,6 +5,7 @@ class FrogObject
 {
 private:
 	float value;
+	float value2;
 	int id;
 
 public:
@@ -17,7 +18,11 @@ public:
 
 	float getValue();
 
+	float getValue2();
+
 	void setValue(float valueV);
+
+	void setValue2(float valueV);
 
 	int getId();
 

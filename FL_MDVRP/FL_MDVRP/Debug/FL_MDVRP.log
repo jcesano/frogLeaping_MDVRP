@@ -1,4 +1,6 @@
-﻿  Vehicle.cpp
+﻿  stdafx.cpp
+  Vertex.cpp
+  Vehicle.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(19): warning C4244: 'argument': conversion from 'long' to 'float', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(32): warning C4244: 'argument': conversion from 'long' to 'float', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(102): warning C4101: 'originIndex': unreferenced local variable
@@ -15,32 +17,41 @@ c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(346): 
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(347): warning C4101: 'destinationIndex': unreferenced local variable
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(345): warning C4101: 'depotId': unreferenced local variable
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\vehicle.cpp(346): warning C4101: 'originPair': unreferenced local variable
+  TspLibEuc2D.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\tsplibeuc2d.cpp(125): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\tsplibeuc2d.cpp(126): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\tsplibeuc2d.cpp(128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   TestCaseObj.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\testcaseobj.cpp(121): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\testcaseobj.cpp(122): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\testcaseobj.cpp(124): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Pair.cpp
+  IndexListNode.cpp
+  IndexList.cpp
   Graph.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\graph.cpp(81): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  FrogObjNode.cpp
   FrogObjectCol.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(114): warning C4101: 'nodePtrTemp': unreferenced local variable
+  FrogObject.cpp
   FrogLeapSolution.cpp
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(260): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(287): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(288): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(299): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(308): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(331): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(338): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(361): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(367): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(396): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(409): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(412): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(421): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(452): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(472): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(594): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(597): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(254): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(281): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(282): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(293): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(302): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(325): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(332): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(355): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(361): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(390): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(403): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(406): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(415): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(446): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(485): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(609): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapsolution.cpp(612): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   FrogLeapController.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(35): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(152): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
@@ -64,17 +75,38 @@ c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(1443): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   FL_MDVRP.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\fl_mdvrp.cpp(169): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 3 has type 'DistanceTable'
+  FloatDistanceTable.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(22): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(23): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(76): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(159): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\floatdistancetable.cpp(206): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type 'double'
+  FeasSolNode.cpp
+  FeasibleSolution.cpp
+  FeasibleSolCol.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\feasiblesolcol.cpp(196): warning C4101: 'tmp': unreferenced local variable
   DistVect.cpp
+  DistanceTable.cpp
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(22): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(23): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(76): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(159): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\distancetable.cpp(206): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type 'double'
+  Generating Code...
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(555): warning C4715: 'FrogLeapController::loadTestCaseData': not all control paths return a value
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(233): warning C4715: 'FrogObjectCol::getFrogObject': not all control paths return a value
+  Compiling...
   DecodedFrogLeapSolution.cpp
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(100): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(112): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(144): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\decodedfrogleapsolution.cpp(149): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
   Generating Code...
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogleapcontroller.cpp(555): warning C4715: 'FrogLeapController::loadTestCaseData': not all control paths return a value
-c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(233): warning C4715: 'FrogObjectCol::getFrogObject': not all control paths return a value
-  Skipping... (no relevant changes detected)
-  TspLibEuc2D.cpp
-  FeasibleSolution.cpp
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.exe
   FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Debug\FL_MDVRP.pdb (Full PDB)

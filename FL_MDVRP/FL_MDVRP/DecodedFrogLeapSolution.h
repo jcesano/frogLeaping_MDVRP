@@ -51,6 +51,8 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool decodeFrogLeapItem(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots);		
 
+		bool decodeFrogLeapAssignCustomerToDepotWithAngularValues(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots);
+
 		float evalSolution();
 
 		void setController(FrogLeapController * controller);
@@ -72,6 +74,8 @@ class DecodedFrogLeapSolution : public FrogObject
 		void adjustVehicleRoutes(FrogLeapController * controller);
 
 		void adjustDepotVehicleRoutes(FrogObjectCol * customerList, FrogLeapController * controller);
+
+		Pair * calculateAngularValue(int customerIndex, int depotIndex, FrogLeapController * controller);
 
 		// abstract methods
 		void printFrogObj();

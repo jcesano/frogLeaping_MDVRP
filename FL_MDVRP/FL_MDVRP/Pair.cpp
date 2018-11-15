@@ -76,6 +76,16 @@ float Pair::set_j_FloatValue(float floatValue)
 	return this->j_float = floatValue;
 }
 
+int Pair::getAssignedDepotIndex()
+{
+	return this->assignedDepotIndex;
+}
+
+void Pair::setAssignedDepotIndex(int depotIndex)
+{
+	this->assignedDepotIndex = depotIndex;
+}
+
 void Pair::printFrogObj()
 {
 	printf("Printing values of pair object: int_i = %.d, int_j = %.d, float_i = %.2f, float_j = %.2f, \n", this->i_int, this->j_int, this->i_float, this->j_float);

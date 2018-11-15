@@ -1156,13 +1156,13 @@ void FrogLeapController::setSuccessAttempts(int vsucessAttempts)
 	this->successAttempts = vsucessAttempts;
 }
 
-void FrogLeapController::setAsCustomer(int customerId, int demand)
+void FrogLeapController::setAsCustomer(int customerInternalId, int demand)
 {
 	Pair * customerPair = new Pair(PairType::IntVsInt);
-	customerPair->set_i_IntValue(customerId);
+	customerPair->set_i_IntValue(customerInternalId);
 	customerPair->set_j_IntValue(demand);
-	customerPair->setValue(customerId);
-	customerPair->setId(customerId);
+	customerPair->setValue(customerInternalId);
+	customerPair->setId(customerInternalId);
 
 	this->customerList->addFrogObjectOrdered(customerPair);
 }
@@ -1487,19 +1487,145 @@ int FrogLeapController::getCloserIndexToDepot(int depotIndex, int lowBoundIndex,
 	return closerNodeIndex;
 }
 
-int FrogLeapController::getCloserIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localNodeCol)
+// returns the index in the local collection passed as parameter
+int FrogLeapController::getClosestCustomerLocalIndexToDepot(int depotIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localCustomerIndexesCol)
+{
+	float closerDistance = FLT_MAX;
+	int closerNodeIndex = INT_MAX;
+
+	for (int i = lowBoundIndex; i < topBoundIndex; i++)
+	{
+		Pair * customerIndexPair = (Pair *)localCustomerIndexesCol->getFrogObject(i);
+		Pair * depotPair = (Pair *) this->depotArray[depotIndex];
+		int customerIndex = customerIndexPair->getId();
+		int customerInternalId = this->getCustomerId(customerIndex);
+		int depotInternalId = depotPair->getId();
+		DistanceTable * dt = this->getDistanceTable();
+
+		float currentDistance = dt->getEdge(customerInternalId, depotInternalId);
+		if (currentDistance < closerDistance)
+		{
+			closerDistance = currentDistance;
+			closerNodeIndex = i;
+		}
+	}
+
+	return closerNodeIndex;
+}
+
+// returns the index in the local collection passed as parameter
+int FrogLeapController::getClosestCustomerLocalIndexToCustomer(int targetCustomerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localCustomerIndexesCol)
+{
+	float closerDistance = FLT_MAX;
+	int closerNodeIndex = INT_MAX;
+
+	for (int i = lowBoundIndex; i < topBoundIndex; i++)
+	{
+		Pair * customerIndexPair = (Pair *)localCustomerIndexesCol->getFrogObject(i);
+		Pair * targetCustomerPair = (Pair *) this->customerArray[targetCustomerIndex];
+		int customerIndex = customerIndexPair->getId();
+		int customerInternalId = this->getCustomerId(customerIndex);
+		int targetCustomerInternalId = targetCustomerPair->getId();
+		DistanceTable * dt = this->getDistanceTable();
+
+		float currentDistance = dt->getEdge(customerInternalId, targetCustomerInternalId);
+		if (currentDistance < closerDistance)
+		{
+			closerDistance = currentDistance;
+			closerNodeIndex = i;
+		}
+	}
+
+	return closerNodeIndex;
+}
+
+bool FrogLeapController::existInLocalDepotList(int assignedDepotIndex, FrogObjectCol * localDepotCol, int low, int top)
+{
+	for(int i = low; i < top; i++)
+	{
+		Pair * currentPair = (Pair *)localDepotCol->getFrogObject(i);
+		int depotInternalId = currentPair->getId();
+		int depotIndex = this->getDepotListIndexByInternal(depotInternalId);
+		
+		if(assignedDepotIndex == depotIndex)
+		{
+			return true;
+		}		
+	}
+
+	return false;	
+}
+
+int FrogLeapController::getClosestDepotIndexOfAssignedCustomers (int targetCustomerIndex, FrogObjectCol * localDepotCol, int low, int top, float & distanceToCustomer)
+{
+	float closestDistance = FLT_MAX, currentDistance;
+	int result = -1;
+	Pair * customerPair = NULL;
+	int assignedDepotIndex;
+	int customerInternalId;
+	Pair * targetCustomerPair;
+	int targetCustomerInternalId;
+	DistanceTable * dt = NULL;
+
+	for(int i = 0; i < this->getNumberOfCustomers(); i++)
+	{
+		customerPair = this->customerArray[i];
+
+		assignedDepotIndex = customerPair->getAssignedDepotIndex();
+
+		if(assignedDepotIndex != -1)
+		{
+			if(existInLocalDepotList(assignedDepotIndex, localDepotCol, low, top) == true)
+			{
+				customerInternalId = customerPair->getId();
+				targetCustomerPair = (Pair *)this->customerArray[targetCustomerIndex];
+				targetCustomerInternalId = targetCustomerPair->getId();
+				dt = this->getDistanceTable();
+
+				currentDistance = dt->getEdge(targetCustomerInternalId, customerInternalId);
+
+				if(currentDistance < closestDistance)
+				{
+					closestDistance = currentDistance;
+					result = customerPair->getAssignedDepotIndex();
+					distanceToCustomer = closestDistance;
+				}
+			}
+		}
+	} //end for
+
+	return result;
+}
+
+void FrogLeapController::setCustomerPairAsAssigned(int customerIndex, int depotIndex)
+{
+	Pair * customerPair = this->customerArray[customerIndex];
+
+	customerPair->setAssignedDepotIndex(depotIndex);
+}
+
+void FrogLeapController::resetCustomersAsNotAssigned()
+{
+	for(int i = 0; i < this->getNumberOfCustomers(); i++)
+	{
+		Pair * customerPair = this->customerArray[i];
+		customerPair->setAssignedDepotIndex(-1);
+	}
+}
+
+int FrogLeapController::getClosestLocalDepotIndexToCustomer(int customerIndex, int lowBoundIndex, int topBoundIndex, FrogObjectCol * localDepotCol, float & distance)
 {
 	float closerDistance = FLT_MAX;
 	int closerNodeIndex = INT_MAX;
 
 	for(int i = lowBoundIndex; i < topBoundIndex; i++ )
 	{
-		Pair * currentPair = (Pair *)localNodeCol->getFrogObject(i);
+		Pair * currentDepotPair = (Pair *)localDepotCol->getFrogObject(i);
 		Pair * customerPair = (Pair *) this->customerArray[customerIndex];
-		int nodeInternalId = currentPair->getId();
+		int depotInternalId = currentDepotPair->getId();
 		int customerInternalId = customerPair->getId();
 		DistanceTable * dt = this->getDistanceTable();
-		float currentDistance = dt->getEdge(nodeInternalId, customerInternalId);
+		float currentDistance = dt->getEdge(depotInternalId, customerInternalId);
 		if(currentDistance < closerDistance)
 		{
 			closerDistance = currentDistance;
@@ -1507,7 +1633,16 @@ int FrogLeapController::getCloserIndexToCustomer(int customerIndex, int lowBound
 		}
 	}
 
+	distance = closerDistance;
+
 	return closerNodeIndex;	
 }
 
+float FrogLeapController::genRandomFloatingNumber(float a, float b)
+{
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
 

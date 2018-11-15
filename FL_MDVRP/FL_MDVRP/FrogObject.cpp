@@ -23,6 +23,10 @@ float FrogObject::getValue()
 {
 	return this->value;
 }
+float FrogObject::getValue2()
+{
+	return this->value2;
+}
 int FrogObject::getId()
 {
 	return this->id;
@@ -36,6 +40,11 @@ void FrogObject::setId(int id_v)
 void FrogObject::setValue(float valueV)
 {
 	this->value = valueV;
+}
+
+void FrogObject::setValue2(float valueV)
+{
+	this->value2 = valueV;
 }
 
 bool FrogObject::isTheSame(int objid)

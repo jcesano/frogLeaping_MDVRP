@@ -379,7 +379,7 @@ void Vehicle::adjustCustomerRoute(FrogLeapController * controller)
 	int depotIndex = this->getDepotIndex();
 	int customerIndex;
 
-	Pair * customerPair = this->getClosestIndexToDepot(depotIndex, controller);
+	Pair * customerPair = this->getClosestIndexCustomerPairToDepot(depotIndex, controller);
 
 	this->customers->removeFrogObject(customerPair);
 
@@ -388,7 +388,7 @@ void Vehicle::adjustCustomerRoute(FrogLeapController * controller)
 	while (this->customers->getSize() > 0)
 	{
 		customerIndex = customerPair->getId();
-		customerPair = this->getClosestIndexToCustomer(customerIndex, controller);
+		customerPair = this->getClosestIndexCustomerPairToCustomer(customerIndex, controller);
 		
 		this->customers->removeFrogObject(customerPair);
 		customerDistanceOrderedCol->addLastFrogObject(customerPair);
@@ -398,16 +398,16 @@ void Vehicle::adjustCustomerRoute(FrogLeapController * controller)
 	this->customers = customerDistanceOrderedCol;
 }
 
-Pair * Vehicle::getClosestIndexToDepot(int depotIndex, FrogLeapController * controller)
+Pair * Vehicle::getClosestIndexCustomerPairToDepot(int depotIndex, FrogLeapController * controller)
 {
-	int closestIndex = controller->getCloserIndexToDepot(depotIndex, 0, this->customers->getSize(), this->customers);
+	int closestIndex = controller->getClosestCustomerLocalIndexToDepot(depotIndex, 0, this->customers->getSize(), this->customers);
 	
 	return (Pair *)this->customers->getFrogObject(closestIndex);
 }
 
-Pair * Vehicle::getClosestIndexToCustomer(int customerIndex, FrogLeapController * controller)
+Pair * Vehicle::getClosestIndexCustomerPairToCustomer(int customerIndex, FrogLeapController * controller)
 {
-	int closestIndex = controller->getCloserIndexToCustomer(customerIndex, 0, this->customers->getSize(), this->customers);
+	int closestIndex = controller->getClosestCustomerLocalIndexToCustomer(customerIndex, 0, this->customers->getSize(), this->customers);
 
 	return (Pair *)this->customers->getFrogObject(closestIndex);
 }

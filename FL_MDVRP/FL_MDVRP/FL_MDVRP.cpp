@@ -200,7 +200,7 @@ int main()
 			{
 				controller->incSuccessAttempts();
 				evalSol = dfls_1->evalSolution();
-				evalSol = dfls_1->applyLocalSearch(controller);
+				//evalSol = dfls_1->applyLocalSearch(controller);
 				if (evalSol < controller->getMinCostValue())
 				{
 					//printf("New solution found \n");
