@@ -12,6 +12,7 @@
 #include <math.h>       /* floor */
 #include <iostream>
 #include <time.h>
+#include <random>
 
 FrogLeapSolution::FrogLeapSolution(SolutionGenerationType v_sgt, SourceType v_sourceType, int ncustomers, int n_depots_v, int id):FrogObject(id)
 {
@@ -127,6 +128,7 @@ bool FrogLeapSolution::genRandomSolution2(FrogLeapController * controller)
 	return result;
 }
 
+// Selects a random depot between those with capacity enough
 bool FrogLeapSolution::genRandomSolution3(FrogLeapController * controller)
 {
 	float u;
@@ -380,6 +382,7 @@ float FrogLeapSolution::assignRandomFeasibleDepot2(FrogLeapController * controll
 	return  result;
 }
 
+//Selects a random depot between those with capacity enough
 float FrogLeapSolution::assignRandomFeasibleDepot3(FrogLeapController * controller, FrogObjectCol * localDepotCol, int customerIndex)
 {
 	float u = -1, result = -1;
@@ -530,7 +533,7 @@ FrogObjectCol * FrogLeapSolution::initializeFeasibleDepotList(FrogLeapController
 DecodedFrogLeapSolution * FrogLeapSolution::decodeSolution(FrogLeapController * controller)
 {
 	controller->resetDepotRemainingCapacities();
-	return this->decodeFrogLeapSolution(controller);
+	return this->decodeFrogLeapSolution(controller, true);
 }
 
 // this uses the sweep algorithm to determine the routes for each depot
@@ -542,7 +545,7 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeSolution2(FrogLeapController *
 
 //if generated instance of DecodedFrogLeapSolution is NULL then solution is not valid due to a vehicle capacity violation
 // This algorithm uses a float distance table
-DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapController * controller)
+DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapController * controller, bool adjustVehicleRoutes)
 {
 	DecodedFrogLeapSolution * decodedSolution = new DecodedFrogLeapSolution(this->n_depots, controller);
 	
@@ -560,7 +563,10 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapContr
 		
 	this->destroyRandomCustomerSelectionList();
 	
-	decodedSolution->adjustVehicleRoutes(controller);
+	if(adjustVehicleRoutes)
+	{
+		decodedSolution->adjustVehicleRoutes(controller);
+	}	
 
 	return decodedSolution;
 }
@@ -569,6 +575,38 @@ DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution(FrogLeapContr
 // Here we also assign vehicles to customer according to the angular order of customers
 DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolution2(FrogLeapController * controller)
 {
+	return NULL;
+}
+
+DecodedFrogLeapSolution * FrogLeapSolution::decodeWithAngularCriteria(FrogLeapController * controller)
+{
+	int customerSetSize = this->getSize();
+
+	// create a list array of doubleOrdered lists for the set of depots
+
+	// for each customer (element of the FrogLeapSolution)
+	for (int i = 0; i <= customerSetSize; i++)
+	{
+		// i is the customerIndex, so get the corresponding customerLabelId
+		// get the corresponding Pair with the customer coordinates
+
+		// get the corresponding depotIndex
+		// get the corresponding depotLabelId
+		// get the corresponding Pair with the depot coordinates
+
+		// calculate angular value and module of customer respect to the depot
+
+		// create a pair with (customerIndex, angle theta, module)
+
+		// add pair to doubleordered list for the corresponding depotIndex
+	}
+
+	// for each list in the array
+	// get the current customer in order
+	// assign customer to current vehicle
+	// if remaining cap of vehicle does not fit then create a new vehicle
+	
+	return nullptr;
 }
 
 void FrogLeapSolution::setSolutionGenerationType(SolutionGenerationType v_sgt)

@@ -75,7 +75,7 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		void adjustDepotVehicleRoutes(FrogObjectCol * customerList, FrogLeapController * controller);
 
-		Pair * calculateAngularValue(int customerIndex, int depotIndex, FrogLeapController * controller);
+		//Pair * calculateAngularValue(int customerIndex, int depotIndex, FrogLeapController * controller);
 
 		// abstract methods
 		void printFrogObj();

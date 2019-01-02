@@ -19,8 +19,21 @@
 #include "IndexList.h"
 #include "Vehicle.h"
 #include <limits>
+#include <iostream>
+#include <string>
+#include <functional>
+#include <random>
+#include <utility>
 
-using std::string;
+//using std::string;
+//using std::cout;
+//using std::endl;
+//using std::cin;
+//using std::string;
+//using std::random_device;
+//using std::default_random_engine;
+
+using namespace std;
 
 const int LINE_MAX = 256;
 
@@ -32,7 +45,7 @@ FrogLeapController::FrogLeapController()
 
 	this->timeSeedUsed = (unsigned)time(NULL);
 	//this->timeSeedUsed = 1537280770;
-	srand(this->timeSeedUsed);
+	//srand(this->timeSeedUsed);
 
 	this->minCostValue = std::numeric_limits<float>::max();;
 
@@ -357,9 +370,10 @@ void FrogLeapController::loadTSPEUC2D_Data(char * fileName){
 				return;
 			}
 
-			// Loading coordinates
+			// Loading coordinates (we load the node Id, x_coord and y_coord)
 			this->loadCoordinates(filePtr, tspLibEuc2DPtrAux);
 
+			// Loading demands (we load the node Id, demand). The Id is the same as the previous one
 			this->loadDemand(filePtr, tspLibEuc2DPtrAux);
 
 			this->loadDepots(filePtr, tspLibEuc2DPtrAux);
@@ -536,9 +550,10 @@ DecodedFrogLeapSolution * FrogLeapController::loadTestCaseData(char * fileName)
 			FrogLeapSolution * fls = NULL;
 
 			// Loading assignations (customers to vehicles)
-			//DecodedFrogLeapSolution * dfls = this->loadAssignations2(filePtr, testCaseObjPtr);
+			//dfls = this->loadAssignations2(filePtr, testCaseObjPtr);
 			fls = this->loadAssignations3(filePtr, testCaseObjPtr);
-			dfls = fls->decodeFrogLeapSolution(this);
+			//dfls = fls->decodeFrogLeapSolution(this);
+			dfls = fls->decodeWithAngularCriteria(this);
 			float evaluation = dfls->evalSolution();
 			printf("Showing test evaluation: %.3f", evaluation);
 			fclose(filePtr);
@@ -621,6 +636,7 @@ void FrogLeapController::loadAssignations(FILE * filePtr, TestCaseObj * testCase
 	}
 }
 
+// This method creates an already decoded solution
 DecodedFrogLeapSolution * FrogLeapController::loadAssignations2(FILE * filePtr, TestCaseObj * testCaseObjPtr)
 {
 	bool stopLoop = false, vehicleDataLoaded = false, assignationBlockLoaded = false;
@@ -711,9 +727,8 @@ FrogLeapSolution * FrogLeapController::loadAssignations3(FILE * filePtr, TestCas
 	int depotLabelId = 0, vehicle_cost = 0, vehicle_load = 0, v_dimension = testCaseObjPtr->getDimension();
 	char buf[LINE_MAX];
 	Pair * currPair;
-	float globalCounter = 0;
-	int depotIndex;
-
+	float globalCounter = 0, fvalue;
+	int depotIndex, customerLabelId, customerIndex;
 	FrogLeapSolution * frogLeapSolution = new FrogLeapSolution(SolutionGenerationType::FrogLeaping, this->getSourceType(), this->getNumberOfCustomers(), this->getNumberOfDepots(), 0);
 		
 	int count;
@@ -754,12 +769,11 @@ FrogLeapSolution * FrogLeapController::loadAssignations3(FILE * filePtr, TestCas
 		depotIndex = this->getDepotIndexByLabelId(depotLabelId);
 		count = 0;
 
-		int customerLabelId, customerIndex;
 		while (tok != NULL)
 		{
 			customerLabelId = atoi(tok);
 			customerIndex = this->getCustomerIndexByLabelId(customerLabelId);
-			float fvalue = depotIndex + (globalCounter / 1000);
+			fvalue = depotIndex + (globalCounter / 1000);
 			frogLeapSolution->setFLValue(customerIndex, fvalue);
 
 			tok = strtok(NULL, " ");
@@ -912,6 +926,7 @@ DistanceTable * FrogLeapController::loadDistanceTable()
 		{
 			floatDistance = this->tspLibEud2DPtr->getEucDistance(i, j);			
 
+			// we add two edges (a[u][v] and a[v][u])
 			fdt->addEdge(i, j, floatDistance);			
 
 			if (i == 54 && j == 260)
@@ -1167,14 +1182,14 @@ void FrogLeapController::setAsCustomer(int customerInternalId, int demand)
 	this->customerList->addFrogObjectOrdered(customerPair);
 }
 
-void FrogLeapController::setAsDepot(int depotId, int capacity)
+void FrogLeapController::setAsDepot(int depotInternalId, int capacity)
 {
 
 	Pair * depotPair = new Pair(PairType::IntVsInt);
 	depotPair->set_i_IntValue(capacity);
 	depotPair->set_j_IntValue(capacity);
-	depotPair->setValue(depotId);
-	depotPair->setId(depotId);
+	depotPair->setValue(depotInternalId);
+	depotPair->setId(depotInternalId);
 
 	this->depotList->addFrogObjectOrdered(depotPair);
 }
@@ -1205,7 +1220,7 @@ void FrogLeapController::setUpDepotList()
 
 void FrogLeapController::loadCustomerAndDepotList()
 {
-	int size = this->tspLibEud2DPtr->getDimension(), demand;
+	int size = this->tspLibEud2DPtr->getDimension(), demandOrCapacity;
 
 	IndexList * depotListSection = this->tspLibEud2DPtr->getDepotSection();
 
@@ -1220,17 +1235,17 @@ void FrogLeapController::loadCustomerAndDepotList()
 
 		if(demandPair != NULL)
 		{
-			demand = demandPair->get_j_IntValue();
+			demandOrCapacity = demandPair->get_j_IntValue();
 		}		
 
 		//if does not exist then it is a customer
 		if (depotListSection->getItemById(nodeIdLabel) == -1)
 		{				
-			this->setAsCustomer(i, demand);
+			this->setAsCustomer(i, demandOrCapacity);
 		}
 		else //is a depot
 		{
-			this->setAsDepot(i, demand);
+			this->setAsDepot(i, demandOrCapacity);
 		}
 	}
 }
@@ -1640,9 +1655,133 @@ int FrogLeapController::getClosestLocalDepotIndexToCustomer(int customerIndex, i
 
 float FrogLeapController::genRandomFloatingNumber(float a, float b)
 {
-	float random = ((float)rand()) / (float)RAND_MAX;
+	float randNumber = ((float)rand()) / (float)RAND_MAX;
 	float diff = b - a;
-	float r = random * diff;
-	return a + r;
+	
+	float result = a + diff*randNumber;
+		 
+	this->writeRandomInfo(a, b, result);
+		
+	return result;
+}
+
+//void FrogLeapController::setEngine(std::default_random_engine * generator)
+//{
+//	this->engine = generator;
+//}
+
+//std::default_random_engine * FrogLeapController::getEngine()
+//{
+//	return this->engine;
+//}
+
+void FrogLeapController::openOutPutFile()
+{
+	outPutFileName = "outPutFL.txt";
+	pFile = fopen(outPutFileName, "w");
+
+	if(pFile != NULL)
+	{
+		fputs("MDVRP ALGORITHM OUTPUT \n", pFile);
+	}
+}
+
+void FrogLeapController::closeOutPutFile()
+{
+	fclose(this->pFile);
+}
+
+void FrogLeapController::writeSeed()
+{
+	char buffer[256] = { 0 };
+
+	sprintf(buffer, "SEED USED: ; %lld \n", this->timeSeedUsed);
+
+	fputs(buffer, this->pFile);
+}
+
+void FrogLeapController::writeFrogLeapSolution(FrogLeapSolution * fls)
+{ 
+	//fputs("FrogLeapSolution \n", this->pFile);
+	
+	fputs("FLS Customer Index: ;", this->pFile);
+
+	for(int i = 0; i < fls->getSize(); i++)
+	{
+		fprintf(this->pFile, "%d ; ", i);
+	}
+
+	fprintf(this->pFile, "\n");
+
+	fputs("FLS Depot Index: ;", this->pFile);
+
+	for (int i = 0; i < fls->getSize(); i++)
+	{
+		fprintf(this->pFile, "%.3f ;", fls->getFLValue(i));
+	}
+
+	fprintf(this->pFile, "\n");
+}
+
+void FrogLeapController::writeIterationInfo(long long int i, float currentValue)
+{
+	char buffer[300] = { 0 };
+
+	printf("\n\n\n Iteration Number i = %lld ; MinCostValue = %.3f ; CurrentCostValue = %.3f \n\n\n", i, this->getMinCostValue(), currentValue);
+	sprintf(buffer, "Iteration Number i = ; %lld ; MinCostValue = ; %.3f ; CurrentCostValue = ; %.3f \n", i, this->getMinCostValue(), currentValue);
+	fputs(buffer, this->pFile);	
+}
+
+void FrogLeapController::writeRandomInfo(float a, float b, float finalRandom)
+{
+	char buffer[300] = { 0 };
+
+	printf("Random Info a = %.3f b = %.3f finalRandom = %.3f \n", a, b, finalRandom);
+	sprintf(buffer, "Random Info a = ; %.3f ; b = ; %.3f m = ; %.3f finalRandom = ; %.3f \n", a, b, finalRandom);
+	fputs(buffer, this->pFile);
+}
+
+void FrogLeapController::writeExecutionInfo()
+{
+	char buffer[300] = { 0 };
+
+	sprintf(buffer, "\n \n SHOWING DATA OF FROGLEAPING CONTROLLER \n");
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+
+	if (this->ptrBestSolution != NULL)
+	{
+		this->ptrBestSolution->printFrogObj();
+	}
+	else
+	{
+		sprintf(buffer,"\n NO FEASIBLE SOLUTION FOUND: ptrBestSolution IS NULL \n");
+		buffer[300] = { 0 };
+	}
+
+	sprintf(buffer, "\n Summary of Best Found Solution \n");
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Time Seed used %lld \n", (long long)this->timeSeedUsed);
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Number of success attempts: %d \n", this->successAttempts);
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Number of fail attempts: %d \n", this->failAttempts);
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Number of TOTAL Improvements: %d \n", this->getTotalImprovements());
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Number of Global Search Improvements: %d \n", this->globalImprovements);
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Number of Local Search Improvements: %d \n", this->localSearchImprovements);
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
+	sprintf(buffer, "	Evaluation of best found solution is: %.3f \n \n", this->getMinCostValue());
+	buffer[300] = { 0 };
+	fputs(buffer, this->pFile);
 }
 

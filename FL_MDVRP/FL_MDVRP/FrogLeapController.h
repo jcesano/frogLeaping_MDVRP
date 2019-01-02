@@ -20,6 +20,7 @@ enum class SolutionGenerationType { FrogLeaping, FixedFrogLeaping};
 const int VEHICLE_CAPACITY = 500;
 const long int TOPE_ITERATIONS = 10000;
 
+
 class FrogLeapController
 {
 	private:
@@ -69,6 +70,10 @@ class FrogLeapController
 		int origin;
 
 		int nVehiclesPerDepot;
+
+		FILE * pFile;
+		
+		char * outPutFileName;		
 
 	public:
 
@@ -239,5 +244,15 @@ class FrogLeapController
 		void resetCustomersAsNotAssigned();
 
 		float genRandomFloatingNumber(float a, float b);
+
+		// functions for writing information in an output file
+		void openOutPutFile();
+
+		void closeOutPutFile();
+		void writeSeed();
+		void writeFrogLeapSolution(FrogLeapSolution * fls);
+		void writeIterationInfo(long long int i, float currentValue);
+		void writeRandomInfo(float a, float b, float finalRandom);
+		void writeExecutionInfo();
 };
 #endif

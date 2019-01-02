@@ -14,6 +14,8 @@
 #include <time.h>
 #include <chrono>
 #include <string>
+#include <random>
+#include <utility>
 
 using std::string;
 
@@ -120,7 +122,7 @@ int main()
 		controller->setUpVehicleCapacity();
 		controller->loadDistanceTable();
 
-		dfls_1 =  controller->loadTestCaseData(testCaseFileName);
+		//dfls_1 =  controller->loadTestCaseData(testCaseFileName);
 	}
 
 	//controller->setUpVehiclesPerDepot();	
@@ -187,9 +189,16 @@ int main()
 	
 	printf("Program execution started ... \n");
 
-	while(execTime <= timeBound)
+	controller->openOutPutFile();
+	controller->writeSeed();
+	int counterAux = 0;
+	//while(execTime <= timeBound)
+	while (counterAux < 20)
+	//while(true)
 	{
 		isFeasibleFLS = fls->genRandomSolution4(controller);
+		
+		controller->writeFrogLeapSolution(fls);
 
 		//fls->printFrogObj();
 
@@ -208,7 +217,6 @@ int main()
 					controller->setBestDecodedFrogLeapSolution(dfls_1);
 					controller->setMinCostValue(evalSol);
 
-					printf("Evaluation of frogLeapingSolution is = %.3f   ", evalSol);
 					//apply local search
 					//controller->applyLocalSearch();					
 					controller->printCtrl();
@@ -230,14 +238,20 @@ int main()
 		end_time = std::chrono::high_resolution_clock::now();
 		time = end_time - start_time;
 		execTime = std::chrono::duration_cast<std::chrono::milliseconds>(time).count();
-		printf("Iteration Number i = %lld MinCostValue = %.3f \n", i, controller->getMinCostValue());
+		
+		controller->writeIterationInfo(i, evalSol);
+
+		printf("Iteration Number i = %lld MinCostValue = %.3f CurrentValue = %.3f\n", i, controller->getMinCostValue(), evalSol);
 		i++;
+
+		counterAux++;
 	}
 	
  	printf("TOTAL ITERATION NUMBER %lld", i);
 
 	controller->printCtrl();
-	
+	controller->closeOutPutFile();
+
 	//delete g;
 	delete fls;
 	delete controller;

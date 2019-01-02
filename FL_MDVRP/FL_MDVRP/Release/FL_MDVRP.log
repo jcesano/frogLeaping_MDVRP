@@ -1,0 +1,114 @@
+﻿  stdafx.cpp
+  DecodedFrogLeapSolution.cpp
+DecodedFrogLeapSolution.cpp(100): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+DecodedFrogLeapSolution.cpp(112): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+DecodedFrogLeapSolution.cpp(144): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+DecodedFrogLeapSolution.cpp(149): warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+  DistanceTable.cpp
+DistanceTable.cpp(22): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+DistanceTable.cpp(23): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+DistanceTable.cpp(75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+DistanceTable.cpp(76): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+DistanceTable.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+DistanceTable.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+DistanceTable.cpp(159): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+DistanceTable.cpp(206): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type 'double'
+  DistVect.cpp
+  FeasibleSolCol.cpp
+FeasibleSolCol.cpp(196): warning C4101: 'tmp': unreferenced local variable
+  FeasibleSolution.cpp
+  FeasSolNode.cpp
+  FloatDistanceTable.cpp
+FloatDistanceTable.cpp(22): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+FloatDistanceTable.cpp(23): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+FloatDistanceTable.cpp(75): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+FloatDistanceTable.cpp(76): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+FloatDistanceTable.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FloatDistanceTable.cpp(134): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FloatDistanceTable.cpp(159): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FloatDistanceTable.cpp(206): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 3 has type 'double'
+  FL_MDVRP.cpp
+FL_MDVRP.cpp(171): warning C4477: 'printf' : format string '%f' requires an argument of type 'double', but variadic argument 3 has type 'DistanceTable'
+  FrogLeapController.cpp
+FrogLeapController.cpp(165): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+FrogLeapController.cpp(592): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(623): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(688): warning C4244: 'argument': conversion from '__int64' to 'int', possible loss of data
+FrogLeapController.cpp(645): warning C4101: 'currPair': unreferenced local variable
+FrogLeapController.cpp(729): warning C4101: 'currPair': unreferenced local variable
+FrogLeapController.cpp(807): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(856): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(1128): warning C4477: 'sscanf' : format string '%hu' requires an argument of type 'unsigned short *', but variadic argument 1 has type 'int *'
+  FrogLeapController.cpp(1128): note: consider using '%u' in the format string
+  FrogLeapController.cpp(1128): note: consider using '%Iu' in the format string
+  FrogLeapController.cpp(1128): note: consider using '%I32u' in the format string
+FrogLeapController.cpp(1143): warning C4477: 'sscanf' : format string '%hu' requires an argument of type 'unsigned short *', but variadic argument 1 has type 'int *'
+  FrogLeapController.cpp(1143): note: consider using '%u' in the format string
+  FrogLeapController.cpp(1143): note: consider using '%Iu' in the format string
+  FrogLeapController.cpp(1143): note: consider using '%I32u' in the format string
+FrogLeapController.cpp(1179): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(1191): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(1458): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapController.cpp(1740): warning C4473: 'sprintf' : not enough arguments passed for format string
+  FrogLeapController.cpp(1740): note: placeholders and their parameters expect 4 variadic arguments, but 3 were provided
+  FrogLeapController.cpp(1740): note: the missing variadic argument 4 is required by format string '%.3f'
+  FrogLeapSolution.cpp
+FrogLeapSolution.cpp(257): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(284): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(285): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+FrogLeapSolution.cpp(296): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(305): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(330): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(337): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+FrogLeapSolution.cpp(360): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(366): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(396): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(409): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(412): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+FrogLeapSolution.cpp(421): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(453): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(492): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(664): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+FrogLeapSolution.cpp(667): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  FrogObject.cpp
+  FrogObjectCol.cpp
+FrogObjectCol.cpp(114): warning C4101: 'nodePtrTemp': unreferenced local variable
+  FrogObjNode.cpp
+  Graph.cpp
+Graph.cpp(81): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  IndexList.cpp
+  IndexListNode.cpp
+  Pair.cpp
+  TestCaseObj.cpp
+TestCaseObj.cpp(121): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+TestCaseObj.cpp(122): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+TestCaseObj.cpp(124): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  TspLibEuc2D.cpp
+TspLibEuc2D.cpp(125): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+TspLibEuc2D.cpp(126): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+TspLibEuc2D.cpp(128): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Vehicle.cpp
+Vehicle.cpp(19): warning C4244: 'argument': conversion from 'long' to 'float', possible loss of data
+Vehicle.cpp(32): warning C4244: 'argument': conversion from 'long' to 'float', possible loss of data
+Vehicle.cpp(102): warning C4101: 'originIndex': unreferenced local variable
+Vehicle.cpp(100): warning C4101: 'depotId': unreferenced local variable
+Vehicle.cpp(101): warning C4101: 'originPair': unreferenced local variable
+Vehicle.cpp(163): warning C4244: 'argument': conversion from 'long' to 'float', possible loss of data
+Vehicle.cpp(318): warning C4101: 'originIndex': unreferenced local variable
+Vehicle.cpp(317): warning C4101: 'destinationPair': unreferenced local variable
+Vehicle.cpp(316): warning C4101: 'depotIddestinationId': unreferenced local variable
+Vehicle.cpp(318): warning C4101: 'destinationIndex': unreferenced local variable
+Vehicle.cpp(317): warning C4101: 'originPair': unreferenced local variable
+Vehicle.cpp(347): warning C4101: 'originIndex': unreferenced local variable
+Vehicle.cpp(346): warning C4101: 'destinationPair': unreferenced local variable
+Vehicle.cpp(347): warning C4101: 'destinationIndex': unreferenced local variable
+Vehicle.cpp(345): warning C4101: 'depotId': unreferenced local variable
+Vehicle.cpp(346): warning C4101: 'originPair': unreferenced local variable
+  Compiling...
+  Vertex.cpp
+  Generating code
+c:\users\7558\gitprojects\frogleaping_mdvrp\fl_mdvrp\fl_mdvrp\frogobjectcol.cpp(316): warning C4715: 'FrogObjectCol::getFrogObject': not all control paths return a value
+  All 366 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Release\FL_MDVRP.exe
+  FL_MDVRP.vcxproj -> C:\Users\7558\gitProjects\frogLeaping_MDVRP\FL_MDVRP\Release\FL_MDVRP.pdb (Full PDB)

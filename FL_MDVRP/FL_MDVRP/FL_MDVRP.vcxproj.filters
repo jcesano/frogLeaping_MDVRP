@@ -81,6 +81,9 @@
     <ClInclude Include="FloatDistanceTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestCaseObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DistanceTable.cpp">
@@ -144,6 +147,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FloatDistanceTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TestCaseObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

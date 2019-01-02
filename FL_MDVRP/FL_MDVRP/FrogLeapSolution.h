@@ -70,9 +70,11 @@ class FrogLeapSolution: public FrogObject
 
 		DecodedFrogLeapSolution * decodeSolution2(FrogLeapController * g);
 
-		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller);
+		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller, bool adjustVehicleRoutes = false);
 
 		DecodedFrogLeapSolution * decodeFrogLeapSolution2(FrogLeapController * controller);
+
+		DecodedFrogLeapSolution * decodeWithAngularCriteria(FrogLeapController * controller);
 
 		void setSolutionGenerationType(SolutionGenerationType v_sgt);
 
