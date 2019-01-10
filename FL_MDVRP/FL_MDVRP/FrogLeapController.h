@@ -155,6 +155,12 @@ class FrogLeapController
 
 		Pair * getDepotPairByIndex(int position);
 
+		Pair * getCustomerPairByIndex(int position);
+
+		Pair * getPairByInternalId(int position);
+
+		void setAngularValues(Pair * veh_customerPair, int customerInternalId, int depotInternalId);		
+
 		void setGraph(Graph * gPtr);
 
 		Graph * getGraph();
@@ -189,11 +195,11 @@ class FrogLeapController
 
 		int getNumberOfVehicles();
 
-		int getCustomerId(int position);
+		int getCustomerInternalId(int position);
 		
 		int getCustomerDemandByIndex(int position);
 
-		int getDepotId(int position);
+		int getDepotInternalId(int position);
 
 		int getDepotCapacityByIndex(int position);
 
@@ -205,19 +211,25 @@ class FrogLeapController
 
 		FrogLeapSolution * genRandomFrogLeapSolution(FrogLeapController * controller);
 
-		void resetDepotRemainingCapacity(Pair * depotPair);
+		void resetCapacityOrDemand(Pair * depotPair);
 
 		long int getTope();
 
 		FrogObjectCol * createDepotListOrderedByCapacity();
 
+		FrogObjectCol * createCustomerListOrderedByDemand();
+
 		void resetDepotRemainingCapacities();
+
+		void resetCustomerRemainingDemands();
 
 		void loadCustomerAndDepotList();
 
 		int getLabel(int internalId);
 
-		int getDepotListIndexByInternal(int depotIdLabel);
+		int getDepotListIndexByInternal(int depotInternalId);
+
+		int getCustomerListIndexByInternal(int customerInternalId);
 
 		int getDepotIndexByLabelId(int depotLabelId);
 

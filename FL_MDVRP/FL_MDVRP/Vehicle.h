@@ -37,6 +37,8 @@ class Vehicle : public FrogObject
 
 		void addCustomerPair(Pair * customerPair);
 
+		void addCustomerPairDoubleOrdered(Pair * customerPair);
+
 		void addLastCustomerPair(Pair * customerPair);
 
 		void setDepotIndex(int depot_v);

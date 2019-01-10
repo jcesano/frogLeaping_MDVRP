@@ -277,6 +277,60 @@ void FrogObjectCol::addFrogObjectDoubleOrdered(FrogObject * fs)
 	}// end if(fs != NULL)
 }
 
+void FrogObjectCol::addFrogObjectDescOrdered(FrogObject * fs)
+{
+	FrogObjNode * nodePtr = this->head, *nodePtrPrev = NULL, *nodePtrTemp;
+	bool stopLoop = false;
+
+	if (fs != NULL)
+	{
+		if (head == NULL)
+		{
+			head = new FrogObjNode(fs, NULL);
+			this->colSize++;
+		}
+		else
+		{
+			stopLoop = false;
+
+			do
+			{
+				//if the new value is lower than current item => add new value before
+				if (fs->getValue() >= nodePtr->getFrogItem()->getValue())
+				{
+					nodePtrTemp = new FrogObjNode(fs, nodePtr);
+
+					// if nodePtrPrev == NULL then i am in the begining of the list
+					if (nodePtrPrev != NULL)
+					{
+						nodePtrPrev->setNextFrogObjNode(nodePtrTemp);
+					}
+					else
+					{
+						head = nodePtrTemp;
+					}
+
+					this->colSize++;
+					stopLoop = true;
+				}
+				else //keep looking
+				{
+					nodePtrPrev = nodePtr;
+					nodePtr = nodePtr->getNextFrogObjNode();
+				}
+			} while (!stopLoop && nodePtr != NULL);
+
+			//if I am in the end of the list
+			if (nodePtr == NULL)
+			{
+				nodePtr = new FrogObjNode(fs, NULL);
+				nodePtrPrev->setNextFrogObjNode(nodePtr);
+				this->colSize++;
+			}
+		}//end else (head == NULL)
+	}// end if(fs != NULL)
+}
+
 void FrogObjectCol::printFrogObjCol()
 {
 	printf("Printing frog objects \n");

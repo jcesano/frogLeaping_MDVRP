@@ -28,6 +28,8 @@ public:
 
 	void addFrogObjectOrdered(FrogObject * fs);
 
+	void addFrogObjectDescOrdered(FrogObject * fs);
+
 	void addFrogObjectDoubleOrdered(FrogObject * fs);
 	
 	void printFrogObjCol();

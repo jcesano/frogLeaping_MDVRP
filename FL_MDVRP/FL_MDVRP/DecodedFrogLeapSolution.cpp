@@ -127,7 +127,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller
 
 	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
 	int remainingDepotCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
-	int customerId = this->ptrController->getCustomerId(customerIndex);
+	int customerId = this->ptrController->getCustomerInternalId(customerIndex);
 
 	if(customerDemand > controller->getVehicleCapacity() || customerDemand > remainingDepotCapacity)
 	{
@@ -140,7 +140,7 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller
 	this->ptrController->decRemainingDepotCapacity(depotIndex, customerDemand);
 
 	//assign vehicle to customer	
-	//get the element with maximum remaining capacity
+	//get the element with minimum remaining capacity enough
 	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getFirstUpperValueFrogObject(customerDemand); 
 	//Vehicle * veh = (Vehicle *)this->getFirstUpperValueVehicle(customerDemand, depotIndex);
 	
@@ -174,6 +174,74 @@ bool DecodedFrogLeapSolution::decodeFrogLeapItem(FrogLeapController * controller
 	veh->addCustomerPair(customerPair);	
 
 	customerPair = NULL;
+	veh = NULL;
+	return result;
+}
+
+bool DecodedFrogLeapSolution::decodeFrogLeapItemWithAngularCriteria(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots)
+{
+	bool result = true;
+	int vehicleId;
+	int depotIndex = this->decodeFrogLeapValue(fvalue, numberOfDepots);
+
+	int customerDemand = this->ptrController->getCustomerDemandByIndex(customerIndex);
+	int remainingDepotCapacity = this->ptrController->getDepotRemainingCapacityByIndex(depotIndex);
+	int customerId = this->ptrController->getCustomerInternalId(customerIndex);
+
+	if (customerDemand > controller->getVehicleCapacity() || customerDemand > remainingDepotCapacity)
+	{
+		this->setIsFeasibleSolution(false);
+		this->setNotAddedCustomer(customerId);
+		result = false;
+		return result;
+	}
+
+	this->ptrController->decRemainingDepotCapacity(depotIndex, customerDemand);
+
+	//assign vehicle to customer	
+	//get the element with minimum remaining capacity enough
+	Vehicle * veh = (Vehicle *)this->vehicles[depotIndex]->getFirstUpperValueFrogObject(customerDemand);
+	//Vehicle * veh = (Vehicle *)this->getFirstUpperValueVehicle(customerDemand, depotIndex);
+
+	if (veh == NULL)
+	{
+		vehicleId = controller->getGlobalVehicleId();
+
+		veh = new Vehicle(vehicleId, this->ptrController);
+
+		veh->decRemainingCapacity(customerDemand);
+
+		//int depotIndex = vehicleId / numberOfDepots;
+		veh->setDepotIndex(depotIndex);
+
+		this->vehicles[depotIndex]->addFrogObjectOrdered(veh);
+	}
+	else
+	{
+		veh->decRemainingCapacity(customerDemand);
+
+		//this->vehicles[depotIndex]->reorderFrogObject(veh);
+		this->vehicles[depotIndex]->reorderFrogObject(veh);
+	}
+
+	Pair * veh_customerPair = new Pair(PairType::IntVsFloat);
+	veh_customerPair->set_i_IntValue(customerIndex);
+	veh_customerPair->set_j_FloatValue(fvalue);
+
+	// we calculate angular values
+	Pair * customerPair = controller->getCustomerPairByIndex(customerIndex);
+	int customerInternalId = controller->getCustomerInternalId(customerIndex);
+	
+	Pair * depotPair = controller->getDepotPairByIndex(depotIndex);
+	int depotInternalId = controller->getDepotInternalId(depotIndex);
+
+	controller->setAngularValues(veh_customerPair, customerInternalId, depotInternalId);	
+	
+	veh_customerPair->setId(customerIndex);
+
+	veh->addCustomerPairDoubleOrdered(veh_customerPair);
+
+	veh_customerPair = NULL;
 	veh = NULL;
 	return result;
 }

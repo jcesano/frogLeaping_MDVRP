@@ -51,7 +51,7 @@ class DecodedFrogLeapSolution : public FrogObject
 
 		bool decodeFrogLeapItem(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots);		
 
-		bool decodeFrogLeapAssignCustomerToDepotWithAngularValues(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots);
+		bool decodeFrogLeapItemWithAngularCriteria(FrogLeapController * controller, float fvalue, int customerIndex, int numberOfDepots);
 
 		float evalSolution();
 

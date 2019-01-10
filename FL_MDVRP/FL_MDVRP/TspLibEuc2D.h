@@ -30,7 +30,7 @@ class TspLibEuc2D : public FrogObject
 		char * getName();
 
 		void setComment(char * v_comment);
-		char *getComment();
+		char * getComment();
 
 		void setType(char * v_type);
 		char * getType();
@@ -62,6 +62,10 @@ class TspLibEuc2D : public FrogObject
 
 		FrogObjectCol * getDemandSection();
 		IndexList * getDepotSection();
+
+		double getAngularTheta(int customerInternalId, int depotInternalId);
+
+		double getAngularRho(int customerInternalId, int depotInternalId);
 
 		// abstract methods
 		void printFrogObj();

@@ -1,5 +1,5 @@
 // stdafx.cpp : source file that includes just the standard includes
-// FL_MDVRP.pch will be the pre-compiled header
+// MDVRP_JC.pch will be the pre-compiled header
 // stdafx.obj will contain the pre-compiled type information
 
 #include "stdafx.h"

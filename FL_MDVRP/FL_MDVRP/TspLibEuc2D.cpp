@@ -155,6 +155,40 @@ IndexList * TspLibEuc2D::getDepotSection()
 	return this->depot_section;
 }
 
+double TspLibEuc2D::getAngularTheta(int customerInternalId, int depotInternalId)
+{
+	
+	float const pi = 3.14159265;
+
+	Pair * customerPair = (Pair *) this->nodeCoordSection->getFrogObject(customerInternalId);
+
+	Pair * depotPair = (Pair *) this->nodeCoordSection->getFrogObject(depotInternalId);
+
+	double x = (customerPair->get_i_IntValue() - depotPair->get_i_IntValue());
+	double y = (customerPair->get_j_IntValue() - depotPair->get_j_IntValue());
+
+	double result = atan2(y, x);
+
+	return result;	
+}
+
+double TspLibEuc2D::getAngularRho(int customerInternalId, int depotInternalId)
+{
+	double result;
+
+	Pair * customerPair = (Pair *) this->nodeCoordSection->getFrogObject(customerInternalId);
+
+	Pair * depotPair = (Pair *) this->nodeCoordSection->getFrogObject(depotInternalId);
+
+	double a = (customerPair->get_i_IntValue() - depotPair->get_i_IntValue());
+	double b = (customerPair->get_j_IntValue() - depotPair->get_j_IntValue());
+
+
+	result = sqrt(a*a + b*b);
+
+	return result;
+}
+
 void TspLibEuc2D::printFrogObj()
 {
 	printf("printing TspLibEuc2D data \n");

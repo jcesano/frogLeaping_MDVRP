@@ -53,7 +53,9 @@ int main()
 	
 	FrogLeapController * controller = new FrogLeapController();
 
-	char * fileName = "casog01.vrp", * testCaseFileName = "TestCase01Casog01 - copia.txt";
+	char * fileName = "casog01.vrp";
+
+	char *testCaseFileName = "TestCase01Casog01 - copia.txt";
 
 	controller->setSourceType(SourceType::Tsp2DEuc);
 

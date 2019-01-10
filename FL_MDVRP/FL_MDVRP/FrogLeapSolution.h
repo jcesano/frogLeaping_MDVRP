@@ -28,7 +28,7 @@ class FrogLeapSolution: public FrogObject
 		SolutionGenerationType sgt;
 		SourceType st;		
 
-		FeasibleSolution * randomCustomerSelectionList;
+		FeasibleSolution * customerSelectionList;
 
 	public:
 	
@@ -52,6 +52,8 @@ class FrogLeapSolution: public FrogObject
 
 		bool genRandomSolution4(FrogLeapController * controller);
 
+		bool genSolution5(FrogLeapController * controller);
+
 		bool genRandomSolutionFromTestCase(FrogLeapController * controller);
 
 		float normalRandomAssigment(FrogLeapController * controller);
@@ -66,21 +68,19 @@ class FrogLeapSolution: public FrogObject
 
 		FrogObjectCol * initializeFeasibleDepotList(FrogLeapController * controller);
 
-		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);		
-
-		DecodedFrogLeapSolution * decodeSolution2(FrogLeapController * g);
+		DecodedFrogLeapSolution * decodeSolution(FrogLeapController * g);				
 
 		DecodedFrogLeapSolution * decodeFrogLeapSolution(FrogLeapController * controller, bool adjustVehicleRoutes = false);
 
-		DecodedFrogLeapSolution * decodeFrogLeapSolution2(FrogLeapController * controller);
+		DecodedFrogLeapSolution * FrogLeapSolution::decodeSolutionWithAngularCriteria(FrogLeapController * controller);
 
-		DecodedFrogLeapSolution * decodeWithAngularCriteria(FrogLeapController * controller);
-
+		DecodedFrogLeapSolution * FrogLeapSolution::decodeFrogLeapSolutionWithAngularCriteria(FrogLeapController * controller, bool adjustVehicleRoutes);
+		
 		void setSolutionGenerationType(SolutionGenerationType v_sgt);
 
 		SolutionGenerationType getSolutionGenerationType();
 
-		void initRandomCustomerSelection(FrogLeapController * controller);
+		void initCustomerSelection(FrogLeapController * controller);
 
 		void destroyRandomCustomerSelectionList();
 

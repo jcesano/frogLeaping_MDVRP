@@ -184,7 +184,7 @@ void DistVect::importCustomers(FrogLeapController * controller)
 
 	for (int i = 0; i < controller->getNumberOfCustomers(); i++)
 	{
-		custId = controller->getCustomerId(i);
+		custId = controller->getCustomerInternalId(i);
 		this->dv[custId].setVertexType(VertexType::Customer);
 	}
 }

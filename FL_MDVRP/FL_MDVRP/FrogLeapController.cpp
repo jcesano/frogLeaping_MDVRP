@@ -553,7 +553,7 @@ DecodedFrogLeapSolution * FrogLeapController::loadTestCaseData(char * fileName)
 			//dfls = this->loadAssignations2(filePtr, testCaseObjPtr);
 			fls = this->loadAssignations3(filePtr, testCaseObjPtr);
 			//dfls = fls->decodeFrogLeapSolution(this);
-			dfls = fls->decodeWithAngularCriteria(this);
+			dfls = fls->decodeSolutionWithAngularCriteria(this);
 			float evaluation = dfls->evalSolution();
 			printf("Showing test evaluation: %.3f", evaluation);
 			fclose(filePtr);
@@ -929,10 +929,10 @@ DistanceTable * FrogLeapController::loadDistanceTable()
 			// we add two edges (a[u][v] and a[v][u])
 			fdt->addEdge(i, j, floatDistance);			
 
-			if (i == 54 && j == 260)
-			{
-				printf("Testing distance table: dt[%d, %d] = %f", i, j, fdt->getEdge(i,j));
-			}
+			//if (i == 54 && j == 260)
+			//{
+			//	printf("Testing distance table: dt[%d, %d] = %f", i, j, fdt->getEdge(i,j));
+			//}
 
 		}
 	}
@@ -982,6 +982,26 @@ int FrogLeapController::getNumberOfDepots()
 Pair * FrogLeapController::getDepotPairByIndex(int position)
 {
 	return this->depotArray[position];
+}
+
+
+Pair * FrogLeapController::getCustomerPairByIndex(int position)
+{
+	return this->customerArray[position];
+}
+
+Pair * FrogLeapController::getPairByInternalId(int internalId)
+{
+	return (Pair *) this->tspLibEud2DPtr->getNodeCoordSection()->getFrogObject(internalId);	
+}
+
+void FrogLeapController::setAngularValues(Pair * veh_customerPair, int customerInternalId, int depotInternalId)
+{
+	float theta = this->tspLibEud2DPtr->getAngularTheta(customerInternalId, depotInternalId);
+	float rho = this->tspLibEud2DPtr->getAngularRho(customerInternalId, depotInternalId);
+
+	veh_customerPair->setValue(theta);
+	veh_customerPair->setValue2(rho);
 }
 
 void FrogLeapController::setUpVehiclesPerDepot()
@@ -1277,6 +1297,20 @@ int FrogLeapController::getDepotListIndexByInternal(int depotInternalId)
 	return -1;
 }
 
+int FrogLeapController::getCustomerListIndexByInternal(int customerInternalId)
+{
+
+	for (int i = 0; i < this->customerList->getSize(); i++)
+	{
+		if (this->customerArray[i]->getId() == customerInternalId)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 int FrogLeapController::getDepotIndexByLabelId(int depotLabelId)
 {
 	
@@ -1377,9 +1411,9 @@ int FrogLeapController::getNumberOfVehicles()
 	return this->vehiclePairList->getSize();
 }
 
-int FrogLeapController::getCustomerId(int position)
+int FrogLeapController::getCustomerInternalId(int position)
 {
-	return this->customerArray[position]->get_i_IntValue();
+	return this->customerArray[position]->getId();
 }
 
 
@@ -1388,7 +1422,7 @@ int FrogLeapController::getCustomerDemandByIndex(int position)
 	return this->customerArray[position]->get_j_IntValue();
 }
 
-int FrogLeapController::getDepotId(int position)
+int FrogLeapController::getDepotInternalId(int position)
 {
 	
 	return this->depotArray[position]->getId();
@@ -1442,15 +1476,38 @@ FrogObjectCol * FrogLeapController::createDepotListOrderedByCapacity()
 	return localDepotCol;
 }
 
+// create a list ordered by demand in descendant order
+FrogObjectCol * FrogLeapController::createCustomerListOrderedByDemand()
+{
+	FrogObjectCol * localCustomerCol = new FrogObjectCol();
+	Pair * current = NULL;
+
+	for (int i = 0; i < this->getNumberOfCustomers(); i++)
+	{
+		current = this->customerArray[i];
+		localCustomerCol->addFrogObjectDescOrdered(current);
+	}
+
+	return localCustomerCol;
+}
+
 void FrogLeapController::resetDepotRemainingCapacities()
 {
 	for (int i = 0; i < this->getNumberOfDepots(); i++)
 	{		
-		resetDepotRemainingCapacity(this->depotArray[i]);
+		resetCapacityOrDemand(this->depotArray[i]);
 	}
 }
 
-void FrogLeapController::resetDepotRemainingCapacity(Pair * depotPair)
+void FrogLeapController::resetCustomerRemainingDemands()
+{
+	for (int i = 0; i < this->getNumberOfCustomers(); i++)
+	{
+		resetCapacityOrDemand(this->customerArray[i]);
+	}
+}
+
+void FrogLeapController::resetCapacityOrDemand(Pair * depotPair)
 {
 	
 	int depotCap = depotPair->get_i_IntValue();
@@ -1513,7 +1570,7 @@ int FrogLeapController::getClosestCustomerLocalIndexToDepot(int depotIndex, int 
 		Pair * customerIndexPair = (Pair *)localCustomerIndexesCol->getFrogObject(i);
 		Pair * depotPair = (Pair *) this->depotArray[depotIndex];
 		int customerIndex = customerIndexPair->getId();
-		int customerInternalId = this->getCustomerId(customerIndex);
+		int customerInternalId = this->getCustomerInternalId(customerIndex);
 		int depotInternalId = depotPair->getId();
 		DistanceTable * dt = this->getDistanceTable();
 
@@ -1539,7 +1596,7 @@ int FrogLeapController::getClosestCustomerLocalIndexToCustomer(int targetCustome
 		Pair * customerIndexPair = (Pair *)localCustomerIndexesCol->getFrogObject(i);
 		Pair * targetCustomerPair = (Pair *) this->customerArray[targetCustomerIndex];
 		int customerIndex = customerIndexPair->getId();
-		int customerInternalId = this->getCustomerId(customerIndex);
+		int customerInternalId = this->getCustomerInternalId(customerIndex);
 		int targetCustomerInternalId = targetCustomerPair->getId();
 		DistanceTable * dt = this->getDistanceTable();
 
@@ -1619,6 +1676,7 @@ void FrogLeapController::setCustomerPairAsAssigned(int customerIndex, int depotI
 	customerPair->setAssignedDepotIndex(depotIndex);
 }
 
+// Set every pair in customerArray as not assigned
 void FrogLeapController::resetCustomersAsNotAssigned()
 {
 	for(int i = 0; i < this->getNumberOfCustomers(); i++)

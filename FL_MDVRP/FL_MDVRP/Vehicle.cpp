@@ -63,6 +63,16 @@ void Vehicle::addCustomerPair(Pair * customerPair)
 	this->customers->addFrogObjectOrdered(customerPair);
 }
 
+void Vehicle::addCustomerPairDoubleOrdered(Pair * customerPair)
+{
+	if (this->customers == NULL)
+	{
+		this->customers = new FrogObjectCol();
+	}
+
+	this->customers->addFrogObjectDoubleOrdered(customerPair);
+}
+
 void Vehicle::addLastCustomerPair(Pair * customerPair)
 {
 	if (this->customers == NULL)
@@ -102,7 +112,7 @@ float Vehicle::evalPath(FrogLeapController * controller)
 	int originIndex, originId, destinationIndex, destinationId;
 	DistanceTable * dt = this->ptrController->getDistanceTable();
 
-	originId = this->ptrController->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotInternalId(depotIndex);
 
 	if(this->customers->getSize() > 0)
 	{
@@ -110,7 +120,7 @@ float Vehicle::evalPath(FrogLeapController * controller)
 		{
 			destinationPair = (Pair *) this->customers->getFrogObject(i);
 			destinationIndex = destinationPair->get_i_IntValue();
-			destinationId = this->ptrController->getCustomerId(destinationIndex);
+			destinationId = this->ptrController->getCustomerInternalId(destinationIndex);
 
 			vehiclePathResult = vehiclePathResult + dt->getEdge(originId, destinationId);
 
@@ -118,7 +128,7 @@ float Vehicle::evalPath(FrogLeapController * controller)
 		}
 
 		// add the last edgde from the last customer to the depot
-		destinationId = this->ptrController->getDepotId(depotIndex);
+		destinationId = this->ptrController->getDepotInternalId(depotIndex);
 		vehiclePathResult = vehiclePathResult + dt ->getEdge(originId, destinationId);
 	}
 
@@ -212,7 +222,7 @@ int Vehicle::ObtainDepotIdFromIndex()
 	int depotId, depotIndex;
 	
 	depotIndex = this->getDepotIndex(); //obtaining Pair(CustomerIndex, flValue)	
-	depotId = this->ptrController->getDepotId(depotIndex); //obtaining the customerId in the graph
+	depotId = this->ptrController->getDepotInternalId(depotIndex); //obtaining the customerId in the graph
 
 	return depotId;
 }
@@ -225,7 +235,7 @@ int Vehicle::ObtainCustomerIdFromIndex(int position)
 
 	tmp = (Pair *) this->customers->getFrogObject(position); //obtaining Pair(CustomerIndex, flValue)
 	customerIndex = tmp->get_i_IntValue();
-	customerId = this->ptrController->getCustomerId(customerIndex); //obtaining the customerId
+	customerId = this->ptrController->getCustomerInternalId(customerIndex); //obtaining the customerId
 
 	return customerId;
 }
@@ -317,7 +327,7 @@ void Vehicle::printLocalSolution()
 	Pair * originPair, *destinationPair;
 	int originIndex, originId, destinationIndex, destinationId, originLabelId, destinationLabelId;
 
-	originId = this->ptrController->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotInternalId(depotIndex);
 	originLabelId = this->ptrController->getLabel(originId);
 
 	printf("\n SHOWING LOCAL SOLUTION \n");
@@ -335,7 +345,7 @@ void Vehicle::printLocalSolution()
 	}
 
 	// add the last edgde from the last customer to the depot
-	destinationId = this->ptrController->getDepotId(depotIndex);
+	destinationId = this->ptrController->getDepotInternalId(depotIndex);
 	destinationLabelId = this->ptrController->getLabel(destinationId);
 	printf("(%d - %d) = %.3f  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));	
 }
@@ -346,7 +356,7 @@ void Vehicle::printGlobalSolution()
 	Pair * originPair, *destinationPair;
 	int originIndex, originId, destinationIndex, destinationId, originLabelId, destinationLabelId;
 
-	originId = this->ptrController->getDepotId(depotIndex);
+	originId = this->ptrController->getDepotInternalId(depotIndex);
 	originLabelId = this->ptrController->getLabel(originId);
 
 	printf("\n SHOWING GLOBAL SOLUTION \n");
@@ -356,7 +366,7 @@ void Vehicle::printGlobalSolution()
 	{
 		Pair * customerPair = (Pair *) this->customers->getFrogObject(i);
 		int customerIndex = customerPair->get_i_IntValue();
-		destinationId = this->ptrController->getCustomerId(customerIndex);
+		destinationId = this->ptrController->getCustomerInternalId(customerIndex);
 		destinationLabelId = this->ptrController->getLabel(destinationId);
 		printf("(%d - %d) = %.3f  ", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 
@@ -367,7 +377,7 @@ void Vehicle::printGlobalSolution()
 	if (this->getIsFeasible() == true)
 	{
 		// add the last edgde from the last customer to the depot
-		destinationId = this->ptrController->getDepotId(depotIndex);
+		destinationId = this->ptrController->getDepotInternalId(depotIndex);
 		destinationLabelId = this->ptrController->getLabel(destinationId);
 		printf("(%d - %d) = %.3f  \n", originLabelId, destinationLabelId, this->ptrController->getDistanceTable()->getEdge(originId, destinationId));
 	}
